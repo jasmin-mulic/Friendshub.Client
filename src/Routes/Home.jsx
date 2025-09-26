@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../Services/AuthStore";
 import userApi from "../Services/UserApi";
+import defaultProfileImg from "../assets/noProfilePic.jpg"
 import AuthApi from "../Services/AuthApi";
-import noProfileImg from "../../public/noProfilePic.jpg";
 import { useNavigate } from "react-router-dom";
 import FriendRecommendations from "../Components/FriendRecommendations";
 
 export default function Home() {
-  const [displayUsername, setDisplayUsername] = useState("");
-  const [profileImgUrl, setProfileImgUrl] = useState("");
+  const [displayUsername, setDisplayUsername] = useState();
+  const [profileImgUrl, setProfileImgUrl] = useState(null);
   const authLogOut = useAuthStore((state) => state.logout);
   const authLogIn = useAuthStore((state) => state.login)
   const [loading, setLoading] = useState(false);
@@ -16,14 +16,19 @@ export default function Home() {
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true)
       try {
         const response = await userApi.get("me");
+        console.log(response)
         if (response.status === 200) {
           setDisplayUsername(response.data.displayUsername);
           setProfileImgUrl(response.data.profileImgUrl);
         }
       } catch (err) {
         if (err.status === 401) navigate("/login");
+      }
+      finally{
+        setLoading(false)
       }
     };
     getData();
@@ -58,9 +63,9 @@ useEffect(() =>{
         <div className="flex justify-between items-center border-b border-gray-700 pb-4">
           <div className="flex items-center gap-4">
             <img
-              className="cursor-pointer rounded-full w-20 h-20 object-cover border-2 border-cyan-600 shadow"
-              src={profileImgUrl ? profileImgUrl : noProfileImg}
-              alt="Profile"
+              className="cursor-pointer rounded-full w-20 h-20  border-2 border-cyan-600 shadow"
+              src={!setLoading && profileImgUrl ? profileImgUrl : defaultProfileImg }
+              
             />
             <h1 className="text-2xl font-bold">{displayUsername}</h1>
           </div>
@@ -90,6 +95,7 @@ useEffect(() =>{
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
+      {loading && <div className="loading"></div>}
     </div>
   );
 }

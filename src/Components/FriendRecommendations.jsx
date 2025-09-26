@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import userApi from "../Services/UserApi";
-import noProfileImage from "../../public/noProfilePic.jpg";
+import noProfileImage from "../assets/noProfilePic.jpg";
 import { useAuthStore } from "../Services/AuthStore";
 const FriendRecommendations = () => {
   const [recommendationsList, setRecommendationsList] = useState([]);
