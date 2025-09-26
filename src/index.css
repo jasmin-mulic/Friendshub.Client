@@ -1,9 +1,12 @@
 @import "tailwindcss";
 #root{
-    background-color: #353535;
     background-image: url("/src//assets/bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    overflow: hidden;
+}
+*{
+  box-sizing: border-box;
 }
 input:-webkit-autofill {
   box-shadow: 0 0 0 1000px rgba(30,41,57) inset !important; /* change 'white' to your bg */

@@ -1,77 +1,96 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../Services/AuthStore";
 import userApi from "../Services/UserApi";
-import defaultProfileImg from "../assets/noProfilePic.jpg"
+import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services/AuthApi";
 import { useNavigate } from "react-router-dom";
 import FriendRecommendations from "../Components/FriendRecommendations";
+import { useUserDataStore } from "../Services/useUserDataStore ";
 
 export default function Home() {
-  const [displayUsername, setDisplayUsername] = useState();
-  const [profileImgUrl, setProfileImgUrl] = useState(null);
+  const {
+    displayUsername,
+    profileImgUrl,
+    followersCount,
+    followingCount,
+    setUserData,
+    resetUserData,
+  } = useUserDataStore();
+
   const authLogOut = useAuthStore((state) => state.logout);
-  const authLogIn = useAuthStore((state) => state.login)
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         const response = await userApi.get("me");
-        console.log(response)
+
         if (response.status === 200) {
-          setDisplayUsername(response.data.displayUsername);
-          setProfileImgUrl(response.data.profileImgUrl);
+          console.log(response.data)
+          setUserData(response.data);
+        } else {
+          authLogOut();
+          resetUserData();
         }
       } catch (err) {
-        if (err.status === 401) navigate("/login");
-      }
-      finally{
-        setLoading(false)
+        if (err.response?.status === 401) {
+          authLogOut();
+          resetUserData();
+          navigate("/login");
+        }
+      } finally {
+        setLoading(false);
       }
     };
     getData();
-  }, []);
-useEffect(() =>{
-  var token = localStorage.getItem("token");
-  if(token)
-    authLogIn(token);
+  }, [setUserData, authLogOut, navigate, resetUserData]);
+  console.log(profileImgUrl)
 
-})
   const logout = async () => {
     setLoading(true);
     try {
       const response = await AuthApi.post("logout");
-      if(response.status == 200)
-      {
+      if (response.status === 200) {
         authLogOut();
-        navigate("/login")
+        resetUserData();
+        navigate("/login");
       }
     } catch (error) {
-        console.log(error.response)
-    }
-    finally{
+      console.log(error.response);
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col 2xl:flex-row gap-8 w-full 2xl:w-3/4 mx-auto p-6">
-      {/* Profile section */}
-      <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6 bg-gray-900/50 rounded-2xl shadow-lg">
-        <div className="flex justify-between items-center border-b border-gray-700 pb-4">
-          <div className="flex items-center gap-4">
+    <div className="flex flex-col 2xl:flex-row gap-8 sm:w-3/4 mx-auto w-full">
+      <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6 bg-gray-900/60 rounded-2xl 2xl:w-3/4 shadow-lg relative">
+        <div className="flex justify-between items-center border-b border-gray-700 pb-4 gap-2 flex-col">
+          <div className="flex items-center gap-3 w-full">
             <img
-              className="cursor-pointer rounded-full w-20 h-20  border-2 border-cyan-600 shadow"
-              src={!setLoading && profileImgUrl ? profileImgUrl : defaultProfileImg }
-              
+              className="cursor-pointer rounded-full w-20 h-20 border-2 border-cyan-600 shadow"
+              src={!setLoading && profileImgUrl ? profileImgUrl : defaultProfileImg}
+              alt="Profile"
             />
             <h1 className="text-2xl font-bold">{displayUsername}</h1>
           </div>
+
+          <div className="flex text-xl mt-2 w-full xl:w-3/5 justify-evenly items-center border-1 rounded-2xl">
+            <div className="flex justify-center items-center flex-col">
+              <p>Followers</p>
+              <p>{followersCount}</p>
+            </div>
+            <div className="flex justify-center items-center flex-col">
+              <p>Following</p>
+              <p>{followingCount}</p>
+            </div>
+          </div>
+
           <button
             onClick={logout}
-            className="text-md bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl shadow transition-all"
+            className="text-md bg-red-500 hover:bg-red-700 px-5 py-2 rounded-xl shadow transition-all absolute right-6 top-8"
           >
             Logout
           </button>
@@ -95,7 +114,6 @@ useEffect(() =>{
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-      {loading && <div className="loading"></div>}
     </div>
   );
 }

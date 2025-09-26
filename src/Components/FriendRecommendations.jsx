@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import userApi from "../Services/UserApi";
 import noProfileImage from "../assets/noProfilePic.jpg";
 import { useAuthStore } from "../Services/AuthStore";
+import { useUserDataStore } from "../Services/useUserDataStore ";
 const FriendRecommendations = () => {
   const [recommendationsList, setRecommendationsList] = useState([]);
   const [removingId, setRemovingId] = useState(null);
   const logout = useAuthStore.getState((state) => state.logout)
+  const {setFollowingCount} = useUserDataStore();
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
@@ -21,10 +23,14 @@ const FriendRecommendations = () => {
 
   const followUser = async (id) => {
     try {
-      await userApi.post("/follow-user?foloweeId=" + id);
+      const response = await userApi.post("follow-user?foloweeId=" + id);
+      if(response.status == 200)
+      {
+        console.log(response);
+        setFollowingCount(1)
+      }
     } catch (error) {
       alert("Check the console, there was an error");
-      console.log(error);
     }
     setRemovingId(id);
 

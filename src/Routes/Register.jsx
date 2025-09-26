@@ -14,7 +14,7 @@ const Register = () => {
     try {
         const response = await axios.post("https://localhost:44326/api/Auth/Register", data)
         if(response.status === 200)
-          navigate
+          navigate("/")
     } catch (exc) {
             var validationErrors = exc.response.data
             setApiValidationErrors(Object.fromEntries(
