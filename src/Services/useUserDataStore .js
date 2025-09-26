@@ -13,8 +13,8 @@ export const useUserDataStore  = create((set) => ({
       followersCount: userData.followersCount,
       followingCount: userData.followingCount,
     })),
-      setFollowingCount: (increment) =>
+      setFollowingCount: () =>
     set((state) => ({
-      followingCount: state.followingCount + increment,
+      followingCount: state.followingCount+=1,
     })),
 }));

@@ -30,6 +30,7 @@ export default function Home() {
         if (response.status === 200) {
           console.log(response.data)
           setUserData(response.data);
+          
         } else {
           authLogOut();
           resetUserData();
@@ -71,7 +72,7 @@ export default function Home() {
           <div className="flex items-center gap-3 w-full">
             <img
               className="cursor-pointer rounded-full w-20 h-20 border-2 border-cyan-600 shadow"
-              src={!setLoading && profileImgUrl ? profileImgUrl : defaultProfileImg}
+              src={profileImgUrl ? profileImgUrl : defaultProfileImg}
               alt="Profile"
             />
             <h1 className="text-2xl font-bold">{displayUsername}</h1>
@@ -90,7 +91,7 @@ export default function Home() {
 
           <button
             onClick={logout}
-            className="text-md bg-red-500 hover:bg-red-700 px-5 py-2 rounded-xl shadow transition-all absolute right-6 top-8"
+            className="text-md bg-red-500 hover:bg-red-700 px-5 py-2 rounded-xl shadow transition-all absolute right-6 top-12"
           >
             Logout
           </button>
