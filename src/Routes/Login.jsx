@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAuthStore } from "../Services/AuthStore";
+import { useAuthStore } from "../Services/Stores/AuthStore";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import AuthApi from "../Services/AuthApi";
+import AuthApi from "../Services//Api/AuthApi";
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();

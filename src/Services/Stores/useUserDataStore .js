@@ -5,6 +5,7 @@ export const useUserDataStore  = create((set) => ({
     profileImgUrl : "",
     followersCount : 0,
     followingCount : 0,
+    postCount : 0,
 
   setUserData: (userData) =>
     set(() => ({
@@ -12,9 +13,15 @@ export const useUserDataStore  = create((set) => ({
       profileImgUrl: userData.profileImgUrl,
       followersCount: userData.followersCount,
       followingCount: userData.followingCount,
+      postCount : userData.postCount
     })),
       setFollowingCount: () =>
     set((state) => ({
       followingCount: state.followingCount+=1,
     })),
+    setPostCount : () =>
+      set((state) =>({
+        postCount : state.postCount+=1
+      }))
+
 }));

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import userApi from "../Services/UserApi";
+import userApi from "../Services/Api/UserApi";
 import noProfileImage from "../assets/noProfilePic.jpg";
-import { useAuthStore } from "../Services/AuthStore";
-import { useUserDataStore } from "../Services/useUserDataStore ";
+import { useAuthStore } from "../Services/Stores/AuthStore";
+import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
 const FriendRecommendations = () => {
   const [recommendationsList, setRecommendationsList] = useState([]);
   const [removingId, setRemovingId] = useState(null);
