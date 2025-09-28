@@ -3,7 +3,6 @@
     background-image: url("/src//assets/bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-    overflow: hidden;
 }
 *{
   box-sizing: border-box;
