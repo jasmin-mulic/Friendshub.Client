@@ -3,7 +3,7 @@
     background-image: url("/src//assets/bg.jpg");
     background-repeat: no-repeat;
     background-size: cover;
-}
+  }
 *{
   box-sizing: border-box;
 }
@@ -11,7 +11,10 @@ input:-webkit-autofill {
   box-shadow: 0 0 0 1000px rgba(30,41,57) inset !important; /* change 'white' to your bg */
   -webkit-text-fill-color: #ffffff !important;       /* optional: force text color */
 }
-
+body, html{
+  height: 100%;
+  overflow: hidden;
+}
 input:-webkit-autofill:focus {
   box-shadow: 0 0 0 1000px rgb(30,41,57) inset !important;
 }
@@ -26,6 +29,15 @@ input:-webkit-autofill:focus {
   position: absolute;
   left: calc(50% - 50px);
   top: calc(50% - 50px);
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }
 
 @keyframes spin {

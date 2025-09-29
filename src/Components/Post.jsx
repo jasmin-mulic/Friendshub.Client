@@ -40,13 +40,13 @@ export default function Post({ post }) {
 
       {/* Images */}
       {post.postImagesUrl && post.postImagesUrl.length > 0 && (
-        <div className="flex flex-col flex-wrap md:flex-row gap-3">
+        <div className="flex flex-col  md:flex-row gap-3">
           {post.postImagesUrl.map((img, i) => (
             <img
               key={i}
               src={img}
               alt={`post-img-${i}`}
-              className="flex-1 w-100 rounded-lg object-cover"
+              className="xl:max-w-1/2 w-full items-center justify-center rounded-lg object-cover"
             />
           ))}
         </div>

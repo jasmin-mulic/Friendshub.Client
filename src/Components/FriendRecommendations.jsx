@@ -23,7 +23,7 @@ const FriendRecommendations = () => {
 
   const followUser = async (id) => {
     try {
-      const response = await userApi.post("follow-user?foloweeId=" + id);
+      const response = await usersApi.post("follow-user?foloweeId=" + id);
       if(response.status == 200)
       {
         console.log(response);

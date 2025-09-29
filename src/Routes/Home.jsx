@@ -3,11 +3,11 @@ import { useAuthStore } from "../Services/Stores/AuthStore";
 import usersApi from "../Services/Api/UserApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services//Api/AuthApi";
-import postsApi from "../Services/Api/PostApi"
 import { useNavigate } from "react-router-dom";
 import FriendRecommendations from "../Components/FriendRecommendations";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
-import Post from "../Components/Post";
+import Feed from "../Components/Feed";
+import "../../src/index.css"
 
 export default function Home() {
   const {
@@ -25,28 +25,14 @@ export default function Home() {
   const [posts, setPosts] = useState([])
   const navigate = useNavigate();
 
-  useEffect(() =>{
-    const getPosts = async() =>{
-      try {
-        const postResponse = await postsApi.get("my-posts");
-        console.log(postResponse.data.items)
-        if(postResponse.status == 200)
-          setPosts(postResponse.data.items)
-      } catch (error) {
-          console.log(error.response)
-      }
-    }
-    getPosts();
-  },[])
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
       try {
-        const myDataResponse = await usersApi.get("me");
+        const profileDataInfo = await usersApi.get("me");
         
-        if (myDataResponse.status === 200) {
-          console.log(myDataResponse.data)
-          setUserData(myDataResponse.data);
+        if (profileDataInfo.status === 200) {
+          setUserData(profileDataInfo.data);
           
         } else {
           authLogOut();
@@ -60,7 +46,6 @@ export default function Home() {
     };
     getData();
   }, [setUserData, authLogOut, navigate, resetUserData]);
-  console.log(profileImgUrl)
 
   const logout = async () => {
     setLoading(true);
@@ -79,12 +64,12 @@ export default function Home() {
   };
   
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/4 mx-auto w-full overflow-x-hidden h-s">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/4 mx-auto w-full h-s overflow-hidden ">
       <FriendRecommendations />
-      <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6  rounded-2xl 2xl:w-3/4 shadow-lg relative bg-gray-500/10 overflow-x-hidden">
-        <div className="flex justify-around items-evenly border-b border-gray-700 pb-4 gap-2 flex-col overflow-hidden">
+      <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6  rounded-2xl 2xl:w-3/4 shadow-lg relative bg-gray-500/10 ">
+        <div className="flex justify-around items-evenly border-b border-gray-700 pb-4 gap-2 flex-col">
           <div className="flex justify-start items-start  flex-col md:flex-row ">
-            <div className="p-2 flex flex-col gap-3 items-center w-full  md:w-1/6">
+            <div className="p-2 flex flex-col gap-3 items-center w-full md:w-1/6">
             <img
               className="cursor-pointer rounded-full w-15 h-15 border-2 border-cyan-600 shadow"
               src={profileImgUrl ? profileImgUrl : defaultProfileImg}
@@ -107,7 +92,6 @@ export default function Home() {
               <p>{postCount}</p>
             </div>
           </div>
-
           </div>
 
           <button
@@ -117,16 +101,8 @@ export default function Home() {
             Logout
           </button>
         </div>
+    <Feed />
 
-        <div className="flex flex-col gap-6 mt-6 overflow-auto">
-          <h2 className="text-xl font-semibold text-cyan-400">
-            Welcome back 👋
-          </h2>
-          <p className="text-gray-300">
-            Explore your feed, find new friends and stay connected!
-          </p>
-        </div>
-        {posts.map((post) => <Post key={post.postId} post={post} />)}
       </div>
 
       {/* Friend recommendations */}
