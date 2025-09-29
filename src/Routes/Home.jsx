@@ -23,8 +23,21 @@ export default function Home() {
   const authLogOut = useAuthStore((state) => state.logout);
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState([])
+  const[recommendationsList, setRecommendationsList] = useState([])
   const navigate = useNavigate();
 
+    useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const response = await usersApi.get("follow-recommendations");
+        if (response.status === 200) 
+          setRecommendationsList(response.data);
+      } catch (error) {
+        console.log(error.response)
+      }
+    };
+    fetchRecommendations();
+  }, []);
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -62,10 +75,13 @@ export default function Home() {
       setLoading(false);
     }
   };
-  
+  const func = (id) =>{
+    let filteredList = recommendationsList.filter((x) => x.id != id)
+    setRecommendationsList(filteredList)
+  }
   return (
     <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/4 mx-auto w-full h-s overflow-hidden ">
-      <FriendRecommendations />
+      {recommendationsList.length > 0 && <FriendRecommendations data = {recommendationsList} handleFollowChange = {func} />}
       <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6  rounded-2xl 2xl:w-3/4 shadow-lg relative bg-gray-500/10 ">
         <div className="flex justify-around items-evenly border-b border-gray-700 pb-4 gap-2 flex-col">
           <div className="flex justify-start items-start  flex-col md:flex-row ">
@@ -104,9 +120,6 @@ export default function Home() {
     <Feed />
 
       </div>
-
-      {/* Friend recommendations */}
-
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>

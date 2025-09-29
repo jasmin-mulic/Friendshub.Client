@@ -3,24 +3,11 @@ import usersApi from "../Services/Api/UserApi";
 import noProfileImage from "../assets/noProfilePic.jpg";
 import { useAuthStore } from "../Services/Stores/AuthStore";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
-const FriendRecommendations = () => {
-  const [recommendationsList, setRecommendationsList] = useState([]);
+const FriendRecommendations = ({data, handleFollowChange}) => {
+  const [recommendationsList, setRecommendationsList] = useState(data);
   const [removingId, setRemovingId] = useState(null);
   const logout = useAuthStore.getState((state) => state.logout)
   const {setFollowingCount} = useUserDataStore();
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      try {
-        const response = await usersApi.get("follow-recommendations");
-        if (response.status === 200) 
-          setRecommendationsList(response.data);
-      } catch (error) {
-        console.log(error.response)
-      }
-    };
-    fetchRecommendations();
-  }, []);
-
   const followUser = async (id) => {
     try {
       const response = await usersApi.post("follow-user?foloweeId=" + id);
@@ -39,7 +26,10 @@ const FriendRecommendations = () => {
       setRemovingId(null);
     }, 600);
   };
-
+const handleFollow = (id) =>{
+  handleFollowChange(id);
+  followUser(id);
+}
   return (
     <div className="text-white w-full 2xl:w-96 flex flex-col gap-4 bg-gray-900/50 rounded-2xl shadow-lg p-6">
       <h2 className="text-lg font-semibold text-cyan-400">
@@ -68,7 +58,7 @@ const FriendRecommendations = () => {
               <span className="font-medium">{r.username}</span>
             </div>
             <button
-              onClick={() => followUser(r.id)}
+              onClick={() => handleFollow(r.id)}
               className="bg-cyan-700 hover:bg-cyan-600 px-4 py-1 rounded-lg text-sm font-medium shadow transition"
             >
               Follow
