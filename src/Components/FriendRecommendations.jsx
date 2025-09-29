@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import userApi from "../Services/Api/UserApi";
+import usersApi from "../Services/Api/UserApi";
 import noProfileImage from "../assets/noProfilePic.jpg";
 import { useAuthStore } from "../Services/Stores/AuthStore";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
@@ -11,11 +11,11 @@ const FriendRecommendations = () => {
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const response = await userApi.get("follow-recommendations");
-        if (response.status === 200) setRecommendationsList(response.data);
+        const response = await usersApi.get("follow-recommendations");
+        if (response.status === 200) 
+          setRecommendationsList(response.data);
       } catch (error) {
-        if(error.response.status == 401)
-            logout();
+        console.log(error.response)
       }
     };
     fetchRecommendations();

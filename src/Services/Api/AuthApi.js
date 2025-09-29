@@ -5,8 +5,6 @@ const AuthApi = axios.create({
   baseURL: "https://localhost:44326/api/Auth/",
   withCredentials: true, // šalje refresh token cookie
 });
-
-// request interceptor → dodaj access token
 AuthApi.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token;
   if (token) {
@@ -14,8 +12,6 @@ AuthApi.interceptors.request.use((config) => {
   }
   return config;
 });
-
-// response interceptor → ako 401, pokušaj refresh
 AuthApi.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -32,10 +28,9 @@ AuthApi.interceptors.response.use(
           { withCredentials: true }
         );
 
-        const newAccessToken = res.data.accessToken;
+        const newAccessToken = res.data;
         localStorage.setItem("token", newAccessToken)
 
-        // spremi ga u zustand store
         useAuthStore.getState().login(newAccessToken);
 
         // ponovi originalni request

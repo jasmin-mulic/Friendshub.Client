@@ -22,6 +22,14 @@ export const useUserDataStore  = create((set) => ({
     setPostCount : () =>
       set((state) =>({
         postCount : state.postCount+=1
-      }))
+      })),
+      resetUserData: () =>
+        set((state) =>({
+      displayUsername: "",
+      profileImgUrl: "",
+      followersCount: 0,
+      followingCount: 0,
+      postCount : 0
+        }))
 
 }));

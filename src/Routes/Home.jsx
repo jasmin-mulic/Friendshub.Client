@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../Services/Stores/AuthStore";
-import userApi from "../Services/Api/UserApi";
+import usersApi from "../Services/Api/UserApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services//Api/AuthApi";
-import postApi from "../Services/Api/PostApi"
+import postsApi from "../Services/Api/PostApi"
 import { useNavigate } from "react-router-dom";
 import FriendRecommendations from "../Components/FriendRecommendations";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
@@ -28,10 +28,10 @@ export default function Home() {
   useEffect(() =>{
     const getPosts = async() =>{
       try {
-        const postResponse = await postApi.get("my-posts");
-        console.log(postResponse.data)
+        const postResponse = await postsApi.get("my-posts");
+        console.log(postResponse.data.items)
         if(postResponse.status == 200)
-          setPosts(postResponse.data)
+          setPosts(postResponse.data.items)
       } catch (error) {
           console.log(error.response)
       }
@@ -42,8 +42,8 @@ export default function Home() {
     const getData = async () => {
       setLoading(true);
       try {
-        const myDataResponse = await userApi.get("me");
-
+        const myDataResponse = await usersApi.get("me");
+        
         if (myDataResponse.status === 200) {
           console.log(myDataResponse.data)
           setUserData(myDataResponse.data);
@@ -53,11 +53,7 @@ export default function Home() {
           resetUserData();
         }
       } catch (err) {
-        if (err.response?.status === 401) {
-          authLogOut();
-          resetUserData();
-          navigate("/login");
-        }
+          console.log("Me api -> ", error.response)
       } finally {
         setLoading(false);
       }
@@ -128,9 +124,9 @@ export default function Home() {
           </h2>
           <p className="text-gray-300">
             Explore your feed, find new friends and stay connected!
-        {posts.map((post) => <Post key={post.id} post = {post} />)}
           </p>
         </div>
+        {posts.map((post) => <Post key={post.postId} post={post} />)}
       </div>
 
       {/* Friend recommendations */}
