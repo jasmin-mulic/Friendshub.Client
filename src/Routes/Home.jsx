@@ -22,7 +22,6 @@ export default function Home() {
 
   const authLogOut = useAuthStore((state) => state.logout);
   const [loading, setLoading] = useState(false);
-  const [posts, setPosts] = useState([])
   const[recommendationsList, setRecommendationsList] = useState([])
   const navigate = useNavigate();
 
@@ -80,39 +79,39 @@ export default function Home() {
     setRecommendationsList(filteredList)
   }
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/4 mx-auto w-full h-s overflow-hidden ">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto w-full h-s overflow-hidden ">
       {recommendationsList.length > 0 && <FriendRecommendations data = {recommendationsList} handleFollowChange = {func} />}
-      <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6  rounded-2xl 2xl:w-3/4 shadow-lg relative bg-gray-500/10 ">
-        <div className="flex justify-around items-evenly border-b border-gray-700 pb-4 gap-2 flex-col">
-          <div className="flex justify-start items-start  flex-col md:flex-row ">
+      <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6  rounded-2xl 2xl:w-3/4 shadow-lg relative bg-gray-500/10">
+        <div className="flex justify-around items-evenly border-gray-700 gap-2 flex-col">
+          <div className="flex justify-start items-start  flex-col md:flex-row  h-20 ">
             <div className="p-2 flex flex-col gap-3 items-center w-full md:w-1/6">
             <img
-              className="cursor-pointer rounded-full w-15 h-15 border-2 border-cyan-600 shadow"
+              className="cursor-pointer rounded-full w-10 h-10 border-2 border-cyan-600 shadow"
               src={profileImgUrl ? profileImgUrl : defaultProfileImg}
               alt="Profile"
             />
-            <h1 className="text-md font-bold">{displayUsername}</h1>
+            <span className="text-sm font-bold">{displayUsername}</span>
 
             </div>
-          <div className="flex text-xl ps-4 justify-center md:justify-start gap-10 items-center rounded-2xl h-18 mt-5 md:w-2/4 w-full">
+          <div className="flex text-xl justify-center md:justify-start gap-10 items-center rounded-2xl mt-5 md:w-2/4 w-full">
             <div className="flex justify-center items-center flex-col">
-              <p>Followers</p>
-              <p>{followersCount}</p>
+              <p className="text-sm">Followers</p>
+              <p className="text-sm">{followersCount}</p>
             </div>
             <div className="flex justify-center items-center flex-col">
-              <p>Following</p>
-              <p>{followingCount}</p>
+              <p className="text-sm">Following</p>
+              <p className="text-sm">{followingCount}</p>
             </div>
                         <div className="flex justify-center items-center flex-col">
-              <p>Posts</p>
-              <p>{postCount}</p>
+              <p className="text-sm">Posts</p>
+              <p className="text-sm">{postCount}</p>
             </div>
           </div>
           </div>
 
           <button
             onClick={logout}
-            className="text-md bg-red-500 hover:bg-red-700 px-5 py-2 rounded-xl shadow transition-all absolute right-6 top-12"
+            className="text-md bg-red-500 hover:bg-red-700 px-3 py-1  rounded-xl shadow transition-all absolute text-sm right-6 top-12"
           >
             Logout
           </button>

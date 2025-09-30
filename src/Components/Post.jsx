@@ -14,7 +14,7 @@ export default function Post({ post }) {
           className="w-12 h-12 rounded-full object-cover"
         />
         <div>
-          <p className="font-semibold">{post.username}</p>
+          <p className="font-semibold text-sm">{post.username}</p>
           <p className="text-gray-500 text-sm">
             {new Date(post.postedAt).toLocaleString()}
           </p>
@@ -23,7 +23,7 @@ export default function Post({ post }) {
 
       {/* Content */}
       {post.content && (
-        <p className="text-white-800 mb-3">
+        <p className="text-white-800 mb-3 text-sm">
           {showFull || post.content.length < 200
             ? post.content
             : post.content.substring(0, 200) + "..."}

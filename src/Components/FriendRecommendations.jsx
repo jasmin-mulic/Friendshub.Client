@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import usersApi from "../Services/Api/UserApi";
 import noProfileImage from "../assets/noProfilePic.jpg";
 import { useAuthStore } from "../Services/Stores/AuthStore";
@@ -59,7 +59,7 @@ const handleFollow = (id) =>{
             </div>
             <button
               onClick={() => handleFollow(r.id)}
-              className="bg-cyan-700 hover:bg-cyan-600 px-4 py-1 rounded-lg text-sm font-medium shadow transition"
+              className="bg-cyan-700 hover:bg-cyan-600 px-4 flex gap-2 justify-between items-center py-1 rounded-lg text-sm font-medium shadow transition"
             >
               Follow
             </button>
