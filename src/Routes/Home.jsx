@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../Services/Stores/AuthStore";
-import usersApi from "../Services/Api/UserApi";
+import UsersApi from "../Services/Api/UsersApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services//Api/AuthApi";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +28,7 @@ export default function Home() {
     useEffect(() => {
     const fetchRecommendations = async () => {
       try {
-        const response = await usersApi.get("follow-recommendations");
+        const response = await UsersApi.followRecommendations();
         if (response.status === 200) 
           setRecommendationsList(response.data);
       } catch (error) {
@@ -41,7 +41,7 @@ export default function Home() {
     const getData = async () => {
       setLoading(true);
       try {
-        const profileDataInfo = await usersApi.get("me");
+        const profileDataInfo = await UsersApi.myData();
         
         if (profileDataInfo.status === 200) {
           setUserData(profileDataInfo.data);
@@ -51,7 +51,7 @@ export default function Home() {
           resetUserData();
         }
       } catch (err) {
-          console.log("Me api -> ", error.response)
+          console.log("Me api -> ", err.response)
       } finally {
         setLoading(false);
       }

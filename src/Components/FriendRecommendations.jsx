@@ -1,6 +1,6 @@
 import { useState } from "react";
-import usersApi from "../Services/Api/UserApi";
 import noProfileImage from "../assets/noProfilePic.jpg";
+import UsersApi from "../Services/Api/UsersApi";
 import { useAuthStore } from "../Services/Stores/AuthStore";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
 const FriendRecommendations = ({data, handleFollowChange}) => {
@@ -10,10 +10,10 @@ const FriendRecommendations = ({data, handleFollowChange}) => {
   const {setFollowingCount} = useUserDataStore();
   const followUser = async (id) => {
     try {
-      const response = await usersApi.post("follow-user?foloweeId=" + id);
+      const response = await UsersApi.followUser(id);
       if(response.status == 200)
       {
-        console.log(response);
+        console.log(response.data);
         setFollowingCount(1)
       }
     } catch (error) {

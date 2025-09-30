@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import isAdult from "../Helpers"
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthApi from "../Services/Api/AuthApi";
 const Register = () => {
   const form = useForm();
   const navigate = useNavigate()
@@ -12,7 +12,7 @@ const Register = () => {
   const onSubmit = async (data) => {
     console.log(data)
     try {
-        const response = await axios.post("https://localhost:44326/api/Auth/Register", data)
+        const response = await AuthApi.register(data)
         if(response.status === 200)
           navigate("/")
     } catch (exc) {

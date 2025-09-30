@@ -17,7 +17,7 @@ export default function Login() {
     setLoading(true);
     setUnauthorized(""); // resetuj grešku
     try {
-      const response = await AuthApi.post("login/", data);
+      const response = await AuthApi.login(data);
 
       if (response.status === 200) {
         localStorage.setItem("token", response.data);
