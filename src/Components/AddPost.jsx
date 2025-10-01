@@ -33,13 +33,16 @@ const AddPost = () => {
     } catch (error) {}
   };
   return (
-    <div className="absolute top-0 bottom-0 left-0 right-0 bg-gray-300/30 "
-    style={{display: showForm != true &&  "none"}} 
+    <div
+    style={{display: showForm != true ?  "none" : "block"}} 
+    className="absolute top-0 bottom-0 left-0 right-0 bg-gray-300/30 mx-auto flex justify-center items-center"
     >
-      <div className="w-full sm:w-180 h-140 border rounded-2xl bg-white p-3 flex flex-col relative">
+      <div className="w-full sm:w-180 h-140 border rounded-2xl bg-white p-3 flex flex-col relative mx-auto mt-10">
         <div>
-          <input onClick={() => setShowForm(!showForm)}  style={{ display: "none" }} />
+          <input onClick={() => setShowForm(!showForm)} id="triggerForm"  style={{ display: "none" }} />
+          <label htmlFor="triggerForm">
           <ImCross className="bg-red-500 text-white text-xl p-1 w-5 absolute right-2 cursor-pointer" />
+          </label>
         </div>
 
         <h2 className="text-xl text-center mt-2 border-b border-gray-500/50 pb-3">
