@@ -5,12 +5,12 @@ import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services//Api/AuthApi";
 import { useNavigate } from "react-router-dom";
 import FriendRecommendations from "../Components/FriendRecommendations";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
+import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import Feed from "../Components/Feed";
-import AddPost from "../Components/AddPost";
 import "../../src/index.css"
+import AddPost from "../Components/AddPost";
 
-export default function Home() {
+export default function Home({closeAddPost}) {
   const {
     displayUsername,
     postCount,
@@ -24,6 +24,8 @@ export default function Home() {
   const authLogOut = useAuthStore((state) => state.logout);
   const [loading, setLoading] = useState(false);
   const[recommendationsList, setRecommendationsList] = useState([])
+  const [showAddPost, setShowAddPost] = useState(false)
+
   const navigate = useNavigate();
 
     useEffect(() => {
@@ -52,7 +54,6 @@ export default function Home() {
           resetUserData();
         }
       } catch (err) {
-          console.log("Me api -> ", err.response)
       } finally {
         setLoading(false);
       }
@@ -117,6 +118,11 @@ export default function Home() {
             Logout
           </button>
         </div>
+                <textarea
+        onClick={() => setShowAddPost(true)}
+          className="bg-white/90 rounded-2xl w-full text-black/80 p-5 border-2"
+          placeholder="What is on your mind"
+        ></textarea>
     <Feed />
 
       </div>
@@ -125,7 +131,7 @@ export default function Home() {
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-      <AddPost />
+      {showAddPost && <AddPost />}
     </div>
   );
 }

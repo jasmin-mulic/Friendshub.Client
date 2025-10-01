@@ -2,7 +2,7 @@ import { useState } from "react";
 import noProfileImage from "../assets/noProfilePic.jpg";
 import UsersApi from "../Services/Api/UsersApi";
 import { useAuthStore } from "../Services/Stores/AuthStore";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
+import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 const FriendRecommendations = ({data, handleFollowChange}) => {
   const [recommendationsList, setRecommendationsList] = useState(data);
   const [removingId, setRemovingId] = useState(null);
