@@ -1,8 +1,9 @@
 import { create } from "zustand";
+import noProfilePic from "../../assets/noProfilePic.jpg"
 
 export const useUserDataStore  = create((set) => ({
-    displayUsername : "",
-    profileImgUrl : "",
+    displayUsername : null,
+    profileImgUrl :  null,
     followersCount : 0,
     followingCount : 0,
     postCount : 0,

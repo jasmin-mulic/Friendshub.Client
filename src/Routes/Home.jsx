@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import FriendRecommendations from "../Components/FriendRecommendations";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore ";
 import Feed from "../Components/Feed";
+import AddPost from "../Components/AddPost";
 import "../../src/index.css"
 
 export default function Home() {
@@ -124,6 +125,7 @@ export default function Home() {
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
+      <AddPost />
     </div>
   );
 }
