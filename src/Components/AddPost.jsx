@@ -3,45 +3,88 @@ import noProfileImg from "../assets/noProfilePic.jpg";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import { FcAddImage } from "react-icons/fc";
 import { ImCross } from "react-icons/im";
+import { FaTrash } from "react-icons/fa";
+import PostsApi from "../Services/Api/PostsApi";
 
-const AddPost = () => {
+const AddPost = ({ setClose, triggerRefresh }) => {
   const { displayUsername, profileImgUrl } = useUserDataStore();
   const [previews, setPreviews] = useState([]);
-  const [imageFiles, setImageFiles] = useState(null);
-  const [content, setContent] = useState();
+  const [postData, setPostData] = useState({
+    Content: "",
+    ImagePaths: [],
+  });
   const [errorMessage, setErrorMessage] = useState(null);
-  const [showForm, setShowForm] = useState(true);
+  
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    setImageFiles(files);
-    console.log(files);
-
-    // napravi preview URL-ove
+    setPostData((prev) => ({
+      ...prev,
+      ImagePaths: files,
+    }));
+    
     const urls = files.map((file) => ({
       name: file.name,
       url: URL.createObjectURL(file),
     }));
     setPreviews((prev) => [...prev, ...urls]);
   };
+
+  const removeImage = (name) => {
+    console.log(name)
+    console.log(postData.ImagePaths);
+    const previewsFiltered = previews.filter((file) => file.name != name);
+    const imagePaths = postData.ImagePaths.filter((file) => file.name != name)
+    setPreviews(previewsFiltered);
+    setPostData((prev) => ({
+      ...prev,
+      ImagePaths : imagePaths
+    }))
+  };
   const handleContentChange = (e) => {
-    setContent(e.target.value);
+    setPostData((prev) => ({
+      ...prev,
+      Content: e.target.value,
+    }));
   };
   const addPost = async () => {
-    if (content == null && imageFiles == null)
+    if (postData.Content == "" && postData.ImagePaths.length == 0)
       setErrorMessage("Please add an image or content.");
-    try {
-    } catch (error) {}
+    else {
+
+      setErrorMessage(null)
+      const formData = new FormData();
+      formData.append("Content", postData.Content)
+      postData.ImagePaths.forEach(element => {
+        formData.append("ImagePaths", element)
+      });
+
+      try {
+        const response = await PostsApi.addPost(formData);
+        if(response.status == 200)
+        {
+          setClose()
+          triggerRefresh()
+        }
+
+          
+      } catch (error) {
+        setErrorMessage(error.response.data.message);
+        
+      }
+    }
   };
   return (
-    <div
-    style={{display: showForm != true ?  "none" : "block"}} 
-    className="absolute top-0 bottom-0 left-0 right-0 bg-gray-300/30 mx-auto flex justify-center items-center"
-    >
-      <div className="w-full sm:w-180 h-140 border rounded-2xl bg-white p-3 flex flex-col relative mx-auto mt-10">
+    <div className="absolute top-0 bottom-0 left-0 right-0 bg-gray-300/30 mx-auto flex justify-center items-center">
+      <div className="w-full sm:w-180 min-h-140  rounded-2xl bg-gray-900 text-white p-3 flex flex-col justify-between relative mx-auto h-fit">
         <div>
-          <input onClick={() => setShowForm(!showForm)} id="triggerForm"  style={{ display: "none" }} />
+          <input
+            onClick={setClose}
+            id="triggerForm"
+            style={{ display: "none" }}
+            className="text-white"
+          />
           <label htmlFor="triggerForm">
-          <ImCross className="bg-red-500 text-white text-xl p-1 w-5 absolute right-2 cursor-pointer" />
+            <ImCross className="bg-red-500 text-white text-xl p-1 w-5 absolute right-2 cursor-pointer" />
           </label>
         </div>
 
@@ -81,30 +124,39 @@ const AddPost = () => {
           />
           <label
             htmlFor="fileInput"
-            className="p-2 rounded-xl hover:bg-gray-200 cursor-pointer inline-flex items-center"
+            className="p-2 rounded-xl hover:bg-gray-800 cursor-pointer inline-flex items-center"
           >
             <FcAddImage className="w-6 h-6 text-gray-700" />
-            <span className="ml-2 text-sm text-gray-600">Add photos</span>
+            <span className="ml-2 text-sm text-white">Add photos</span>
           </label>
         </div>
 
         {/* preview sekcija */}
         {
-          <div className="mt-4 flex gap-3">
+          <div className="mt-4 flex gap-3 flex-wrap h-fit justify-start">
             {previews.map((file, i) => (
-              <div key={i} className="relative">
+              <div key={i} className="relative group">
                 <img
                   src={file.url}
                   alt={file.name}
-                  className="w-30 h-24 object-cover rounded-lg shadow"
+                  className="w-30 h-30 object-cover rounded-lg shadow"
                 />
+
+                {/* ikonica za brisanje */}
+                <button
+                  type="button"
+                  onClick={() => removeImage(file.name)}
+                  className="absolute top-1 right-1 p-1 bg-black/60 rounded-xl text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <FaTrash size={30} className="bg-red-500/20" />
+                </button>
               </div>
             ))}
           </div>
         }
         <button
           onClick={addPost}
-          className="absolute bottom-5 9 mx-auto bg-green-600 left-2 right-2 rounded-md text-xl text-white py-1"
+          className="bg-green-600 mt-2 rounded-md text-xl text-white py-1"
         >
           Finish
         </button>

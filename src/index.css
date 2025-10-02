@@ -52,4 +52,13 @@ textarea {
 textarea
 {
   resize: none;
+  position: relative;
+  overflow: hidden;
+}
+textarea::placeholder, textarea{
+  color: rgb(203, 203, 203);
+}
+textarea::placeholder{
+  position: absolute;
+  top: 2;
 }

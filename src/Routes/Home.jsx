@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../Services/Stores/AuthStore";
 import UsersApi from "../Services/Api/UsersApi";
+import PostsApi from "../Services/Api/PostsApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services//Api/AuthApi";
 import { useNavigate } from "react-router-dom";
@@ -25,9 +26,26 @@ export default function Home({closeAddPost}) {
   const [loading, setLoading] = useState(false);
   const[recommendationsList, setRecommendationsList] = useState([])
   const [showAddPost, setShowAddPost] = useState(false)
+  const [feedPosts, setFeedPosts] = useState([])
+
 
   const navigate = useNavigate();
+  const getPosts = async () => {
+  try {
+    const postFeedResponse = await PostsApi.getFeedPosts();
 
+    if (postFeedResponse.status == 200) {
+      setFeedPosts(postFeedResponse.data.items);
+    }
+  } catch (error) {
+    console.log(error.response);
+  }
+};
+
+
+  useEffect(() =>{
+    getPosts()
+  },[feedPosts.length])
     useEffect(() => {
     const fetchRecommendations = async () => {
       try {
@@ -40,6 +58,8 @@ export default function Home({closeAddPost}) {
     };
     fetchRecommendations();
   }, []);
+
+
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -64,7 +84,7 @@ export default function Home({closeAddPost}) {
   const logout = async () => {
     setLoading(true);
     try {
-      const response = await AuthApi.post("logout");
+      const response = await AuthApi.logout();
       if (response.status === 200) {
         authLogOut();
         resetUserData();
@@ -80,8 +100,11 @@ export default function Home({closeAddPost}) {
     let filteredList = recommendationsList.filter((x) => x.id != id)
     setRecommendationsList(filteredList)
   }
+  const closeAddForm = () =>{
+    setShowAddPost(false);
+  }
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto w-full h-s overflow-hidden ">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto w-full  ">
       {recommendationsList.length > 0 && <FriendRecommendations data = {recommendationsList} handleFollowChange = {func} />}
       <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6  rounded-2xl 2xl:w-3/4 shadow-lg relative bg-gray-500/10">
         <div className="flex justify-around items-evenly border-gray-700 gap-2 flex-col">
@@ -118,12 +141,12 @@ export default function Home({closeAddPost}) {
             Logout
           </button>
         </div>
-                <textarea
-        onClick={() => setShowAddPost(true)}
-          className="bg-white/90 rounded-2xl w-full text-black/80 p-5 border-2"
-          placeholder="What is on your mind"
-        ></textarea>
-    <Feed />
+        <div className="bg-white text-gray-700 rounded-md pb-15 pt-2 ps-2"
+          onClick={() => setShowAddPost(true)}
+        >
+          <p>Share something...</p>
+        </div>
+    <Feed posts={feedPosts} />
 
       </div>
       {loading && (
@@ -131,7 +154,7 @@ export default function Home({closeAddPost}) {
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-      {showAddPost && <AddPost />}
+      {showAddPost == true && <AddPost setClose={closeAddForm} />}
     </div>
   );
 }
