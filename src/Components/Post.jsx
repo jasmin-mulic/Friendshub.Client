@@ -1,9 +1,19 @@
 import { useState } from "react";
 import defaultProfilePic from "../assets/noProfilePic.jpg"
+import { BiLike } from "react-icons/bi";
+import PostsApi from "../Services/Api/PostsApi";
 
 export default function Post({ post }) {
+  console.log(post)
   const [showFull, setShowFull] = useState(false);
 
+  const  likePost = async (postId) => {
+    try {
+      const response = await PostsApi.likePost(postId)        
+    } catch (error) {
+        console.log(error.response)
+    }
+  }
   return (
     <div className="w-full bg-transparent shadow-md rounded-2xl p-4 mb-6">
       {/* Header: profilna slika + user info */}
@@ -43,14 +53,15 @@ export default function Post({ post }) {
         <div className="flex flex-col  md:flex-row gap-3">
           {post.postImagesUrl.map((img, i) => (
             <img
-              key={i}
-              src={img}
-              alt={`post-img-${i}`}
-              className="xl:max-w-1/2 w-full items-center justify-center rounded-lg object-cover"
+            key={i}
+            src={img}
+            alt={`post-img-${i}`}
+            className="xl:max-w-1/2 w-full items-center justify-center rounded-lg object-cover"
             />
           ))}
         </div>
       )}
+      <div className="flex gap-2 items-center bg-white/50 p-2"><BiLike className="cursor-pointer text-blue-700" size={25} onClick={() => likePost(post.postId)} /> {post.likes.count}</div>
     </div>
   );
 }

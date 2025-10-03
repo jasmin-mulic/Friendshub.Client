@@ -3,10 +3,7 @@ import { useEffect, useState } from "react";
 import Post from "./Post";
 const Feed = ({posts}) => {
 
-  const [feedPosts, setFeedPosts] = useState();
-  useEffect(() =>{
-  setFeedPosts(posts)
-  },[])
+
   return (
     <div className="min-h-full ">
       <div className="relative pb-7 flex flex-col  md:mt-0">

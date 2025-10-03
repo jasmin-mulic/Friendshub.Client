@@ -99,15 +99,15 @@ export default function Home() {
     setShowAddPost(false);
   };
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto w-full  ">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto  p-10 ">
       {recommendationsList.length > 0 && (
         <FriendRecommendations
           data={recommendationsList}
           handleFollowChange={func}
         />
       )}
-      <div className="min-h-screen flex-1 text-white p-6 flex flex-col gap-6  rounded-2xl 2xl:w-3/4 shadow-lg relative bg-gray-500/10">
-        <div className="flex justify-around items-evenly border-gray-700 gap-2 flex-col">
+      <div className="flex-1 text-white p-6 flex flex-col gap-6 rounded-2xl  shadow-lg relative bg-gray-900/9 " >
+        <div className="flex justify-around items-evenly border-gray-700 gap-2 flex-col ">
           <div className="flex justify-start items-start  flex-col md:flex-row  h-20 ">
             <div className="p-2 flex flex-col gap-3 items-center w-full md:w-1/6">
               <img

@@ -31,7 +31,7 @@ const handleFollow = (id) =>{
   followUser(id);
 }
   return (
-    <div className="text-white w-full 2xl:w-96 flex flex-col gap-4 bg-gray-900/50 rounded-2xl shadow-lg p-6">
+    <div className="text-white w-full 2xl:w-96 flex flex-col gap-4 bg-gray-900/90 rounded-2xl shadow-lg p-6">
       <h2 className="text-lg font-semibold text-cyan-400">
         Friend Recommendations
       </h2>
