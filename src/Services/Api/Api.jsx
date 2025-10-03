@@ -1,41 +1,58 @@
 import axios from "axios";
 import { useAuthStore } from "../Stores/AuthStore";
 
+let isRefreshing = false;
+let refreshPromise = null;
+
 const Api = axios.create({
   baseURL: "https://localhost:44326/api",
-  withCredentials: true, // ako koristiš cookies
+  withCredentials: true,
 });
 
-// dodaj access token
-Api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// ✅ Request interceptor - svaki request automatski dobija token
+Api.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().token || localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-// refresh token interceptor
 Api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (originalRequest.url.includes("/Auth/refresh-token")) {
-      return Promise.reject(error);
-    }
-
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      try {
-        const { data } = await Api.post("/Auth/refresh-token");
-        useAuthStore.getState().setToken(data.accessToken);
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-        return Api(originalRequest);
-      } catch (err) {
-        useAuthStore.getState().logout();
-        return Promise.reject(err);
+
+      if (!isRefreshing) {
+        isRefreshing = true;
+        refreshPromise = axios
+          .post(
+            "https://localhost:44326/api/Auth/refresh-token",
+            {},
+            { withCredentials: true }
+          )
+          .then((res) => {
+            const newToken = res.data;
+            // ✅ update store
+            useAuthStore.getState().login(newToken);
+            // ✅ update axios default
+            Api.defaults.headers.common["Authorization"] = "Bearer " + newToken;
+            return newToken;
+          })
+          .finally(() => {
+            isRefreshing = false;
+          });
       }
+
+      const newToken = await refreshPromise;
+      originalRequest.headers["Authorization"] = "Bearer " + newToken;
+      return Api(originalRequest);
     }
 
     return Promise.reject(error);

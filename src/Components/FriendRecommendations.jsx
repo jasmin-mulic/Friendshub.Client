@@ -1,13 +1,13 @@
 import { useState } from "react";
 import noProfileImage from "../assets/noProfilePic.jpg";
 import UsersApi from "../Services/Api/UsersApi";
-import { useAuthStore } from "../Services/Stores/AuthStore";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+
 const FriendRecommendations = ({data, handleFollowChange}) => {
   const [recommendationsList, setRecommendationsList] = useState(data);
   const [removingId, setRemovingId] = useState(null);
-  const logout = useAuthStore.getState((state) => state.logout)
   const {setFollowingCount} = useUserDataStore();
+  
   const followUser = async (id) => {
     try {
       const response = await UsersApi.followUser(id);
@@ -35,7 +35,7 @@ const handleFollow = (id) =>{
       <h2 className="text-lg font-semibold text-cyan-400">
         Friend Recommendations
       </h2>
-      {recommendationsList.length > 0 ? (
+      {recommendationsList.length > 0 && (
         recommendationsList.map((r) => (
           <div
             key={r.id}
@@ -65,8 +65,6 @@ const handleFollow = (id) =>{
             </button>
           </div>
         ))
-      ) : (
-        <p className="text-gray-400 text-sm">No friends to show.</p>
       )}
     </div>
   );
