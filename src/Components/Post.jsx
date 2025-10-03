@@ -4,7 +4,6 @@ import { BiLike } from "react-icons/bi";
 import PostsApi from "../Services/Api/PostsApi";
 
 export default function Post({ post }) {
-  console.log(post)
   const [showFull, setShowFull] = useState(false);
 
   const  likePost = async (postId) => {

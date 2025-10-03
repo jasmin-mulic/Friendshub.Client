@@ -99,7 +99,7 @@ export default function Home() {
     setShowAddPost(false);
   };
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto  p-10 ">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto  p-10">
       {recommendationsList.length > 0 && (
         <FriendRecommendations
           data={recommendationsList}

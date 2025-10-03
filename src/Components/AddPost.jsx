@@ -73,7 +73,7 @@ const AddPost = ({ setClose, triggerRefresh }) => {
   };
   return (
     <div className="absolute top-0 bottom-0 left-0 right-0 bg-gray-300/30 mx-auto flex justify-center items-center">
-      <div className="w-full sm:w-180 min-h-140  rounded-2xl bg-gray-900 text-white p-3 flex flex-col justify-between relative mx-auto h-fit">
+      <div className="w-full sm:w-180 min-h-140  rounded-2xl bg-gray-900 text-white p-5 flex flex-col justify-between relative mx-auto h-fit">
         <div>
           <input
             onClick={setClose}

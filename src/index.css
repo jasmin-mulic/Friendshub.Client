@@ -1,7 +1,8 @@
 @import "tailwindcss";
 #root{
-background: #3F5EFB;
-background: radial-gradient(circle, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+  background:url("./assets/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
   }
 *{
   box-sizing: border-box;
