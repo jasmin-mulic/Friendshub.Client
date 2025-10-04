@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 const isAdult = (dateString)=> {
   const today = new Date();
   const birthDate = new Date(dateString);
@@ -12,35 +14,32 @@ const isAdult = (dateString)=> {
 
   return age >= 18;
 }
-function dateToText(dateString)
-{
-  const today = new Date();
-  const postDate = new Date(dateString)
+function dateToText(dateString) {
+  const now = new Date();
+  const postDate = new Date(dateString + "Z");
+  const diffMs = now - postDate;
 
-  let yearDiff = today.getFullYear() - postDate.getFullYear();
-  let monthDiff = today.getMonth() - postDate.getMonth();
-  let dayDiff = today.getDate() - postDate.getDate();
-  if(yearDiff > 0)
-  {
-    if(year == 1)
-    return `one year ago`
-  else
-    return `${yearDiff} years ago`
-  }
-    if(monthDiff > 0)
-  {
-    if(monthDiff == 1)
-    return `one month ago`
-  else
-    return `${monthDiff} months ago`
-  }
-      if(dayDiff > 0)
-  {
-    if(dayDiff == 1)
-    return `one day ago`
-  else
-    return `${dayDiff} days ago`
-  }
+  const seconds = Math.floor(diffMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (years > 0) return years === 1 ? "one year ago" : `${years} years ago`;
+  if (months > 0) return months === 1 ? "one month ago" : `${months} months ago`;
+  if (days > 0) return days === 1 ? "one day ago" : `${days} days ago`;
+  if (hours > 0) return hours === 1 ? "one hour ago" : `${hours} hours ago`;
+  if (minutes > 0) return minutes === 1 ? "one minute ago" : `${minutes} minutes ago`;
+
+  return "just now";
 }
-export  {dateToText, isAdult};
+
+function getUserIdFromStorage()
+{
+  const token = localStorage.getItem("token");
+  const userId = jwtDecode(token).nameid
+  return userId;
+}
+export  {dateToText, isAdult, getUserIdFromStorage};
 

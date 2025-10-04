@@ -62,8 +62,9 @@ const AddPost = ({ setClose, triggerRefresh }) => {
         const response = await PostsApi.addPost(formData);
         if(response.status == 200)
         {
-          setClose()
           triggerRefresh()
+          alert("Post added")
+          setClose()
         }
       } catch (error) {
         setErrorMessage(error.response.data);

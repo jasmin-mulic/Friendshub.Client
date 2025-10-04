@@ -10,6 +10,7 @@ import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import Feed from "../Components/Feed";
 import "../../src/index.css";
 import AddPost from "../Components/AddPost";
+import { getUserIdFromStorage } from "../Helpers";
 
 export default function Home() {
   const {
@@ -29,7 +30,6 @@ export default function Home() {
   const [feedPosts, setFeedPosts] = useState([]);
   const navigate = useNavigate();
   const storeLogout = useAuthStore.getState().logout;
-
   const getPosts = async () => {
     try {
       const postFeedResponse = await PostsApi.getFeedPosts();
@@ -71,7 +71,7 @@ export default function Home() {
     getPosts();
     fetchRecommendations()
     getData();
-  }, []);
+  }, [feedPosts.length]);
 
   const logout = async () => {
     setLoading(true);
@@ -98,6 +98,7 @@ export default function Home() {
   const closeAddForm = () => {
     setShowAddPost(false);
   };
+
   return (
     <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto  p-10">
       {recommendationsList.length > 0 && (

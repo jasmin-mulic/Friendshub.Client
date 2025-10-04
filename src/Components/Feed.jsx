@@ -1,9 +1,11 @@
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Post from "./Post";
+import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 const Feed = ({posts}) => {
-
-
+const userId = useUserDataStore.getState((state) => state.userId)
+useEffect(() =>{
+},[])
   return (
     <div className="min-h-full ">
       <div className="relative pb-7 flex flex-col  md:mt-0">

@@ -3,24 +3,28 @@ import { useAuthStore } from "../Services/Stores/AuthStore";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AuthApi from "../Services//Api/AuthApi";
+import { jwtDecode } from "jwt-decode";
+import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const login = useAuthStore((state) => state.login);
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate();
-
   const [unauthorized, setUnauthorized] = useState("");
   const [loading, setLoading] = useState(false);
+  const setUserId = useUserDataStore((state) => state.setUserId)
 
   const onSubmit = async (data) => {
     setLoading(true);
-    setUnauthorized(""); // resetuj grešku
+    setUnauthorized("");
     try {
       const response = await AuthApi.login(data);
 
       if (response.status === 200) {
-        localStorage.setItem("token", response.data);
+       localStorage.setItem("token", response.data);
+       const token = localStorage.getItem("token")
+       const userId = jwtDecode(token).nameid
+       setUserId(userId);
         login(response.data);
         navigate("/");
       }
