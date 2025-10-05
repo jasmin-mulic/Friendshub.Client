@@ -10,7 +10,6 @@ import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import Feed from "../Components/Feed";
 import "../../src/index.css";
 import AddPost from "../Components/AddPost";
-import { getUserIdFromStorage } from "../Helpers";
 
 export default function Home() {
   const {
@@ -28,14 +27,27 @@ export default function Home() {
   const [recommendationsList, setRecommendationsList] = useState([]);
   const [showAddPost, setShowAddPost] = useState(false);
   const [feedPosts, setFeedPosts] = useState([]);
+  const [feedPage, setFeedPage] = useState(1);
   const navigate = useNavigate();
   const storeLogout = useAuthStore.getState().logout;
-  const getPosts = async () => {
+
+  const nextPage = async () =>{
+  
+    const data = await getPosts(feedPage + 1)
+    console.log(data)
+    const newData = [...feedPosts ];
+    newData.push(...data.items);
+    setFeedPosts(newData)
+    if(newData.length <= data.totalCount)
+    setFeedPage((prev) => prev +1)
+  }
+
+  const getPosts = async (page) => {
     try {
-      const postFeedResponse = await PostsApi.getFeedPosts();
+      const postFeedResponse = await PostsApi.getFeedPosts(page);
 
       if (postFeedResponse.status == 200) {
-        setFeedPosts(postFeedResponse.data.items);
+        return postFeedResponse.data
       }
     } catch (error) {
       storeLogout();
@@ -68,11 +80,18 @@ export default function Home() {
     }
   };
   useEffect(() => {
-    getPosts();
+    const fetchPosts = async() =>{
+      const data = await getPosts(feedPage);
+      setFeedPosts(data.items)
+    }
+    fetchPosts()
     fetchRecommendations()
     getData();
-  }, [feedPosts.length]);
+  }, []);
+  useEffect(() =>{
+    console.log(feedPosts)
 
+  },[feedPosts.length])
   const logout = async () => {
     setLoading(true);
     try {
@@ -100,7 +119,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto  p-10">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto">
       {recommendationsList.length > 0 && (
         <FriendRecommendations
           data={recommendationsList}
@@ -147,7 +166,7 @@ export default function Home() {
         >
           <p>Share something...</p>
         </div>
-        <Feed posts={feedPosts} />
+        <Feed posts={feedPosts} loadMore={nextPage} />
       </div>
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -155,7 +174,7 @@ export default function Home() {
         </div>
       )}
       {showAddPost == true && (
-        <AddPost setClose={closeAddForm} triggerRefresh={getPosts} />
+        <AddPost setClose={closeAddForm} triggerRefresh={() => nextPage(feedPage)} />
       )}
     </div>
   );

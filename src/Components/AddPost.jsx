@@ -63,7 +63,6 @@ const AddPost = ({ setClose, triggerRefresh }) => {
         if(response.status == 200)
         {
           triggerRefresh()
-          alert("Post added")
           setClose()
         }
       } catch (error) {

@@ -11,12 +11,13 @@ export default function Post({ post }) {
   const [showFull, setShowFull] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [userId, setUserId] = useState(getUserIdFromStorage())
-  const [postLikeCount, setPostLikeCount] = useState(post.likes.count)
+  const [postLikeCount, setPostLikeCount] = useState()
   useEffect(() => {
+    setPostLikeCount(post.likes?.count)
     if (userId && post.likes?.users) {
       setIsLiked(post.likes.users.some((x) => x.userId === userId));
     }
-  }, [userId, post.likes.count]);
+  }, [userId, post.likes?.count]);
 
   const likePost = async (postId) => {
     try {
@@ -38,9 +39,8 @@ export default function Post({ post }) {
       console.log(error.response);
     }
   };
-console.log(post)
   return (
-    <div className="w-full bg-transparent shadow-md rounded-2xl p-4 mb-6">
+    <div className="w-full bg-transparent shadow-md rounded-2xl p-4 border-1">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <img
