@@ -7,7 +7,6 @@ import ProtectedRoute from "./Routes/ProtectedRoute.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./Routes/Register.jsx";
 
-// definicija ruta
 const router = createBrowserRouter([
   {
     path: "/login",

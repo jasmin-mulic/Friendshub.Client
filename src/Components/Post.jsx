@@ -6,12 +6,15 @@ import Dislike from "./Dislike";
 import PostsApi from "../Services/Api/PostsApi";
 import { getUserIdFromStorage } from "../Helpers";
 import { dateToText } from "../Helpers";
+import { FaCommentDots } from "react-icons/fa6";
+
 
 export default function Post({ post }) {
   const [showFull, setShowFull] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [userId, setUserId] = useState(getUserIdFromStorage())
   const [postLikeCount, setPostLikeCount] = useState()
+  const [showCommentArea, setShowCommentArea] = useState(false)
   useEffect(() => {
     setPostLikeCount(post.likes?.count)
     if (userId && post.likes?.users) {
@@ -98,9 +101,17 @@ export default function Post({ post }) {
         </div>
       </div>
 
-      <div onClick={() => likePost(post.postId)}>
+      <div className="flex gap-4">
+        <div onClick={() => likePost(post.postId)}>
         {isLiked == true ? <Dislike /> : <Like />}
+        </div>
+        <div className="flex gap-2 items-center cursor-pointer" onClick={() => setShowCommentArea(!showCommentArea)}><FaCommentDots /> Comments</div>
       </div>
+      { showCommentArea == true &&
+      <div className="mt-4 w-full bg-amber-600">
+        <input type="text" placeholder="Comment" />
+      </div>
+      }
     </div>
   );
 }

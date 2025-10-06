@@ -31,6 +31,9 @@ export default function Home() {
   const navigate = useNavigate();
   const storeLogout = useAuthStore.getState().logout;
 
+  const pushNewPost =(newPost) =>{
+    setFeedPosts((prev) => [newPost, ...prev])
+  }
   const nextPage = async () =>{
   
     const data = await getPosts(feedPage + 1)
@@ -55,6 +58,7 @@ export default function Home() {
       console.log(error);
     }
   };
+
   const fetchRecommendations = async () => {
     try {
       const response = await UsersApi.followRecommendations();
@@ -63,6 +67,7 @@ export default function Home() {
       console.log(error);
     }
   };
+
   const getData = async () => {
     setLoading(true);
     try {
@@ -79,6 +84,7 @@ export default function Home() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const fetchPosts = async() =>{
       const data = await getPosts(feedPage);
@@ -88,10 +94,11 @@ export default function Home() {
     fetchRecommendations()
     getData();
   }, []);
+
   useEffect(() =>{
     console.log(feedPosts)
-
   },[feedPosts.length])
+
   const logout = async () => {
     setLoading(true);
     try {
@@ -110,16 +117,18 @@ export default function Home() {
       setLoading(false);
     }
   };
+
   const func = (id) => {
     let filteredList = recommendationsList.filter((x) => x.id != id);
     setRecommendationsList(filteredList);
   };
+  
   const closeAddForm = () => {
     setShowAddPost(false);
   };
 
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-3/5 mx-auto">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 sm:w-2/5 mx-auto">
       {recommendationsList.length > 0 && (
         <FriendRecommendations
           data={recommendationsList}
@@ -174,7 +183,7 @@ export default function Home() {
         </div>
       )}
       {showAddPost == true && (
-        <AddPost setClose={closeAddForm} triggerRefresh={() => nextPage(feedPage)} />
+        <AddPost setClose={closeAddForm} triggerRefresh={pushNewPost} />
       )}
     </div>
   );

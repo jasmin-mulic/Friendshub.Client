@@ -6,7 +6,7 @@ import { ImCross } from "react-icons/im";
 import { FaTrash } from "react-icons/fa";
 import PostsApi from "../Services/Api/PostsApi";
 
-const AddPost = ({ setClose, triggerRefresh }) => {
+const AddPost = ({ setClose, pushNewPost }) => {
   const { displayUsername, profileImgUrl } = useUserDataStore();
   const [previews, setPreviews] = useState([]);
   const [postData, setPostData] = useState({
@@ -62,7 +62,7 @@ const AddPost = ({ setClose, triggerRefresh }) => {
         const response = await PostsApi.addPost(formData);
         if(response.status == 200)
         {
-          triggerRefresh()
+          pushNewPost(response.data)
           setClose()
         }
       } catch (error) {
