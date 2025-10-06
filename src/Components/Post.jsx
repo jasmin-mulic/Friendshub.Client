@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import defaultProfilePic from "../assets/noProfilePic.jpg";
 import { AiFillLike } from "react-icons/ai";
 import Like from "./Like";
-import Dislike from "./Dislike";
 import PostsApi from "../Services/Api/PostsApi";
 import { getUserIdFromStorage } from "../Helpers";
 import { dateToText } from "../Helpers";
@@ -103,9 +102,9 @@ export default function Post({ post }) {
 
       <div className="flex gap-4">
         <div onClick={() => likePost(post.postId)}>
-        {isLiked == true ? <Dislike /> : <Like />}
+        <Like isLiked={isLiked} />
         </div>
-        <div className="flex gap-2 items-center cursor-pointer" onClick={() => setShowCommentArea(!showCommentArea)}><FaCommentDots /> Comments</div>
+        <div className="flex gap-2 px-2 rounded-md items-center cursor-pointer hover:bg-gray-400/70" onClick={() => setShowCommentArea(!showCommentArea)}><FaCommentDots /> Comments</div>
       </div>
       { showCommentArea == true &&
       <div className="mt-4 w-full bg-amber-600">

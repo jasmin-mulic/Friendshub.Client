@@ -66,7 +66,7 @@ const AddPost = ({ setClose, pushNewPost }) => {
           setClose()
         }
       } catch (error) {
-        setErrorMessage(error.response.data);
+        setErrorMessage(error.response);
         
       }
     }
