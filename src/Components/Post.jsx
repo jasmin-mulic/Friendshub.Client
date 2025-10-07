@@ -6,6 +6,8 @@ import PostsApi from "../Services/Api/PostsApi";
 import { getUserIdFromStorage } from "../Helpers";
 import { dateToText } from "../Helpers";
 import { FaCommentDots } from "react-icons/fa6";
+import Comment from "../Components/Comment"
+import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 
 
 export default function Post({ post }) {
@@ -14,6 +16,10 @@ export default function Post({ post }) {
   const [userId, setUserId] = useState(getUserIdFromStorage())
   const [postLikeCount, setPostLikeCount] = useState()
   const [showCommentArea, setShowCommentArea] = useState(false)
+  const [comments, setComments] = useState(post.comments)
+  const username = useUserDataStore((state) => state.displayUsername)
+    const profileImage = useUserDataStore((state) => state.profileImgUrl)
+
   useEffect(() => {
     setPostLikeCount(post.likes?.count)
     if (userId && post.likes?.users) {
@@ -42,7 +48,7 @@ export default function Post({ post }) {
     }
   };
   return (
-    <div className="w-full bg-transparent shadow-md rounded-2xl p-4 border-1">
+    <div className="w-full bg-transparent shadow-md rounded-2xl border-4">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <img
@@ -107,8 +113,14 @@ export default function Post({ post }) {
         <div className="flex gap-2 px-2 rounded-md items-center cursor-pointer hover:bg-gray-400/70" onClick={() => setShowCommentArea(!showCommentArea)}><FaCommentDots /> Comments</div>
       </div>
       { showCommentArea == true &&
-      <div className="mt-4 w-full bg-amber-600">
-        <input type="text" placeholder="Comment" />
+      <div className="mt-4 w-full">
+        {comments.map((comment) => <Comment comment = {comment} key={comment.commentId} />)}
+        <div className="flex mt-2 bg-gray flex-col">
+          <div className="bg-gray-300">
+          <img src={profileImage} className="w-10 h-10 rounded-full" />
+          </div>
+        <input type="text" placeholder={`Comment as ${username}`} className="p-2 w-full bg-gray-300 rounded-md" />
+        </div>
       </div>
       }
     </div>

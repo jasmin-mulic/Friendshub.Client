@@ -31,7 +31,7 @@ const handleFollow = (id) =>{
   followUser(id);
 }
   return (
-    <div className="text-white w-full 2xl:w-96 flex flex-col gap-4 bg-gray-900/90 rounded-2xl shadow-lg p-6">
+    <div className="text-white w-full flex flex-col gap-4 bg-gray-900/30 rounded-2xl shadow-lg p-2">
       <h2 className="text-lg font-semibold text-cyan-400">
         Friend Recommendations
       </h2>
@@ -39,27 +39,27 @@ const handleFollow = (id) =>{
         recommendationsList.map((r) => (
           <div
             key={r.id}
-            className={`flex items-center justify-between border border-gray-700 rounded-xl p-3 transition-all duration-500 ${
+            className={`flex items-center justify-between border border-gray-700 rounded-xl p-3 transition-all duration-500 w-fit flex-col gap-3 ${
               removingId === r.id
                 ? "opacity-0 translate-x-10"
                 : "opacity-100 translate-x-0"
             }`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex justify flex-col w-30 rounded-md items-center gap-3 h-40">
               <img
                 src={
                   r.profileImageUrl
                     ? "https://localhost:44326/" + r.profileImageUrl
                     : noProfileImage
                 }
-                className="w-12 h-12 rounded-full object-cover border border-gray-600"
+                className="rounded-md object-cover border border-gray-600 w-full h-30"
                 alt={r.username}
               />
               <span className="font-medium">{r.username}</span>
             </div>
             <button
               onClick={() => handleFollow(r.id)}
-              className="bg-cyan-700 hover:bg-cyan-600 px-4 flex gap-2 justify-between items-center py-1 rounded-lg text-sm font-medium shadow transition"
+              className="bg-cyan-700 hover:bg-cyan-600 px-4 w-full flex gap-2 justify-center items-center py-1 rounded-lg text-sm font-medium shadow transition"
             >
               Follow
             </button>
