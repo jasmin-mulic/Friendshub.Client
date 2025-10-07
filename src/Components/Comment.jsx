@@ -10,7 +10,7 @@ const Comments = (prop) => {
       </div>
       <div className="mt-2 flex flex-col rounded-md w-full flex-wrap text-wrap">
         <p className="ps-10">{prop.comment.content}</p>
-        <p className="text-gray-400">
+        <p className="text-gray-400 ps-10">
         {dateToText(prop.comment.commentedAt)}
 
         </p>

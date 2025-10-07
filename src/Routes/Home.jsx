@@ -35,7 +35,6 @@ export default function Home() {
     setFeedPosts((prev) => [newPost, ...prev])
   }
   const nextPage = async () =>{
-  
     const data = await getPosts(feedPage + 1)
     const newData = [...feedPosts ];
     newData.push(...data.items);
@@ -125,13 +124,13 @@ export default function Home() {
     setShowAddPost(false);
   };
   return (
-    <div className="flex flex-col-reverse 2xl:flex-row gap-8 w-full xl:w-3/5 2xl:w-2/5 mx-auto">
-      <div className="flex-1 text-white p-6 flex flex-col gap-6 rounded-2xl  shadow-lg relative bg-gray-500/10 " >
-        <div className="flex justify-around items-evenly border-gray-700 gap-2 flex-col ">
+    <div className="flex flex-col-reverse 2xl:flex-row gap-8 w-full xl:w-3/5 2xl:w-2/5 mx-auto border-2 h-100vh">
+      <div className="flex-1 text-white p-6 flex flex-col gap-6 rounded-2xl  shadow-lg relative bg-gray-500/10" >
+        <div className="flex justify-around items-evenly gap-2 flex-col">
           <div className="flex justify-start items-start  flex-col md:flex-row  h-20 ">
             <div className="p-2 flex flex-col gap-3 items-center w-full md:w-1/6">
               <img
-                className="cursor-pointer rounded-full w-10 h-10 border-2 border-cyan-600 shadow"
+                className="cursor-pointer rounded-full w-15 h-15 border-2 border-cyan-600 shadow"
                 src={profileImgUrl ? profileImgUrl : defaultProfileImg}
                 alt="Profile"
                 />
@@ -167,12 +166,12 @@ export default function Home() {
                 />
               )}
         <div
-          className="bg-white/90 text-gray-700 rounded-md pb-5 xl:pb-15 pt-2 ps-2"
+          className="bg-white/90 text-gray-700 rounded-md pb-10"
           onClick={() => setShowAddPost(true)}
           >
           <p>Share something...</p>
         </div>
-        <Feed posts={feedPosts} loadMore={nextPage} />
+        <Feed posts={feedPosts} loadMore={nextPage}/>
       </div>
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">

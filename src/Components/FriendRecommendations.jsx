@@ -4,6 +4,7 @@ import UsersApi from "../Services/Api/UsersApi";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 
 const FriendRecommendations = ({data, handleFollowChange}) => {
+  console.log(data)
   const [recommendationsList, setRecommendationsList] = useState(data);
   const [removingId, setRemovingId] = useState(null);
   const {setFollowingCount} = useUserDataStore();
@@ -31,10 +32,7 @@ const handleFollow = (id) =>{
   followUser(id);
 }
   return (
-    <div className="text-white w-full flex flex-col gap-4 bg-gray-900/30 rounded-2xl shadow-lg p-2">
-      <h2 className="text-lg font-semibold text-cyan-400">
-        Friend Recommendations
-      </h2>
+    <div className="text-white w-full flex justify-start  gap-4 bg-gray-900/30 rounded-2xl shadow-lg p-2">
       {recommendationsList.length > 0 && (
         recommendationsList.map((r) => (
           <div
@@ -49,7 +47,7 @@ const handleFollow = (id) =>{
               <img
                 src={
                   r.profileImageUrl
-                    ? "https://localhost:44326/" + r.profileImageUrl
+                    ? r.profileImageUrl
                     : noProfileImage
                 }
                 className="rounded-md object-cover border border-gray-600 w-full h-30"

@@ -11,15 +11,13 @@ const loadMorePosts = () =>{
 useEffect(() =>{
 },[])
   return (
-    <div className="min-h-full bg-gray-500/20 ">
-      <div className="relative flex flex-col  md:mt-0">
-      </div>
-      <div className="flex flex-col gap-3 overflow-y-scroll h-[calc(100vh-250px)] scrollbar-hide">
+    <div className="min-h-full relative">
+      <div className="flex flex-col gap-5 overflow-y-scroll h-[calc(100vh)] scrollbar-hide">
         {posts.map((post) => (
           <Post key={post.postId} post={post} />
         ))}
-              <button className="px-4 py-1 text-xl bg-green-600" onClick={loadMorePosts}>Load more posts</button>
       </div>
+            {posts.length > 10 && <button className=" px-4 mx-auto py-1 text-xl bg-green-600" onClick={loadMorePosts}>Load more posts</button> }
     </div>
   );
 };

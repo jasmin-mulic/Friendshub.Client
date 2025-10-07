@@ -8,7 +8,8 @@ import { dateToText } from "../Helpers";
 import { FaCommentDots } from "react-icons/fa6";
 import Comment from "../Components/Comment"
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
-
+import noProfilePic from "../assets/noProfilePic.jpg"
+import "../index.css"
 
 export default function Post({ post }) {
   const [showFull, setShowFull] = useState(false);
@@ -20,6 +21,7 @@ export default function Post({ post }) {
   const username = useUserDataStore((state) => state.displayUsername)
     const profileImage = useUserDataStore((state) => state.profileImgUrl)
 
+    console.log(post)
   useEffect(() => {
     setPostLikeCount(post.likes?.count)
     if (userId && post.likes?.users) {
@@ -48,7 +50,7 @@ export default function Post({ post }) {
     }
   };
   return (
-    <div className="w-full bg-transparent shadow-md rounded-2xl border-4">
+    <div className="w-full shadow-md rounded-2xl px-3 py-5 bg-gray-500/20">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <img
@@ -83,13 +85,13 @@ export default function Post({ post }) {
 
       {/* Images */}
       {post.postImagesUrl?.length > 0 && (
-        <div className="flex flex-col md:flex-row gap-3">
+        <div className="flex flex-col md:flex-row gap-3 px-3">
           {post.postImagesUrl.map((img, i) => (
             <img
               key={i}
               src={img}
               alt={`post-img-${i}`}
-              className="xl:max-w-1/2 w-full rounded-lg object-cover"
+              className="sm:max-w-1/2 w-full rounded-xl  object-cover"
             />
           ))}
         </div>
@@ -110,16 +112,16 @@ export default function Post({ post }) {
         <div onClick={() => likePost(post.postId)}>
         <Like isLiked={isLiked} />
         </div>
-        <div className="flex gap-2 px-2 rounded-md items-center cursor-pointer hover:bg-gray-400/70" onClick={() => setShowCommentArea(!showCommentArea)}><FaCommentDots /> Comments</div>
+        <div className="flex gap-2 px-2 rounded-md items-center cursor-pointer hover:bg-gray-400/70" onClick={() => setShowCommentArea(!showCommentArea)}><FaCommentDots /> {post.comments.length}</div>
       </div>
       { showCommentArea == true &&
       <div className="mt-4 w-full">
         {comments.map((comment) => <Comment comment = {comment} key={comment.commentId} />)}
-        <div className="flex mt-2 bg-gray flex-col">
-          <div className="bg-gray-300">
-          <img src={profileImage} className="w-10 h-10 rounded-full" />
+        <div className="flex mt-2 gap-4 bg-gray flex-col">
+          <div className="">
+          <img src={profileImage == null ? noProfilePic : profileImage } className="w-7 h-7 rounded-full" />
           </div>
-        <input type="text" placeholder={`Comment as ${username}`} className="p-2 w-full bg-gray-300 rounded-md" />
+        <input type="text" placeholder={`Comment as ${username}`} className="p-2 w-full h-10 border-b-2 text-gray-100" />
         </div>
       </div>
       }
