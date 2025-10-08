@@ -14,7 +14,7 @@ import { LogOut, Home as HomeIcon, User } from "lucide-react";
 
 export default function Profile() {
   const {
-    displayUsername,
+    username,
     postCount,
     profileImgUrl,
     followersCount,
@@ -117,7 +117,7 @@ console.log(feedPosts)
     setRecommendationList(filteredList);
   };
  return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col min-h-screen bg-gray-900/60 text-white">
 
       {/* 🧭 Navigacija */}
       <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
@@ -155,7 +155,7 @@ console.log(feedPosts)
                 alt="Profile"
               />
               <div>
-                <p className="font-bold text-gray-100">{displayUsername}</p>
+                <p className="font-bold text-gray-100">{username}</p>
                 <div className="flex gap-4 text-sm text-gray-300 mt-1">
                   <span>Followers: {followersCount}</span>
                   <span>Following: {followingCount}</span>

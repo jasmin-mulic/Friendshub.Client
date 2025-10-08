@@ -130,9 +130,8 @@ export default function Home() {
     setRecommendationList(filteredList);
   };
  return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col min-h-screen bg-gray-900/60 text-white">
 
-      {/* 🧭 Navigacija */}
       <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
         <div className="flex items-center gap-6">
           <Link
@@ -157,7 +156,6 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* 🔽 Glavni sadržaj */}
       <div className="flex flex-col 2xl:flex-row gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">
         <div className="flex-1 text-white p-6 flex flex-col gap-6 rounded-2xl shadow-lg bg-gray-800/20 backdrop-blur-sm relative">
           {/* Profile Info */}

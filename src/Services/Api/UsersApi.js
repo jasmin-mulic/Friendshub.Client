@@ -4,7 +4,7 @@ const UsersApi = {
   myData: () => Api.get("/Users/me"),
   changeProfilePicture: () => Api.post("Users/change-profile-picture"),
   followRecommendations: () => Api.get("/Users/follow-recommendations"),
-  followUser: (id) => Api.post(`/Users/follow-user?foloweeId=${id}`),
+  followUser: (id, comment) => Api.post(`/Users/follow-user?foloweeId=${id}`, comment),
   deleteUser: () => Api.get("delete-user"),
 };
 export default UsersApi;

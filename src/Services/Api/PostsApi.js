@@ -5,7 +5,8 @@ const PostsApi = {
   addPost : (postData) =>Api.post("Posts/add-post", postData),
   getFeedPosts : (page) => Api.get(`/Posts/get-feed-posts/page/${page}`),
   likePost : (postId) => Api.post(`/Posts/like?postId=${postId}`),
-  getMyPosts : (page) => Api.get(`/Posts/my-posts/page/${page}`)
+  getMyPosts : (page) => Api.get(`/Posts/my-posts/page/${page}`),
+  addComment : (postId, comment) => Api.post(`/Posts/add-comment/${postId}`, comment)
 
 }
 export default PostsApi
