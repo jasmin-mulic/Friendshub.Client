@@ -6,6 +6,7 @@ import Login from "./Routes/Login.jsx";
 import ProtectedRoute from "./Routes/ProtectedRoute.jsx"; 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./Routes/Register.jsx";
+import Profile from "./Routes/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path : "/profile",
+    element : (
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    ),
+  }
 ]);
 
 // render

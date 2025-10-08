@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 export const useUserDataStore = create((set) => ({
-  displayUsername: null,
+  username: null,
   profileImgUrl: null,
   followersCount: 0,
   followingCount: 0,
@@ -10,7 +10,7 @@ export const useUserDataStore = create((set) => ({
 
   setUserData: (userData) =>
     set(() => ({
-      displayUsername: userData.displayUsername,
+      username: userData.displayUsername,
       profileImgUrl: userData.profileImgUrl,
       followersCount: userData.followersCount,
       followingCount: userData.followingCount,
@@ -30,12 +30,12 @@ export const useUserDataStore = create((set) => ({
 
   resetUserData: () =>
     set(() => ({
-      displayUsername: "",
-      profileImgUrl: "",
+      username: null,
+      profileImgUrl: null,
       followersCount: 0,
       followingCount: 0,
       postCount: 0,
-      userId: "",
+      userId: null,
     })),
 
   setUserId: (id) =>

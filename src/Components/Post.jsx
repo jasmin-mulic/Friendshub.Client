@@ -10,7 +10,7 @@ import Comment from "../Components/Comment";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import noProfilePic from "../assets/noProfilePic.jpg";
 import "../index.css";
-
+import PostDetails from "./PostDetails";
 export default function Post({ post }) {
   const [showFull, setShowFull] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -140,6 +140,7 @@ export default function Post({ post }) {
           </div>
         </div>
       )}
+      {showCommentArea == true && <PostDetails post = {post} />}
     </div>
   );
 }
