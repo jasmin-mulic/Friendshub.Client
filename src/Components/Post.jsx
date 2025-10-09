@@ -4,16 +4,30 @@ import { AiFillLike } from "react-icons/ai";
 import Like from "./Like";
 import PostsApi from "../Services/Api/PostsApi";
 import { getUserIdFromStorage } from "../Helpers";
+import { Link } from "react-router-dom";
 import { dateToText } from "../Helpers";
 import { FaCommentDots } from "react-icons/fa6";
+import { FaTrashAlt } from "react-icons/fa";
 import "../index.css";
 import PostDetails from "./PostDetails";
-export default function Post({ post }) {
+import DeletePostModal from "./DeletePostModal";
+
+export default function Post({ post: initialPost, deletePost }) {
   const [showFull, setShowFull] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [userId] = useState(getUserIdFromStorage());
   const [postLikeCount, setPostLikeCount] = useState();
+  const [post, setPost] = useState(initialPost);
   const [showCommentArea, setShowCommentArea] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+
+  const addCommentToPost = (newComment) => {
+    setPost((prev) => ({
+      ...prev,
+      comments: [...prev.comments, newComment],
+    }));
+  };
+
   useEffect(() => {
     setPostLikeCount(post.likes?.count);
     if (userId && post.likes?.users) {
@@ -37,9 +51,27 @@ export default function Post({ post }) {
       console.log(error.response);
     }
   };
+
+  const handleDelete = async (postId) =>{
+    setShowDelete(false)
+    try {
+        const response = await PostsApi.deletePost(postId);
+        if(response.status == 200)
+          deletePost(postId);
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
   return (
-    <div className="w-full shadow-md rounded-2xl  bg-gray-500/20 mb-6 p-3">
-      {/* Header */}
+    <div className="w-full shadow-md rounded-2xl  bg-gray-500/20 mb-6 p-3 relative">
+
+      {userId == post.userId && (
+        <div className="absolute p-2 right-3 top-3 rounded-xl bg-red-500 hover:bg-red-700" onClick={() => setShowDelete(true)}>
+          <FaTrashAlt size={20} />
+        </div>
+      )}
+
       <div className="flex items-center gap-3 mb-3">
         <img
           src={post.userProfileImage || defaultProfilePic}
@@ -47,12 +79,11 @@ export default function Post({ post }) {
           className="w-12 h-12 rounded-full object-cover"
         />
         <div>
-          <p className="font-semibold text-sm">{post.username}</p>
+          <Link to={post.username} className="font-semibold text-sm">{post.username}</Link>
           <p className="text-gray-400 text-sm">{dateToText(post.postedAt)}</p>
         </div>
       </div>
 
-      {/* Content */}
       {post.content && (
         <p className="text-gray-100 mb-3 text-sm">
           {showFull || post.content.length < 200
@@ -69,15 +100,14 @@ export default function Post({ post }) {
         </p>
       )}
 
-      {/* Images */}
       {post.postImagesUrl?.length > 0 && (
-        <div className="flex flex-col md:flex-row gap-3 px-3 mb-3">
+        <div className="flex flex-row md:flex-row gap-3 px-3 mb-3 flex-wrap">
           {post.postImagesUrl.map((img, i) => (
             <img
               key={i}
               src={img}
               alt={`post-img-${i}`}
-              className="w-full md:w-1/2 rounded-xl object-cover"
+              className=" w-3/7 md:w-60 md:h-60 rounded-xl object-cover"
             />
           ))}
         </div>
@@ -85,7 +115,10 @@ export default function Post({ post }) {
 
       <div className="flex gap-5 items-center mb-2">
         <div className="flex gap-2 items-center">
-          <AiFillLike className="text-blue-500 bg-white rounded-full p-1" size={25} />
+          <AiFillLike
+            className="text-blue-500 bg-white rounded-full p-1"
+            size={25}
+          />
           <span className="text-gray-200 font-medium">{postLikeCount}</span>
         </div>
       </div>
@@ -100,7 +133,18 @@ export default function Post({ post }) {
           <FaCommentDots /> <span>{post.comments.length}</span>
         </div>
       </div>
-      {showCommentArea == true && <PostDetails post = {post} setShowCommentArea = {setShowCommentArea}  />}
-    </div>
+      {showCommentArea == true && (
+        <PostDetails
+          post={post}
+          setShowCommentArea={setShowCommentArea}
+          addCommentToPost={addCommentToPost}
+        />
+      )}
+            <DeletePostModal
+        show={showDelete}
+        onConfirm={() => handleDelete(post.postId)}
+        onCancel={() => setShowDelete(false)}
+      />
+  </div>
   );
 }

@@ -8,11 +8,11 @@ import { MdAddAPhoto } from "react-icons/md";
 import "../index.css";
 import { FaLocationArrow } from "react-icons/fa";
 import PostsApi from "../Services/Api/PostsApi";
-const PostDetails = ({ post, setShowCommentArea }) => {
+const PostDetails = ({ post, setShowCommentArea, addCommentToPost }) => {
   const username = useUserDataStore((state) => state.username);
   const profileImgUrl = useUserDataStore((state) => state.profileImgUrl);
   const [newComment, setNewComment] = useState({ Content: null, Image: null, });
-
+console.log(post.comments)
   const closeCommentArea = () =>{
     setShowCommentArea()
   }
@@ -40,7 +40,10 @@ const addComment = async () =>{
     formData.append("Image", newComment.Image)
     const response = await PostsApi.addComment(post.postId, formData)
     if(response.status == 200)
+    {
       setShowCommentArea()
+      addCommentToPost(response.data)
+    }
   } catch (error) {
     console.log(error.response)
     
@@ -48,7 +51,7 @@ const addComment = async () =>{
 }
 
   return (
-    <div className="fixed inset-1 z-50 flex justify-center items-center bg-black/50 backdrop-blur-xs p-4">
+    <div className="fixed inset-1 z-50 flex justify-center items-center w-full bg-black/50 backdrop-blur-xs p-4">
       <div className="scrollbar-hide w-full sm:w-[600px] max-h-[90vh] overflow-y-auto bg-gray-800/90 rounded-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
         <button
           onClick={closeCommentArea}

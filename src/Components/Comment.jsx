@@ -1,6 +1,7 @@
 import noProfileImage from "../assets/noProfilePic.jpg";
 import { dateToText } from "../Helpers";
 const Comment = ({ comment }) => {
+  console.log(comment)
   return (
     <div className="flex items-start gap-3 w-full p-3 bg-gray-700/50 rounded-xl border border-gray-600/40 mb-2">
       <img

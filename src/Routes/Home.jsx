@@ -4,14 +4,13 @@ import UsersApi from "../Services/Api/UsersApi";
 import PostsApi from "../Services/Api/PostsApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services//Api/AuthApi";
-import { useNavigate } from "react-router-dom";
-import FriendRecommendations from "../Components/FriendRecommendations";
+import { useNavigate, Link } from "react-router-dom";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+import FriendRecommendations from "../Components/FriendRecommendations";
 import Feed from "../Components/Feed";
-import "../../src/index.css";
 import AddPost from "../Components/AddPost";
-import { Link } from "react-router-dom";
 import { LogOut, Home as HomeIcon, User } from "lucide-react";
+import "../../src/index.css";
 
 export default function Home() {
   const {
@@ -30,81 +29,68 @@ export default function Home() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [feedPosts, setFeedPosts] = useState([]);
   const [feedPage, setFeedPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const navigate = useNavigate();
   const storeLogout = useAuthStore.getState().logout;
 
-  const pushNewPost =(newPost) =>{
-    alert("Pushing new post")
-    setFeedPosts((prev) => [newPost, ...prev])
-  }
-  const nextPage = async () =>{
+  const pushNewPost = (newPost) => {
+    setFeedPosts((prev) => [newPost, ...prev]);
+  };
 
-        const data = await getPosts(feedPage + 1)
-        if(data.totalCount === feedPosts.length)
-          alert("That's all.")
-        else{
-
-          const newData = [...feedPosts ];
-          console.log(data)
-          newData.push(...data.items);
-          setFeedPosts(newData)
-          if(newData.length <= data.totalCount)
-            setFeedPage((prev) => prev +1)
-        }
-  }
+  const nextPage = async () => {
+    const data = await getPosts(feedPage + 1);
+    if (data.totalCount === feedPosts.length) return;
+    const newData = [...feedPosts, ...data.items];
+    setFeedPosts(newData);
+    if (newData.length <= data.totalCount) setFeedPage((prev) => prev + 1);
+  };
 
   const getPosts = async (page) => {
     try {
       const postFeedResponse = await PostsApi.getFeedPosts(page);
-
-      if (postFeedResponse.status == 200) {
-        return postFeedResponse.data
-      }
+      setTotalCount(postFeedResponse.data.totalCount);
+      if (postFeedResponse.status === 200) return postFeedResponse.data;
     } catch (error) {
       storeLogout();
       navigate("login");
-      console.log(error);
     }
   };
+
   const fetchRecommendations = async () => {
     try {
       const response = await UsersApi.followRecommendations();
-      if (response.status === 200)
-        {
-        } setRecommendationList(response.data || []);
-        
-      } catch (error) {
-        console.log(error);
+      if (response.status === 200) {
+        setRecommendationList(response.data || []);
       }
-    };
-    
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getData = async () => {
     setLoading(true);
     try {
       const profileDataInfo = await UsersApi.myData();
-
       if (profileDataInfo.status === 200) {
         setUserData(profileDataInfo.data);
       } else {
         authLogOut();
         resetUserData();
       }
-    } catch (err) {
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchPosts = async() =>{
+    const fetchPosts = async () => {
       const data = await getPosts(feedPage);
-      setFeedPosts(data.items)
-    }
-    fetchPosts()
-    fetchRecommendations()
+      setFeedPosts(data.items);
+    };
+    fetchPosts();
+    fetchRecommendations();
     getData();
   }, []);
-
 
   const logout = async () => {
     setLoading(true);
@@ -115,8 +101,8 @@ export default function Home() {
         resetUserData();
         navigate("login");
       }
-    } catch (error) {
-      localStorage.removeItem("token")
+    } catch {
+      localStorage.removeItem("token");
       storeLogout();
       resetUserData();
       navigate("login");
@@ -125,14 +111,17 @@ export default function Home() {
     }
   };
 
-  const func = (id) => {
-    let filteredList = recommendationList.filter((x) => x.id != id);
-    setRecommendationList(filteredList);
+  const handleFollowRemove = (id) => {
+    setRecommendationList((prev) => prev.filter((x) => x.id !== id));
   };
- return (
-    <div className="flex flex-col min-h-screen bg-gray-900/60 text-white">
 
-      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
+  return (
+    <div className="flex flex-col min-h-screen text-white ">
+      {/* Ambient background glow */}
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.07),transparent_70%)]"></div>
+
+      {/* Navbar */}
+      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md border-b border-gray-700/40">
         <div className="flex items-center gap-6">
           <Link
             to="/"
@@ -141,7 +130,7 @@ export default function Home() {
             <HomeIcon size={20} /> Home
           </Link>
           <Link
-            to="/profile"
+            to="/me"
             className="flex items-center gap-2 hover:text-cyan-400 transition"
           >
             <User size={20} /> Profile
@@ -156,57 +145,70 @@ export default function Home() {
         </button>
       </nav>
 
-      <div className="flex flex-col 2xl:flex-row gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">
-        <div className="flex-1 text-white p-6 flex flex-col gap-6 rounded-2xl shadow-lg bg-gray-800/20 backdrop-blur-sm relative">
-          {/* Profile Info */}
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
+      {/* Main layout */}
+      <div className="flex flex-col 2xl:flex-row gap-8 w-full xl:w-4/5 2xl:w-4/5 mx-auto py-10">
+
+        <div className="hidden 2xl:flex flex-col gap-6 w-1/5 h-fit text-gray-300">
+          <div className="bg-gray-800/30 rounded-xl p-5 shadow backdrop-blur-md border border-gray-700/40">
+            <div className="flex flex-col items-center text-center">
               <img
-                className="cursor-pointer rounded-full w-14 h-14 border-2 border-cyan-600 shadow"
-                src={profileImgUrl ? profileImgUrl : defaultProfileImg}
+                src={profileImgUrl || defaultProfileImg}
                 alt="Profile"
+                className="w-20 h-20 rounded-full border border-gray-700"
               />
-              <div>
-                <p className="font-bold text-gray-100">{username}</p>
-                <div className="flex gap-4 text-sm text-gray-300 mt-1">
-                  <span>Followers: {followersCount}</span>
-                  <span>Following: {followingCount}</span>
-                  <span>Posts: {postCount}</span>
-                </div>
-              </div>
+              <h3 className="mt-3 text-lg font-semibold text-gray-100">{username}</h3>
+              <p className="text-sm text-gray-400">{followersCount} followers</p>
+            </div>
+            <div className="mt-5 text-sm space-y-2">
+              <p className="text-gray-400 font-semibold mb-1">Quick Links</p>
+              <ul className="space-y-1">
+                <Link to={"/me"} className="hover:text-cyan-400 cursor-pointer">My Profile</Link>
+                <li className="hover:text-cyan-400 cursor-pointer">Saved</li>
+                <li className="hover:text-cyan-400 cursor-pointer">Settings</li>
+              </ul>
             </div>
           </div>
+        </div>
 
-          {/* Add post trigger */}
+        {/* CENTER FEED */}
+        <div className="flex-1 text-white p-6 flex flex-col gap-6 rounded-2xl shadow-lg bg-gray-800/40 backdrop-blur-md border w-full border-gray-700/40">
+          <h2 className="text-xl font-semibold text-gray-200 border-b border-gray-700/50 pb-2">
+            Your Feed
+          </h2>
+
           <div
-            className="text-gray-300 bg-gray-700/40 rounded-md h-15 xl:h-20 px-3 py-4 hover:bg-gray-700/60 cursor-pointer transition relative"
+            className="text-gray-300 bg-gray-700/40 rounded-md h-15 xl:h-20 px-3 py-4 hover:bg-gray-700/60 cursor-pointer transition"
             onClick={() => setShowAddForm(true)}
           >
             <p>Share something...</p>
           </div>
 
-          {/* Feed */}
-          <Feed loadMorePosts={nextPage} posts={feedPosts} />
+          <Feed
+            loadMorePosts={nextPage}
+            feedPosts={feedPosts}
+            totalCount={totalCount}
+          />
         </div>
 
+        {/* RIGHT SIDEBAR */}
         <div className="w-full 2xl:w-1/3">
           {recommendationList.length > 0 && (
             <FriendRecommendations
               recommendationList={recommendationList}
-              handleFollow={func}
+              handleFollow={handleFollowRemove}
             />
           )}
         </div>
       </div>
 
-      {/* Loader */}
+      {/* Loading overlay */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
-      {/* Add post modal */}
+      {/* Add Post Modal */}
       {showAddForm && (
         <AddPost
           setClose={() => setShowAddForm(false)}
