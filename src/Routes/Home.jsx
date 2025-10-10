@@ -34,6 +34,7 @@ export default function Home() {
   const storeLogout = useAuthStore.getState().logout;
 
   const pushNewPost = (newPost) => {
+    
     setFeedPosts((prev) => [newPost, ...prev]);
   };
 
@@ -115,28 +116,21 @@ export default function Home() {
     setRecommendationList((prev) => prev.filter((x) => x.id !== id));
   };
 
-  return (
-    <div className="flex flex-col min-h-screen text-white ">
-      {/* Ambient background glow */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.07),transparent_70%)]"></div>
+    return (
+    <div className="flex z-10  flex-col min-h-screen text-white relative">
+      {/* Background gradient */}
+      <div className="absolute inset-0 -z-50 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.07),transparent_70%)] backdrop-blur-sm"></div>
 
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md border-b border-gray-700/40">
+      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-10 shadow-md border-b border-gray-700/40">
         <div className="flex items-center gap-6">
-          <Link
-            to="/"
-            className="flex items-center gap-2 hover:text-cyan-400 transition"
-          >
+          <Link to="/" className="flex items-center gap-2 hover:text-cyan-400 transition">
             <HomeIcon size={20} /> Home
           </Link>
-          <Link
-            to="/me"
-            className="flex items-center gap-2 hover:text-cyan-400 transition"
-          >
+          <Link to="/me" className="flex items-center gap-2 hover:text-cyan-400 transition">
             <User size={20} /> Profile
           </Link>
         </div>
-
         <button
           onClick={logout}
           className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg shadow transition-all"
@@ -145,9 +139,9 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* Main layout */}
-      <div className="flex flex-col 2xl:flex-row gap-8 w-full xl:w-4/5 2xl:w-4/5 mx-auto py-10">
-
+      {/* Main content layout */}
+      <div className="flex gap-8 w-full xl:w-4/5 2xl:w-4/5 mx-auto mt-5">
+        {/* Left sidebar: Profile info */}
         <div className="hidden 2xl:flex flex-col gap-6 w-1/5 h-fit text-gray-300">
           <div className="bg-gray-800/30 rounded-xl p-5 shadow backdrop-blur-md border border-gray-700/40">
             <div className="flex flex-col items-center text-center">
@@ -162,7 +156,9 @@ export default function Home() {
             <div className="mt-5 text-sm space-y-2">
               <p className="text-gray-400 font-semibold mb-1">Quick Links</p>
               <ul className="space-y-1">
-                <Link to={"/me"} className="hover:text-cyan-400 cursor-pointer">My Profile</Link>
+                <Link to="/me" className="hover:text-cyan-400 cursor-pointer">
+                  My Profile
+                </Link>
                 <li className="hover:text-cyan-400 cursor-pointer">Saved</li>
                 <li className="hover:text-cyan-400 cursor-pointer">Settings</li>
               </ul>
@@ -170,8 +166,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* CENTER FEED */}
-        <div className="flex-1 text-white p-6 flex flex-col gap-6 rounded-2xl shadow-lg bg-gray-800/40 backdrop-blur-md border w-full border-gray-700/40">
+        {/* Center panel: Feed */}
+        <div className="flex-1 flex flex-col gap-6 p-6 rounded-2xl shadow-lg bg-gray-800/40 backdrop-blur-md border border-gray-700/40">
           <h2 className="text-xl font-semibold text-gray-200 border-b border-gray-700/50 pb-2">
             Your Feed
           </h2>
@@ -183,14 +179,10 @@ export default function Home() {
             <p>Share something...</p>
           </div>
 
-          <Feed
-            loadMorePosts={nextPage}
-            feedPosts={feedPosts}
-            totalCount={totalCount}
-          />
+          <Feed loadMorePosts={nextPage} feedPosts={feedPosts} totalCount={totalCount} />
         </div>
 
-        {/* RIGHT SIDEBAR */}
+        {/* Right sidebar: Friend recommendations */}
         <div className="w-full 2xl:w-1/3">
           {recommendationList.length > 0 && (
             <FriendRecommendations
@@ -203,18 +195,14 @@ export default function Home() {
 
       {/* Loading overlay */}
       {loading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
       {/* Add Post Modal */}
-      {showAddForm && (
-        <AddPost
-          setClose={() => setShowAddForm(false)}
-          pushNewPost={pushNewPost}
-        />
-      )}
+      {showAddForm && <AddPost setClose={() => setShowAddForm(false)} pushNewPost={pushNewPost} />}
     </div>
   );
-}
+};
+

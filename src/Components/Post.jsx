@@ -20,14 +20,14 @@ export default function Post({ post: initialPost, deletePost }) {
   const [post, setPost] = useState(initialPost);
   const [showCommentArea, setShowCommentArea] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-
+  
   const addCommentToPost = (newComment) => {
     setPost((prev) => ({
       ...prev,
       comments: [...prev.comments, newComment],
     }));
   };
-
+  
   useEffect(() => {
     setPostLikeCount(post.likes?.count);
     if (userId && post.likes?.users) {

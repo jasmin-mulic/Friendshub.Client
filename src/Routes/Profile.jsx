@@ -98,8 +98,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen  text-white">
-      {/* Navbar */}
+    <div className="flex flex-col z-10 min-h-screen text-white backdrop-blur-md">
       <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
         <div className="flex items-center gap-6">
           <Link
@@ -123,7 +122,6 @@ export default function Profile() {
         </button>
       </nav>
 
-      {/* Main layout */}
       <div className="flex gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">
         {/* Left panel: profile info */}
         <div className="w-1/4 hidden lg:flex flex-col items-center p-4 bg-gray-800/20 rounded-2xl shadow-lg backdrop-blur-sm gap-4">

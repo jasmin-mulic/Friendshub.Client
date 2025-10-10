@@ -12,7 +12,10 @@ const PostDetails = ({ post, setShowCommentArea, addCommentToPost }) => {
   const username = useUserDataStore((state) => state.username);
   const profileImgUrl = useUserDataStore((state) => state.profileImgUrl);
   const [newComment, setNewComment] = useState({ Content: null, Image: null, });
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 console.log(post.comments)
+
   const closeCommentArea = () =>{
     setShowCommentArea()
   }
@@ -42,7 +45,10 @@ const addComment = async () =>{
     if(response.status == 200)
     {
       setShowCommentArea()
-      addCommentToPost(response.data)
+      const newComment = response.data;
+      newComment.commentImageUrl = API_BASE_URL + newComment.commentImageUrl;
+      addCommentToPost(newComment)
+      console.log(response.data)
     }
   } catch (error) {
     console.log(error.response)
@@ -50,9 +56,12 @@ const addComment = async () =>{
   }
 }
 
-  return (
-    <div className="fixed inset-1 z-50 flex justify-center items-center w-full bg-black/50 backdrop-blur-xs p-4">
+   return (
+    <div className="fixed inset-0 z-50 flex justify-center items-start pt-10 bg-black/50 backdrop-blur-xs">
+      {/* Modal container */}
       <div className="scrollbar-hide w-full sm:w-[600px] max-h-[90vh] overflow-y-auto bg-gray-800/90 rounded-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
+        
+        {/* Close button */}
         <button
           onClick={closeCommentArea}
           className="absolute top-3 right-3 p-2 bg-red-600 hover:bg-red-700 rounded-full transition"
@@ -60,7 +69,7 @@ const addComment = async () =>{
           <ImCross size={14} />
         </button>
 
-        {/* Header */}
+        {/* Header: Profile + Timestamp */}
         <div className="flex items-center gap-3 mb-3">
           <img
             src={profileImgUrl || defaultProfilePic}
@@ -73,12 +82,12 @@ const addComment = async () =>{
           </div>
         </div>
 
-        {/* Content */}
+        {/* Post content */}
         {post.content && (
           <p className="text-gray-100 mb-3 text-sm">{post.content}</p>
         )}
 
-        {/* Images */}
+        {/* Post images */}
         {post.postImagesUrl?.length > 0 && (
           <div className="flex flex-col md:flex-row gap-3 px-3 mb-3">
             {post.postImagesUrl.map((img, i) => (
@@ -92,11 +101,13 @@ const addComment = async () =>{
           </div>
         )}
 
-        {/* Comments */}
+        {/* Comments section */}
         <div className="mt-4 flex flex-col gap-3">
           {post.comments?.map((comment) => (
             <Comment comment={comment} key={comment.commentId} />
           ))}
+
+          {/* Add comment input */}
           <div className="flex gap-3 items-center bg-gray-700/50 p-2 rounded-xl border border-gray-600/30">
             <img
               src={profileImgUrl || defaultProfilePic}
@@ -123,21 +134,20 @@ const addComment = async () =>{
                 <MdAddAPhoto size={25} className="cursor-pointer" />
               </label>
             </div>
-<button
-  onClick={addComment}
-  disabled={isSubmitDisabled}
-  className={`px-3 py-1 rounded-md transition flex items-center justify-center 
-    ${isSubmitDisabled
-      ? "bg-gray-600 text-gray-300 cursor-not-allowed"
-      : "bg-cyan-700 hover:bg-cyan-600 text-white"}`}
->
-  <FaLocationArrow size={15} />
-</button>
+            <button
+              onClick={addComment}
+              disabled={isSubmitDisabled}
+              className={`px-3 py-1 rounded-md transition flex items-center justify-center 
+                ${isSubmitDisabled
+                  ? "bg-gray-600 text-gray-300 cursor-not-allowed"
+                  : "bg-cyan-700 hover:bg-cyan-600 text-white"}`}
+            >
+              <FaLocationArrow size={15} />
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-export default PostDetails;
+export default PostDetails
