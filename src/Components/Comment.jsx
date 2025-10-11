@@ -7,6 +7,7 @@ import { useState } from "react";
 const Comment = ({ comment }) => {
   const userId = getUserIdFromStorage();
   const [isLiked, setIsLiked] = useState(false);
+  console.log(comment)
   useState(() => {
     setIsLiked(
       comment.commentLikes.some((comment) => comment.userId == userId),
@@ -17,7 +18,7 @@ const Comment = ({ comment }) => {
     try {
       const likeResponse = await PostsApi.likeComment(id);
       console.log(likeResponse.data)
-      if (likeResponse.data.message == "Comment disliked") setIsLiked(false);
+      if (likeResponse.status == 200 && likeResponse.data.message == "Comment disliked") setIsLiked(false);
       else setIsLiked(true);
     } catch (error) {
       console.log(error);
@@ -30,7 +31,7 @@ const Comment = ({ comment }) => {
     <div className="flex items-start gap-3 w-full p-3 bg-gray-700/50 rounded-xl border border-gray-600/40 mb-2">
       <img
         className="w-10 h-10 rounded-full object-cover border border-cyan-600"
-        src={comment.userProfileImageDto || noProfileImage}
+        src={comment.userProfileImageUrl || noProfileImage}
         alt={comment.username}
       />
 
