@@ -1,30 +1,34 @@
 import  { useEffect, useState } from "react";
-import defaultProfilePic from "../assets/noProfilePic.jpg";
-import { dateToText } from "../Helpers";
+import defaultProfilePic from "../../assets/noProfilePic.jpg";
+import { dateToText } from "../../Helpers";
 import { ImCross } from "react-icons/im";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore";
-import Comment from "./Comment";
+import { useUserDataStore } from "../../Services/Stores/useUserDataStore";
+import Comment from "../Comment";
 import { MdAddAPhoto } from "react-icons/md";
-import "../index.css";
+import "../../index.css";
 import { FaLocationArrow } from "react-icons/fa";
-import PostsApi from "../Services/Api/PostsApi";
-const PostDetails = ({ post, setShowCommentArea, addCommentToPost }) => {
+import PostsApi from "../../Services/Api/PostsApi";
+
+const PostDetailsModal = ({ post, setShowCommentArea, addCommentToPost }) => {
+  
   const username = useUserDataStore((state) => state.username);
   const profileImgUrl = useUserDataStore((state) => state.profileImgUrl);
   const [newComment, setNewComment] = useState({ Content: null, Image: null, });
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-console.log(post.comments)
 
   const closeCommentArea = () =>{
     setShowCommentArea()
   }
   const handleFileChange = (e) => {
   const file = e.target.files[0];
-  setNewComment((prev) => ({
-    ...prev,
-    Image: file,
-  }));
+  if(file)
+  {
+    setNewComment((prev) => ({
+      ...prev,
+      Image: file,
+    }));
+  }
 };
 
 const handleContentChange = (e) => {
@@ -46,9 +50,9 @@ const addComment = async () =>{
     {
       setShowCommentArea()
       const newComment = response.data;
-      newComment.commentImageUrl = API_BASE_URL + newComment.commentImageUrl;
+      console.log("Komentar u funkciji.")
+      console.log(newComment)
       addCommentToPost(newComment)
-      console.log(response.data)
     }
   } catch (error) {
     console.log(error.response)
@@ -57,9 +61,9 @@ const addComment = async () =>{
 }
 
    return (
-    <div className="fixed inset-0 z-50 flex justify-center items-start pt-10 bg-black/50 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 flex justify-center items-center pt-10 bg-black/50 backdrop-blur-xs">
       {/* Modal container */}
-      <div className="scrollbar-hide w-full sm:w-[600px] max-h-[90vh] overflow-y-auto bg-gray-800/90 rounded-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
+      <div className="scrollbar-hide w-full sm:w-[600px] max-h-[80vh] overflow-y-auto bg-gray-800/90 rounded-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
         
         {/* Close button */}
         <button
@@ -150,4 +154,4 @@ const addComment = async () =>{
     </div>
   );
 };
-export default PostDetails
+export default PostDetailsModal

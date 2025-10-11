@@ -7,6 +7,7 @@ const PostsApi = {
   likePost : (postId) => Api.post(`/Posts/like?postId=${postId}`),
   getMyPosts : (page) => Api.get(`/Posts/my-posts/page/${page}`),
   addComment : (postId, comment) => Api.post(`/Posts/add-comment/${postId}`, comment),
-  deletePost : (postId) => Api.delete(`/Posts/delete-post?postId=${postId}`)
+  deletePost : (postId) => Api.delete(`/Posts/delete-post?postId=${postId}`),
+  likeComment : (commentId) => Api.post(`/Posts/like-comment/${commentId}`)
 }
 export default PostsApi

@@ -3,6 +3,7 @@ import Post from "./Post";
 
 const Feed = ({ loadMorePosts, feedPosts, totalCount }) => {
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (feedPosts && feedPosts.length > 0) {
@@ -15,7 +16,7 @@ const Feed = ({ loadMorePosts, feedPosts, totalCount }) => {
   };
 
   return (
-    <div className="flex flex-col gap-5 overflow-y-auto max-h-[70vh] scrollbar-hide">
+    <div className="flex flex-col gap-5 overflow-y-auto max-h-[70vh] scrollbar-hide px-4">
       {posts.length > 0 ? (
         posts.map((post) => (
           <Post key={post.postId} post={post} deletePost={deletePost} />

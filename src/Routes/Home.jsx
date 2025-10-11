@@ -24,17 +24,17 @@ export default function Home() {
   } = useUserDataStore();
 
   const authLogOut = useAuthStore((state) => state.logout);
+  const storeLogout = useAuthStore.getState().logout;
   const [loading, setLoading] = useState(false);
   const [recommendationList, setRecommendationList] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [feedPosts, setFeedPosts] = useState([]);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+
   const navigate = useNavigate();
-  const storeLogout = useAuthStore.getState().logout;
 
   const pushNewPost = (newPost) => {
-    
     setFeedPosts((prev) => [newPost, ...prev]);
   };
 
@@ -47,22 +47,26 @@ export default function Home() {
   };
 
   const getPosts = async (page) => {
+    setLoading(true);
     try {
       const postFeedResponse = await PostsApi.getFeedPosts(page);
-      setTotalCount(postFeedResponse.data.totalCount);
-      if (postFeedResponse.status === 200) return postFeedResponse.data;
+      if (postFeedResponse.status === 200) {
+        setTotalCount(postFeedResponse.data.totalCount);
+        return postFeedResponse.data;
+      }
     } catch (error) {
       storeLogout();
       navigate("login");
+    }
+    finally{
+      setLoading(false)
     }
   };
 
   const fetchRecommendations = async () => {
     try {
       const response = await UsersApi.followRecommendations();
-      if (response.status === 200) {
-        setRecommendationList(response.data || []);
-      }
+      if (response.status === 200) setRecommendationList(response.data || []);
     } catch (error) {
       console.log(error);
     }
@@ -72,9 +76,8 @@ export default function Home() {
     setLoading(true);
     try {
       const profileDataInfo = await UsersApi.myData();
-      if (profileDataInfo.status === 200) {
-        setUserData(profileDataInfo.data);
-      } else {
+      if (profileDataInfo.status === 200) setUserData(profileDataInfo.data);
+      else {
         authLogOut();
         resetUserData();
       }
@@ -82,16 +85,6 @@ export default function Home() {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const data = await getPosts(feedPage);
-      setFeedPosts(data.items);
-    };
-    fetchPosts();
-    fetchRecommendations();
-    getData();
-  }, []);
 
   const logout = async () => {
     setLoading(true);
@@ -116,11 +109,20 @@ export default function Home() {
     setRecommendationList((prev) => prev.filter((x) => x.id !== id));
   };
 
-    return (
-    <div className="flex flex-col z-10 min-h-screen text-white backdrop-blur-md">
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const data = await getPosts(feedPage);
+      if (data) setFeedPosts(data.items);
+    };
+    fetchPosts();
+    fetchRecommendations();
+    getData();
+  }, []);
 
+  return (
+    <div className="flex flex-col z-10 min-h-screen text-white backdrop-blur-md">
       {/* Navbar */}
-      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-10 shadow-md border-b border-gray-700/40">
+      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2 hover:text-cyan-400 transition">
             <HomeIcon size={20} /> Home
@@ -137,9 +139,8 @@ export default function Home() {
         </button>
       </nav>
 
-      <div className="flex flex-col xl:flex-row gap-8 w-full 2xl:w-4/5 mx-auto py-8  ">
-
-        <div className="hidden 2xl:flex flex-col gap-6 w-1/4 h-fit text-gray-300 v ">
+      <div className="flex gap-8 w-full md:w-4/5  mx-auto py-8">
+        <div className="hidden lg:flex flex-col w-1/4 h-fit text-gray-300">
           <div className="bg-gray-800/30 rounded-xl p-5 shadow backdrop-blur-md border border-gray-700/40">
             <div className="flex flex-col items-center text-center">
               <img
@@ -162,27 +163,24 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Center panel: Feed */}
-        <div className="flex-1 flex flex-col gap-6 p-6 rounded-2xl shadow-lg bg-gray-800/40 backdrop-blur-md border border-gray-700/40">
-          <h2 className="text-xl font-semibold text-gray-200 border-b border-gray-700/50 pb-2">
-            Your Feed
-          </h2>
-
+        {/* Center panel (Feed + AddPost) */}
+        <div className="flex-1 flex flex-col gap-6">
           <div
-            className="text-gray-300 bg-gray-700/40 rounded-md h-15 xl:h-20 px-3 py-4 hover:bg-gray-700/60 cursor-pointer transition"
+            className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"
             onClick={() => setShowAddForm(true)}
           >
-            <p>Share something...</p>
+            <p className="font-medium">Share something...</p>
           </div>
 
           <Feed loadMorePosts={nextPage} feedPosts={feedPosts} totalCount={totalCount} />
         </div>
 
-        <div className="w-full xl:w-1/5">
-            <FriendRecommendations
-              recommendationList={recommendationList}
-              handleFollow={handleFollowRemove}
-            />
+        {/* Right panel (recommendations) */}
+        <div className="hidden xl:block w-1/5">
+          <FriendRecommendations
+            recommendationList={recommendationList}
+            handleFollow={handleFollowRemove}
+          />
         </div>
       </div>
 
@@ -192,8 +190,10 @@ export default function Home() {
         </div>
       )}
 
-      {showAddForm && <AddPost setClose={() => setShowAddForm(false)} pushNewPost={pushNewPost} />}
+      {/* Add Post modal */}
+      {showAddForm && (
+        <AddPost setClose={() => setShowAddForm(false)} pushNewPost={pushNewPost} />
+      )}
     </div>
   );
-};
-
+}

@@ -9,7 +9,7 @@ import { dateToText } from "../Helpers";
 import { FaCommentDots } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import "../index.css";
-import PostDetails from "./PostDetails";
+import PostDetailsModal from "./Modals/PostDetailsModal";
 import DeletePostModal from "./Modals/DeletePostModal";
 
 export default function Post({ post: initialPost, deletePost }) {
@@ -64,7 +64,7 @@ export default function Post({ post: initialPost, deletePost }) {
 
   }
   return (
-    <div className="w-full shadow-md rounded-2xl  bg-gray-500/20 mb-6 p-3 relative">
+    <div className="w-full shadow-md rounded-2xl  bg-gray-500/20 mb-6 p-5 relative">
 
       {userId == post.userId && (
         <div className="absolute p-2 right-3 top-3 rounded-xl bg-red-500 hover:bg-red-700" onClick={() => setShowDelete(true)}>
@@ -74,7 +74,7 @@ export default function Post({ post: initialPost, deletePost }) {
 
       <div className="flex items-center gap-3 mb-3">
         <img
-          src={post.userProfileImage || defaultProfilePic}
+          src={post.profileImgUrl || defaultProfilePic}
           alt="Profile"
           className="w-12 h-12 rounded-full object-cover"
         />
@@ -134,7 +134,7 @@ export default function Post({ post: initialPost, deletePost }) {
         </div>
       </div>
       {showCommentArea == true && (
-        <PostDetails
+        <PostDetailsModal
           post={post}
           setShowCommentArea={setShowCommentArea}
           addCommentToPost={addCommentToPost}
