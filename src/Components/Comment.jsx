@@ -17,6 +17,7 @@ const Comment = ({ comment }) => {
         <span className="text-gray-400 text-xs mt-1">
           {dateToText(comment.commentedAt)}
         </span>
+        <p>Like</p>
       </div>
     </div>
   );

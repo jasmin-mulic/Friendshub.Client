@@ -10,7 +10,7 @@ import { FaCommentDots } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import "../index.css";
 import PostDetails from "./PostDetails";
-import DeletePostModal from "./DeletePostModal";
+import DeletePostModal from "./Modals/DeletePostModal";
 
 export default function Post({ post: initialPost, deletePost }) {
   const [showFull, setShowFull] = useState(false);

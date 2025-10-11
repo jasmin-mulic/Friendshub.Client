@@ -152,14 +152,6 @@ export default function Profile() {
             totalCount={totalCount}
           />
         </div>
-
-        {/* Right panel: placeholder for friends / recommendations */}
-        <div className="w-1/4 hidden lg:flex flex-col gap-4">
-          <div className="bg-gray-800/20 p-4 rounded-2xl shadow-lg backdrop-blur-sm text-gray-300">
-            <p className="font-semibold mb-2">Friend Recommendations</p>
-            <p>Some placeholder content...</p>
-          </div>
-        </div>
       </div>
 
       {/* Loader */}

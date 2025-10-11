@@ -117,9 +117,7 @@ export default function Home() {
   };
 
     return (
-    <div className="flex z-10  flex-col min-h-screen text-white relative">
-      {/* Background gradient */}
-      <div className="absolute inset-0 -z-50 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.07),transparent_70%)] backdrop-blur-sm"></div>
+    <div className="flex flex-col z-10 min-h-screen text-white backdrop-blur-md">
 
       {/* Navbar */}
       <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-10 shadow-md border-b border-gray-700/40">
@@ -139,10 +137,9 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* Main content layout */}
-      <div className="flex gap-8 w-full xl:w-4/5 2xl:w-4/5 mx-auto mt-5">
-        {/* Left sidebar: Profile info */}
-        <div className="hidden 2xl:flex flex-col gap-6 w-1/5 h-fit text-gray-300">
+      <div className="flex flex-col xl:flex-row gap-8 w-full 2xl:w-4/5 mx-auto py-8  ">
+
+        <div className="hidden 2xl:flex flex-col gap-6 w-1/4 h-fit text-gray-300 v ">
           <div className="bg-gray-800/30 rounded-xl p-5 shadow backdrop-blur-md border border-gray-700/40">
             <div className="flex flex-col items-center text-center">
               <img
@@ -153,8 +150,7 @@ export default function Home() {
               <h3 className="mt-3 text-lg font-semibold text-gray-100">{username}</h3>
               <p className="text-sm text-gray-400">{followersCount} followers</p>
             </div>
-            <div className="mt-5 text-sm space-y-2">
-              <p className="text-gray-400 font-semibold mb-1">Quick Links</p>
+            <div className="mt-5 text-sm space-y-2 text-center">
               <ul className="space-y-1">
                 <Link to="/me" className="hover:text-cyan-400 cursor-pointer">
                   My Profile
@@ -182,25 +178,20 @@ export default function Home() {
           <Feed loadMorePosts={nextPage} feedPosts={feedPosts} totalCount={totalCount} />
         </div>
 
-        {/* Right sidebar: Friend recommendations */}
-        <div className="w-full 2xl:w-1/3">
-          {recommendationList.length > 0 && (
+        <div className="w-full xl:w-1/5">
             <FriendRecommendations
               recommendationList={recommendationList}
               handleFollow={handleFollowRemove}
             />
-          )}
         </div>
       </div>
 
-      {/* Loading overlay */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
 
-      {/* Add Post Modal */}
       {showAddForm && <AddPost setClose={() => setShowAddForm(false)} pushNewPost={pushNewPost} />}
     </div>
   );
