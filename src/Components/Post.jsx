@@ -20,11 +20,12 @@ export default function Post({ post: initialPost, deletePost }) {
   const [post, setPost] = useState(initialPost);
   const [showCommentArea, setShowCommentArea] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-console.log(post)
+
   const addCommentToPost = (newComment) => {
+    console.log("novi komentar -> " + {newComment})
     setPost((prev) => ({
       ...prev,
-      comments: [...prev.comments, newComment],
+      comments: [newComment,...prev.comments],
     }));
   };
   

@@ -7,7 +7,6 @@ import { useState } from "react";
 const Comment = ({ comment }) => {
   const userId = getUserIdFromStorage();
   const [isLiked, setIsLiked] = useState(false);
-  console.log(comment)
   useState(() => {
     setIsLiked(
       comment.commentLikes.some((comment) => comment.userId == userId),
@@ -31,7 +30,7 @@ const Comment = ({ comment }) => {
     <div className="flex items-start gap-3 w-full p-3 bg-gray-700/50 rounded-xl border border-gray-600/40 mb-2">
       <img
         className="w-10 h-10 rounded-full object-cover border border-cyan-600"
-        src={comment.userProfileImageUrl || noProfileImage}
+        src={comment.userProfileImageUrl == "" ? noProfileImage : comment.userProfileImageUrl}
         alt={comment.username}
       />
 

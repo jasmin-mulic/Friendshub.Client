@@ -43,7 +43,9 @@ const isSubmitDisabled = !newComment.Content?.trim() && !newComment.Image;
 const addComment = async () =>{
   try {
     const formData = new FormData();
+    if(newComment.Content)
     formData.append("Content", newComment.Content)
+  if(newComment.Image)
     formData.append("Image", newComment.Image)
     const response = await PostsApi.addComment(post.postId, formData)
     if(response.status == 200)
