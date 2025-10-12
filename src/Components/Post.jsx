@@ -101,18 +101,24 @@ export default function Post({ post: initialPost, deletePost }) {
         </p>
       )}
 
-      {post.postImagesUrl?.length > 0 && (
-        <div className="flex flex-row md:flex-row gap-3 px-3 mb-3 flex-wrap">
-          {post.postImagesUrl.map((img, i) => (
-            <img
-              key={i}
-              src={img}
-              alt={`post-img-${i}`}
-              className=" w-3/7 md:w-60 md:h-60 rounded-xl object-cover"
-            />
-          ))}
-        </div>
-      )}
+{post.postImagesUrl?.length > 0 && (
+  <div className="flex flex-wrap gap-3 px-3 mb-3">
+    {post.postImagesUrl.map((img, i) => (
+      <div
+        key={i}
+        className="w-40 h-40 md:w-60 md:h-60 rounded-xl overflow-hidden bg-gray-800/50  items-center justify-center flex flex-wrap gap-3 px-3 mb-3 will-change-transform"
+      >
+        <img
+          src={img}
+          loading="lazy"
+          alt={`post-img-${i}`}
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+        />
+      </div>
+    ))}
+  </div>
+)}
+
 
       <div className="flex gap-5 items-center mb-2">
         <div className="flex gap-2 items-center">

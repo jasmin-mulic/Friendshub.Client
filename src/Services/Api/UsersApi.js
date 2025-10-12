@@ -6,5 +6,6 @@ const UsersApi = {
   followRecommendations: () => Api.get("/Users/follow-recommendations"),
   followUser: (id, comment) => Api.post(`/Users/follow-user?foloweeId=${id}`, comment),
   deleteUser: () => Api.get("delete-user"),
+  getFollowers: () => Api.get("/Users/followers"),
 };
 export default UsersApi;

@@ -3,7 +3,6 @@ import Post from "./Post";
 
 const Feed = ({ loadMorePosts, feedPosts, totalCount }) => {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (feedPosts && feedPosts.length > 0) {

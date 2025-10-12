@@ -9,7 +9,7 @@ import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import Feed from "../Components/Feed";
 import "../../src/index.css";
 import { LogOut, Home as HomeIcon, User } from "lucide-react";
-
+import FollowersModal from "../Components/Modals/FollowersModal";
 export default function Profile() {
   const {
     username,
@@ -27,7 +27,7 @@ export default function Profile() {
   const [feedPosts, setFeedPosts] = useState([]);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-
+  const [showFollowersModal, setShowFollowersModal] = useState(false);
   const navigate = useNavigate();
 
   const getData = async () => {
@@ -131,21 +131,14 @@ export default function Profile() {
             alt="Profile"
           />
           <p className="font-bold text-lg">{username}</p>
-          <div className="flex flex-col text-sm text-gray-300 gap-1">
-            <span>Followers: {followersCount}</span>
+          <div className="flex flex-col text-md text-gray-300 gap-1">
+            <span onClick={() => setShowFollowersModal(true)} className="hover:text-blue-400 cursor-pointer">Followers: {followersCount}</span>
             <span>Following: {followingCount}</span>
             <span>Posts: {postCount}</span>
           </div>
         </div>
 
-        {/* Center panel: feed + share */}
         <div className="flex-1 flex flex-col gap-6">
-          {/* Share input */}
-          <div className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition">
-            <p className="font-medium">Share something...</p>
-          </div>
-
-          {/* Feed */}
           <Feed
             loadMorePosts={nextPage}
             feedPosts={feedPosts}
@@ -154,12 +147,12 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Loader */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
+      {showFollowersModal && <FollowersModal />}
     </div>
   );
 }
