@@ -163,7 +163,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Center panel (Feed + AddPost) */}
         <div className="flex-1 flex flex-col gap-6">
           <div
             className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"
@@ -175,8 +174,7 @@ export default function Home() {
           <Feed loadMorePosts={nextPage} feedPosts={feedPosts} totalCount={totalCount} />
         </div>
 
-        {/* Right panel (recommendations) */}
-        <div className="hidden xl:block w-1/5">
+        <div className="hidden 2xl:block w-2/8">
           <FriendRecommendations
             recommendationList={recommendationList}
             handleFollow={handleFollowRemove}

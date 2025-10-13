@@ -97,6 +97,9 @@ export default function Profile() {
     }
   };
 
+  const showFollowers = () =>{
+    setShowFollowersModal(!showFollowersModal)
+  }
   return (
     <div className="flex flex-col z-10 min-h-screen text-white backdrop-blur-md">
       <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
@@ -123,7 +126,6 @@ export default function Profile() {
       </nav>
 
       <div className="flex gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">
-        {/* Left panel: profile info */}
         <div className="w-1/4 hidden lg:flex flex-col items-center p-4 bg-gray-800/20 rounded-2xl shadow-lg backdrop-blur-sm gap-4">
           <img
             className="rounded-full w-20 h-20 border-2 border-cyan-600 shadow-lg"
@@ -132,7 +134,7 @@ export default function Profile() {
           />
           <p className="font-bold text-lg">{username}</p>
           <div className="flex flex-col text-md text-gray-300 gap-1">
-            <span onClick={() => setShowFollowersModal(true)} className="hover:text-blue-400 cursor-pointer">Followers: {followersCount}</span>
+            <span onClick={showFollowers} className="hover:text-blue-400 cursor-pointer">Followers: {followersCount}</span>
             <span>Following: {followingCount}</span>
             <span>Posts: {postCount}</span>
           </div>
@@ -146,13 +148,13 @@ export default function Profile() {
           />
         </div>
       </div>
+      {showFollowersModal == true && <FollowersModal onCancel={showFollowers} />}
 
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-      {showFollowersModal && <FollowersModal />}
     </div>
   );
 }

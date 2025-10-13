@@ -22,7 +22,6 @@ export default function Post({ post: initialPost, deletePost }) {
   const [showDelete, setShowDelete] = useState(false);
 
   const addCommentToPost = (newComment) => {
-    console.log("novi komentar -> " + {newComment})
     setPost((prev) => ({
       ...prev,
       comments: [newComment,...prev.comments],
@@ -112,7 +111,7 @@ export default function Post({ post: initialPost, deletePost }) {
           src={img}
           loading="lazy"
           alt={`post-img-${i}`}
-          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+          className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105"
         />
       </div>
     ))}

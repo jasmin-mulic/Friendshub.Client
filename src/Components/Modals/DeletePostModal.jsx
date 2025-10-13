@@ -9,7 +9,6 @@ export default function DeletePostModal({ show, onConfirm, onCancel }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onCancel}
         >
           <motion.div
             className="bg-gray-800 text-white p-6 rounded-2xl shadow-2xl w-[320px] text-center"
@@ -24,14 +23,14 @@ export default function DeletePostModal({ show, onConfirm, onCancel }) {
             </p>
             <div className="flex justify-center gap-4">
               <button
-                onClick={onConfirm}
                 className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition"
+                onClick={onConfirm}
               >
                 Yes
               </button>
               <button
-                onClick={onCancel}
                 className="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded-lg transition"
+                onClick={onCancel}
               >
                 No
               </button>

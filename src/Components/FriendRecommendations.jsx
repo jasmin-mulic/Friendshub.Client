@@ -16,6 +16,7 @@ const FriendRecommendations = ({ recommendationList, handleFollow }) => {
     try {
       const response = await UsersApi.followUser(id);
       if (response.status === 200) {
+        console.log(response.data.message)
         setFollowingCount(1);
       }
     } catch (error) {

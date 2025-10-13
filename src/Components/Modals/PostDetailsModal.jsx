@@ -52,8 +52,6 @@ const addComment = async () =>{
     {
       setShowCommentArea()
       const newComment = response.data;
-      console.log("Komentar u funkciji.")
-      console.log(newComment)
       addCommentToPost(newComment)
     }
   } catch (error) {
