@@ -9,6 +9,7 @@ const UsersApi = {
   getFollowers: () => Api.get("/Users/followers"),
   getFollowings: () => Api.get("/Users/following"),
 
-  removeFollower: (followeeId) => Api.post(`Users/remove-follower/${followeeId}`),
+
+  removeFromFollowings: (followeeId) => Api.post(`Users/remove-from-followings/${followeeId}`),
 };
 export default UsersApi;

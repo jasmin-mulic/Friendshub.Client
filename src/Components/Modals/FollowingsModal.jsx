@@ -3,9 +3,12 @@ import noProfilePic from "../../assets/noProfilePic.jpg";
 import { AnimatePresence, motion } from "motion/react";
 import UsersApi from "../../Services/Api/UsersApi";
 import { ImCross } from "react-icons/im";
-
+import { useUserDataStore } from "../../Services/Stores/useUserDataStore";
 const FollowingsModal = ({ onCancel }) => {
+
   const [followings, setFollowers] = useState([]);
+  const setFollowingCount = useUserDataStore((state) => state.setFollowingCount)
+
 
   useEffect(() => {
     const getFollowings = async () => {
@@ -22,13 +25,15 @@ const FollowingsModal = ({ onCancel }) => {
     console.log("rendering");
   }, []);
 
-  const removeFollower = async (followeeId) => {
+  const removeFromFollowing = async (followeeId) => {
     try {
-      const response = await UsersApi.removeFollower(followeeId)
-      if(response.data == 200)
+      const response = await UsersApi.followUser(followeeId)
+      if(response.status == 200)
       {
         const filteredList = followings.filter((followee) => followee.userId != followeeId);
         setFollowers(filteredList);
+        console.log(response.data)
+        setFollowingCount(-1)
       }
     } catch (error) {
       console.log(error)
@@ -76,7 +81,7 @@ const FollowingsModal = ({ onCancel }) => {
               </div>
               <button
                 className="bg-cyan-700 hover:bg-cyan-600 px-4 py-1 rounded-lg text-sm font-medium shadow transition-all duration-200"
-                onClick={ () => removeFollower(followee.userId)}
+                onClick={ () => removeFromFollowing(followee.userId)}
               >
                 Unfollow
               </button>

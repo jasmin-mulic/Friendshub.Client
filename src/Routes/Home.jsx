@@ -58,7 +58,7 @@ export default function Home() {
       storeLogout();
       navigate("login");
     }
-    finally{
+    finally {
       setLoading(false)
     }
   };
@@ -119,8 +119,8 @@ export default function Home() {
     getData();
   }, []);
 
-  return (
-    <div className="flex flex-col z-10 min-h-screen text-white backdrop-blur-md">
+   return (
+    <div className="flex flex-col min-h-screen text-white w-full">
       {/* Navbar */}
       <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
         <div className="flex items-center gap-6">
@@ -131,6 +131,7 @@ export default function Home() {
             <User size={20} /> Profile
           </Link>
         </div>
+
         <button
           onClick={logout}
           className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg shadow transition-all"
@@ -139,8 +140,11 @@ export default function Home() {
         </button>
       </nav>
 
-      <div className="flex gap-8 w-full md:w-4/5  mx-auto py-8">
-        <div className="hidden lg:flex flex-col w-1/4 h-fit text-gray-300">
+      {/* Glavni layout */}
+      <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0">
+        
+        {/* Lijevi sidebar (profil) */}
+        <div className="hidden lg:flex flex-col w-full xl:w-1/4 text-gray-300">
           <div className="bg-gray-800/30 rounded-xl p-5 shadow backdrop-blur-md border border-gray-700/40">
             <div className="flex flex-col items-center text-center">
               <img
@@ -151,9 +155,10 @@ export default function Home() {
               <h3 className="mt-3 text-lg font-semibold text-gray-100">{username}</h3>
               <p className="text-sm text-gray-400">{followersCount} followers</p>
             </div>
+
             <div className="mt-5 text-sm space-y-2 text-center">
               <ul className="space-y-1">
-                <Link to="/me" className="hover:text-cyan-400 cursor-pointer">
+                <Link to="/me" className="hover:text-cyan-400 cursor-pointer block">
                   My Profile
                 </Link>
                 <li className="hover:text-cyan-400 cursor-pointer">Saved</li>
@@ -163,6 +168,7 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Feed */}
         <div className="flex-1 flex flex-col gap-6">
           <div
             className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"
@@ -174,7 +180,8 @@ export default function Home() {
           <Feed loadMorePosts={nextPage} feedPosts={feedPosts} totalCount={totalCount} />
         </div>
 
-        <div className="hidden 2xl:block w-2/8">
+        {/* Desni sidebar (preporuke prijatelja) */}
+        <div className="hidden 2xl:block w-full xl:w-1/4">
           <FriendRecommendations
             recommendationList={recommendationList}
             handleFollow={handleFollowRemove}
@@ -182,6 +189,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Loader */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>

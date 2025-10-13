@@ -61,7 +61,7 @@ const addComment = async () =>{
 }
 
    return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center pt-10 bg-black/50 backdrop-blur-xs">
+<div className="fixed inset-0 z-50 flex justify-center items-center pt-10 bg-black/40 backdrop-blur-lg transition-opacity duration-2000">
       {/* Modal container */}
       <div className="scrollbar-hide w-full sm:w-[600px] max-h-[80vh] overflow-y-auto bg-gray-800/90 rounded-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
         

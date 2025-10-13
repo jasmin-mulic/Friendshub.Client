@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import Post from "./Post";
-
+import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 const Feed = ({ loadMorePosts, feedPosts, totalCount }) => {
-  const [posts, setPosts] = useState([]);
 
+  const [posts, setPosts] = useState([]);
+  const setPostCount = useUserDataStore((state) => state.setPostCount)
+  
   useEffect(() => {
     if (feedPosts && feedPosts.length > 0) {
       setPosts(feedPosts);
     }
   }, [feedPosts]);
-
+  
   const deletePost = (postId) => {
     setPosts((prev) => prev.filter((post) => post.postId !== postId));
+    setPostCount(-1)
   };
 
   return (

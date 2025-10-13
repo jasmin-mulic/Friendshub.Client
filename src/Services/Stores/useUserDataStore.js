@@ -18,14 +18,14 @@ export const useUserDataStore = create((set) => ({
       userId: userData.userId,
     })),
 
-  setFollowingCount: () =>
+  setFollowingCount: (num) =>
     set((state) => ({
-      followingCount: state.followingCount + 1,
+      followingCount: state.followingCount + num,
     })),
 
-  setPostCount: () =>
+  setPostCount: (num) =>
     set((state) => ({
-      postCount: state.postCount + 1,
+      postCount: state.postCount + num,
     })),
 
   resetUserData: () =>

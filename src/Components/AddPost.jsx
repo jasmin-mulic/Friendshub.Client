@@ -69,7 +69,10 @@ const AddPost = ({ setClose, pushNewPost }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/50 backdrop-blur-xs p-4">
+<div
+  className={`fixed inset-0 z-10 flex justify-center items-center bg-black/40 backdrop-blur-lg p-4 
+  transition-opacity duration-300}`}
+>
       <div className="w-full sm:w-[500px] bg-gray-800/90 rounded-2xl shadow-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
         <button
           onClick={setClose}
