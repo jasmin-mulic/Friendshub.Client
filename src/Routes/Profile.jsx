@@ -10,6 +10,7 @@ import Feed from "../Components/Feed";
 import "../../src/index.css";
 import { LogOut, Home as HomeIcon, User } from "lucide-react";
 import FollowersModal from "../Components/Modals/FollowersModal";
+import FollowingsModal from "../Components/Modals/FollowingsModal";
 export default function Profile() {
   const {
     username,
@@ -28,6 +29,7 @@ export default function Profile() {
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
+  const [showFollowingsModal, setShowFollowingsModal] = useState(false)
   const navigate = useNavigate();
 
   const getData = async () => {
@@ -100,6 +102,10 @@ export default function Profile() {
   const showFollowers = () =>{
     setShowFollowersModal(!showFollowersModal)
   }
+
+  const showFollowings = () =>{
+    setShowFollowingsModal(!showFollowingsModal);
+  }
   return (
     <div className="flex flex-col z-10 min-h-screen text-white backdrop-blur-md">
       <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
@@ -135,7 +141,7 @@ export default function Profile() {
           <p className="font-bold text-lg">{username}</p>
           <div className="flex flex-col text-md text-gray-300 gap-1">
             <span onClick={showFollowers} className="hover:text-blue-400 cursor-pointer">Followers: {followersCount}</span>
-            <span>Following: {followingCount}</span>
+            <span onClick={showFollowings} className="hover:text-blue-400 cursor-pointer">Following: {followingCount}</span>
             <span>Posts: {postCount}</span>
           </div>
         </div>
@@ -149,6 +155,8 @@ export default function Profile() {
         </div>
       </div>
       {showFollowersModal == true && <FollowersModal onCancel={showFollowers} />}
+            {showFollowingsModal == true && <FollowingsModal onCancel={showFollowings} />}
+
 
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
