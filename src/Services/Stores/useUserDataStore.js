@@ -7,6 +7,7 @@ export const useUserDataStore = create((set) => ({
   followingCount: 0,
   postCount: 0,
   userId: null,
+  privateAccount: null,
 
   setUserData: (userData) =>
     set(() => ({
@@ -16,6 +17,7 @@ export const useUserDataStore = create((set) => ({
       followingCount: userData.followingCount,
       postCount: userData.postCount,
       userId: userData.userId,
+      privateAccount : userData.privateAccount
     })),
 
   setFollowingCount: (num) =>

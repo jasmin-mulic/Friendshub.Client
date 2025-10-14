@@ -11,6 +11,7 @@ import "../../src/index.css";
 import { LogOut, Home as HomeIcon, Edit3 } from "lucide-react";
 import FollowersModal from "../Components/Modals/FollowersModal";
 import FollowingsModal from "../Components/Modals/FollowingsModal";
+import Navbar from "../Components/Navbar";
 export default function Profile() {
   const {
     username,
@@ -99,45 +100,13 @@ export default function Profile() {
       setLoading(false);
     }
   };
-
-  const showFollowers = () =>{
-    setShowFollowersModal(!showFollowersModal)
-  }
-
-  const showFollowings = () =>{
-    setShowFollowingsModal(!showFollowingsModal);
-  }
  const toggleFollowers = () => setShowFollowersModal((prev) => !prev);
   const toggleFollowings = () => setShowFollowingsModal((prev) => !prev);
 
   return (
-    <div className="flex flex-col z-10 min-h-screen text-white">
-      {/* Navbar */}
-      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
-        <div className="flex items-center gap-6">
-          <Link
-            to="/"
-            className="flex items-center gap-2 hover:text-cyan-400 transition"
-          >
-            <HomeIcon size={20} /> Home
-          </Link>
-          <Link
-            to="/me"
-            className="flex items-center gap-2 hover:text-cyan-400 transition"
-          >
-            Profile
-          </Link>
-        </div>
+    <div className="flex flex-col z-10 min-h-screen text-white border-2">
+      <Navbar />
 
-        <button
-          onClick={logout}
-          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg shadow transition-all"
-        >
-          <LogOut size={18} /> Logout
-        </button>
-      </nav>
-
-      {/* Glavni layout */}
       <div className="flex gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">
         {/* Lijevi sidebar (profil info) */}
         <div className="w-1/4 hidden lg:flex flex-col items-center p-4 bg-gray-800/20 rounded-2xl shadow-lg backdrop-blur-sm gap-4">

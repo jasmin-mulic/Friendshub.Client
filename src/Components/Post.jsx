@@ -13,27 +13,28 @@ import PostDetailsModal from "./Modals/PostDetailsModal";
 import DeletePostModal from "./Modals/DeletePostModal";
 
 export default function Post({ post: initialPost, deletePost }) {
+
   const [showFull, setShowFull] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [userId] = useState(getUserIdFromStorage());
   const [postLikeCount, setPostLikeCount] = useState();
   const [post, setPost] = useState(initialPost);
-  const [showCommentArea, setShowCommentArea] = useState(false);
+  const [showPostDetails, setShowPostDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
   const addCommentToPost = (newComment) => {
     setPost((prev) => ({
       ...prev,
-      comments: [newComment,...prev.comments],
+      comments: [newComment, ...prev.comments],
     }));
   };
-  
+
   useEffect(() => {
     setPostLikeCount(post.likes?.count);
     if (userId && post.likes?.users) {
       setIsLiked(post.likes.users.some((x) => x.userId === userId));
     }
-  }, [userId, post.likes?.count]);
+  }, [userId, post.likes?.count, post.comments.count]);
 
   const likePost = async (postId) => {
     try {
@@ -52,16 +53,50 @@ export default function Post({ post: initialPost, deletePost }) {
     }
   };
 
-  const handleDelete = async (postId) =>{
+  const handleDelete = async (postId) => {
     setShowDelete(false)
     try {
-        const response = await PostsApi.deletePost(postId);
-        if(response.status == 200)
-          deletePost(postId);
+      const response = await PostsApi.deletePost(postId);
+      if (response.status == 200)
+        deletePost(postId);
     } catch (error) {
       console.log(error)
     }
+  }
+  useEffect(() => {
+    console.log(post)
+  }, [initialPost])
 
+  const addCommentLike = (user, commentId) => {
+    console.log("Pozivam dodavanje lajka")
+    setPost((prev) => ({
+      ...prev,
+      comments: prev.comments.map((comment) =>
+        comment.commentId == commentId ? {
+          ...comment,
+          commentLikes: [...comment.commentLikes, user]
+        } : comment)
+    }))
+  }
+
+  const removeCommentLike = (user, commentId) => {
+    console.log("userId iz funkcije brisanje ->" + user.userId)
+        console.log("Pozivam brisanje lajka")
+
+    setPost((prev) => ({
+      ...prev,
+      comments: prev.comments.map((comment) =>
+        comment.commentId === commentId
+          ? {
+            ...comment,
+            commentLikes: comment.commentLikes.filter(
+              (like) => like.userId !== user.userId
+            ),
+          }
+          : comment
+      ),
+    }));
+    console.log(post.comments[0].commentLikes)
   }
   return (
     <div className="w-full shadow-md rounded-2xl  bg-gray-500/20 mb-6 p-5 relative">
@@ -100,23 +135,23 @@ export default function Post({ post: initialPost, deletePost }) {
         </p>
       )}
 
-{post.postImagesUrl?.length > 0 && (
-  <div className="flex flex-wrap gap-3 px-3 mb-3">
-    {post.postImagesUrl.map((img, i) => (
-      <div
-        key={i}
-        className="w-40 h-40 md:w-60 md:h-60 rounded-xl overflow-hidden bg-gray-800/50  items-center justify-center flex flex-wrap gap-3 px-3 mb-3 will-change-transform"
-      >
-        <img
-          src={img}
-          loading="lazy"
-          alt={`post-img-${i}`}
-          className="w-full h-full object-cover rounded-xl transition-transform duration-300 hover:scale-105"
-        />
-      </div>
-    ))}
-  </div>
-)}
+      {post.postImagesUrl?.length > 0 && (
+        <div className="flex flex-wrap gap-3 px-3 mb-4 justify-center items-center md:justify-start">
+          {post.postImagesUrl.map((img, i) => (
+            <div
+              key={i}
+              className=" w-full md:w-60 md:h-60 mt-4 rounded-xl overflow-hidden bg-gray-800/50  items-center justify-center flex flex-wrap gap-3 px-3 mb-3 will-change-transform"
+            >
+              <img
+                src={img}
+                loading="lazy"
+                alt={`post-img-${i}`}
+                className="w-full h-full object-cover rounded-xl"
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
 
       <div className="flex gap-5 items-center mb-2">
@@ -134,23 +169,25 @@ export default function Post({ post: initialPost, deletePost }) {
         </div>
         <div
           className="flex gap-2 px-2 rounded-md items-center cursor-pointer hover:bg-gray-600/50 transition"
-          onClick={() => setShowCommentArea(!showCommentArea)}
+          onClick={() => setShowPostDetails(!showPostDetails)}
         >
           <FaCommentDots /> <span>{post.comments.length}</span>
         </div>
       </div>
-      {showCommentArea == true && (
+      {showPostDetails == true && (
         <PostDetailsModal
           post={post}
-          setShowCommentArea={setShowCommentArea}
+          setShowCommentArea={setShowPostDetails}
           addCommentToPost={addCommentToPost}
+          addCommentLike={addCommentLike}
+          removeCommentLike = {removeCommentLike}
         />
       )}
-            <DeletePostModal
+      <DeletePostModal
         show={showDelete}
         onConfirm={() => handleDelete(post.postId)}
         onCancel={() => setShowDelete(false)}
       />
-  </div>
+    </div>
   );
 }

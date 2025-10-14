@@ -9,12 +9,11 @@ import "../../index.css";
 import { FaLocationArrow } from "react-icons/fa";
 import PostsApi from "../../Services/Api/PostsApi";
 
-const PostDetailsModal = ({ post, setShowCommentArea, addCommentToPost }) => {
+const PostDetailsModal = ({ post, setShowCommentArea, addCommentToPost, addCommentLike, removeCommentLike}) => {
   
   const username = useUserDataStore((state) => state.username);
   const profileImgUrl = useUserDataStore((state) => state.profileImgUrl);
   const [newComment, setNewComment] = useState({ Content: null, Image: null, });
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
   const closeCommentArea = () =>{
@@ -53,6 +52,7 @@ const addComment = async () =>{
       setShowCommentArea()
       const newComment = response.data;
       addCommentToPost(newComment)
+      console.log(newComment)
     }
   } catch (error) {
     console.log(error.response)
@@ -90,10 +90,9 @@ const addComment = async () =>{
         {post.content && (
           <p className="text-gray-100 mb-3 text-sm">{post.content}</p>
         )}
-
         {/* Post images */}
         {post.postImagesUrl?.length > 0 && (
-          <div className="flex flex-col md:flex-row gap-3 px-3 mb-3">
+          <div className="flex flex-col md:flex-row gap-3 px-3 mb-3 overflow-x-auto scrollbar-hide">
             {post.postImagesUrl.map((img, i) => (
               <img
                 key={i}
@@ -108,7 +107,7 @@ const addComment = async () =>{
         {/* Comments section */}
         <div className="mt-4 flex flex-col gap-3">
           {post.comments?.map((comment) => (
-            <Comment comment={comment} key={comment.commentId} />
+            <Comment comment={comment} key={comment.commentId} addCommentLike = {addCommentLike} removeCommentLike = {removeCommentLike}  />
           ))}
 
           {/* Add comment input */}

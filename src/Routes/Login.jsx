@@ -15,6 +15,7 @@ export default function Login() {
   const setUserId = useUserDataStore((state) => state.setUserId)
 
   const onSubmit = async (data) => {
+    console.log(data)
     setLoading(true);
     setUnauthorized("");
     try {

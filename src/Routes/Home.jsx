@@ -3,24 +3,22 @@ import { useAuthStore } from "../Services/Stores/AuthStore";
 import UsersApi from "../Services/Api/UsersApi";
 import PostsApi from "../Services/Api/PostsApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
-import AuthApi from "../Services//Api/AuthApi";
 import { useNavigate, Link } from "react-router-dom";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import FriendRecommendations from "../Components/FriendRecommendations";
 import Feed from "../Components/Feed";
 import AddPost from "../Components/AddPost";
-import { LogOut, Home as HomeIcon, User } from "lucide-react";
 import "../../src/index.css";
+import Navbar from "../Components/Navbar";
 
 export default function Home() {
   const {
     username,
-    postCount,
     profileImgUrl,
     followersCount,
-    followingCount,
     setUserData,
     resetUserData,
+    privateAccount,
   } = useUserDataStore();
 
   const authLogOut = useAuthStore((state) => state.logout);
@@ -86,25 +84,6 @@ export default function Home() {
     }
   };
 
-  const logout = async () => {
-    setLoading(true);
-    try {
-      const response = await AuthApi.logout();
-      if (response.status === 200) {
-        storeLogout();
-        resetUserData();
-        navigate("login");
-      }
-    } catch {
-      localStorage.removeItem("token");
-      storeLogout();
-      resetUserData();
-      navigate("login");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleFollowRemove = (id) => {
     setRecommendationList((prev) => prev.filter((x) => x.id !== id));
   };
@@ -117,28 +96,12 @@ export default function Home() {
     fetchPosts();
     fetchRecommendations();
     getData();
-  }, []);
+    console.log(privateAccount)
+  }, [privateAccount]);
 
    return (
-    <div className="flex flex-col min-h-screen text-white w-full">
-      {/* Navbar */}
-      <nav className="flex justify-between items-center px-6 py-3 bg-gray-800/80 backdrop-blur-md sticky top-0 z-50 shadow-md">
-        <div className="flex items-center gap-6">
-          <Link to="/" className="flex items-center gap-2 hover:text-cyan-400 transition">
-            <HomeIcon size={20} /> Home
-          </Link>
-          <Link to="/me" className="flex items-center gap-2 hover:text-cyan-400 transition">
-            <User size={20} /> Profile
-          </Link>
-        </div>
-
-        <button
-          onClick={logout}
-          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg shadow transition-all"
-        >
-          <LogOut size={18} /> Logout
-        </button>
-      </nav>
+    <div className="flex flex-col min-h-screen text-white w-full">  
+    <Navbar />
 
       {/* Glavni layout */}
       <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0">
@@ -168,7 +131,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Feed */}
         <div className="flex-1 flex flex-col gap-6">
           <div
             className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"

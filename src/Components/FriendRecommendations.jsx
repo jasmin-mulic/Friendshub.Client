@@ -16,8 +16,7 @@ const FriendRecommendations = ({ recommendationList, handleFollow }) => {
     try {
       const response = await UsersApi.followUser(id);
       if (response.status === 200) {
-        console.log(response.data.message)
-        
+        console.log(response.data)
       }
     } catch (error) {
       console.error(error);

@@ -2,24 +2,33 @@ import noProfileImage from "../assets/noProfilePic.jpg";
 import { dateToText, getUserIdFromStorage } from "../Helpers";
 import { BiLike } from "react-icons/bi";
 import PostsApi from "../Services/Api/PostsApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, addCommentLike, removeCommentLike }) => {
   const userId = getUserIdFromStorage();
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(comment.commentLikes.some((comment) => comment.userId == userId));
   useState(() => {
-    setIsLiked(
-      comment.commentLikes.some((comment) => comment.userId == userId),
-    );
-  }, []);
+    console.log("isLiked => " + isLiked)
+  }, [comment]);
 
   const likeComment = async (id) => {
     try {
       const likeResponse = await PostsApi.likeComment(id);
       console.log(likeResponse.data)
-      if (likeResponse.status == 200 && likeResponse.data.message == "Comment disliked") setIsLiked(false);
-      else setIsLiked(true);
-    } catch (error) {
+      if (likeResponse.status == 200 && likeResponse.data.message == "disliked") {
+        setIsLiked(false);
+        removeCommentLike(likeResponse.data.user.userId, id)
+        console.log("UserId nakon dislajka => " + likeResponse.data.user.userId)
+      }
+      else 
+        {
+          setIsLiked(true)
+          addCommentLike(likeResponse.data.user.userId, id)
+                  console.log("UserId nakon lajka => " + likeResponse.data.user.userId)
+
+      }
+    }
+    catch (error) {
       console.log(error);
     }
   };
