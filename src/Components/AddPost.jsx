@@ -5,13 +5,13 @@ import { FcAddImage } from "react-icons/fc";
 import { ImCross } from "react-icons/im";
 import { FaTrash } from "react-icons/fa";
 import PostsApi from "../Services/Api/PostsApi";
+
 const AddPost = ({ setClose, pushNewPost }) => {
   const { displayUsername, profileImgUrl } = useUserDataStore();
   const [previews, setPreviews] = useState([]);
   const [postData, setPostData] = useState({ Content: "", ImagePaths: [] });
   const [errorMessage, setErrorMessage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
   const handleFileChange = (e) => {
@@ -55,6 +55,7 @@ const AddPost = ({ setClose, pushNewPost }) => {
       if (response.status === 200) {
         const newPost = response.data;
         pushNewPost(response.data);
+        console.log(response.data)
         newPost.postImagesUrl.forEach(postImg => {
           
           console.log(postImg)

@@ -10,7 +10,7 @@ import Feed from "../Components/Feed";
 import AddPost from "../Components/AddPost";
 import "../../src/index.css";
 import Navbar from "../Components/Navbar";
-
+import { useFeedStore } from "../Services/Stores/useFeedStore";
 export default function Home() {
   const {
     username,
@@ -29,11 +29,11 @@ export default function Home() {
   const [feedPosts, setFeedPosts] = useState([]);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-
+  const addPost = useFeedStore((state) => state.addPost)
   const navigate = useNavigate();
 
   const pushNewPost = (newPost) => {
-    setFeedPosts((prev) => [newPost, ...prev]);
+    addPost(newPost)
   };
 
   const nextPage = async () => {

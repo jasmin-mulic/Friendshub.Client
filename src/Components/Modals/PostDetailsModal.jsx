@@ -1,6 +1,6 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import defaultProfilePic from "../../assets/noProfilePic.jpg";
-import { dateToText } from "../../Helpers";
+import { dateToText, getUserIdFromStorage } from "../../Helpers";
 import { ImCross } from "react-icons/im";
 import { useUserDataStore } from "../../Services/Stores/useUserDataStore";
 import Comment from "../Comment";
@@ -8,66 +8,63 @@ import { MdAddAPhoto } from "react-icons/md";
 import "../../index.css";
 import { FaLocationArrow } from "react-icons/fa";
 import PostsApi from "../../Services/Api/PostsApi";
+import { useFeedStore } from "../../Services/Stores/useFeedStore";
+const PostDetailsModal = ({ post : initialPost, onClose}) => {
 
-const PostDetailsModal = ({ post, setShowCommentArea, addCommentToPost, addCommentLike, removeCommentLike}) => {
-  
   const username = useUserDataStore((state) => state.username);
   const profileImgUrl = useUserDataStore((state) => state.profileImgUrl);
   const [newComment, setNewComment] = useState({ Content: null, Image: null, });
+  const [post, setPost] = useState(initialPost);
+  const addCommentToPost = useFeedStore((state) => state.addCommentToPost)
 
-
-  const closeCommentArea = () =>{
-    setShowCommentArea()
-  }
+  useEffect(() => {
+    setPost(initialPost)
+  },[initialPost])
   const handleFileChange = (e) => {
-  const file = e.target.files[0];
-  if(file)
-  {
+    const file = e.target.files[0];
+    if (file) {
+      setNewComment((prev) => ({
+        ...prev,
+        Image: file,
+      }));
+    }
+  };
+
+  const handleContentChange = (e) => {
     setNewComment((prev) => ({
       ...prev,
-      Image: file,
+      Content: e.target.value,
     }));
-  }
-};
+  };
 
-const handleContentChange = (e) => {
-  setNewComment((prev) => ({
-    ...prev,
-    Content: e.target.value,
-  }));    
-};
+  const isSubmitDisabled = !newComment.Content?.trim() && !newComment.Image;
 
-const isSubmitDisabled = !newComment.Content?.trim() && !newComment.Image;
-
-const addComment = async () =>{
-  try {
-    const formData = new FormData();
-    if(newComment.Content)
-    formData.append("Content", newComment.Content)
-  if(newComment.Image)
-    formData.append("Image", newComment.Image)
-    const response = await PostsApi.addComment(post.postId, formData)
-    if(response.status == 200)
-    {
-      setShowCommentArea()
-      const newComment = response.data;
-      addCommentToPost(newComment)
-      console.log(newComment)
+  const addComment = async () => {
+    try {
+      const formData = new FormData();
+      if (newComment.Content)
+        formData.append("Content", newComment.Content)
+      if (newComment.Image)
+        formData.append("Image", newComment.Image)
+      const response = await PostsApi.addComment(post.postId, formData)
+      if (response.status == 200) {
+        const newComment = response.data
+        addCommentToPost(newComment.commentId, newComment)
+        onClose
+      }
+    } catch (error) {
+      console.log(error.response)
     }
-  } catch (error) {
-    console.log(error.response)
-    
   }
-}
 
-   return (
-<div className="fixed inset-0 z-50 flex justify-center items-center pt-10 bg-black/40 backdrop-blur-lg transition-opacity duration-2000">
+  return (
+    <div className="fixed inset-0 z-50 flex justify-center items-center pt-10 bg-black/40 backdrop-blur-lg transition-opacity duration-2000">
       {/* Modal container */}
       <div className="scrollbar-hide w-full sm:w-[600px] max-h-[80vh] overflow-y-auto bg-gray-800/90 rounded-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
-        
+
         {/* Close button */}
         <button
-          onClick={closeCommentArea}
+          onClick={onClose}
           className="absolute top-3 right-3 p-2 bg-red-600 hover:bg-red-700 rounded-full transition"
         >
           <ImCross size={14} />
@@ -107,7 +104,7 @@ const addComment = async () =>{
         {/* Comments section */}
         <div className="mt-4 flex flex-col gap-3">
           {post.comments?.map((comment) => (
-            <Comment comment={comment} key={comment.commentId} addCommentLike = {addCommentLike} removeCommentLike = {removeCommentLike}  />
+            <Comment comment={comment} key={comment.commentId}/>
           ))}
 
           {/* Add comment input */}

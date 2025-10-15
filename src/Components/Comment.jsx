@@ -4,25 +4,24 @@ import { BiLike } from "react-icons/bi";
 import PostsApi from "../Services/Api/PostsApi";
 import { useEffect, useState } from "react";
 
-const Comment = ({ comment, addCommentLike, removeCommentLike }) => {
-  const userId = getUserIdFromStorage();
-  const [isLiked, setIsLiked] = useState(comment.commentLikes.some((comment) => comment.userId == userId));
+const Comment = ({ comment, addCommentLike, removeCommentLike, isLiked }) => {
+  const [liked, setLiked] = useState(isLiked)
   useState(() => {
-    console.log("isLiked => " + isLiked)
-  }, [comment]);
+    
+  }, []);
 
   const likeComment = async (id) => {
     try {
       const likeResponse = await PostsApi.likeComment(id);
       console.log(likeResponse.data)
       if (likeResponse.status == 200 && likeResponse.data.message == "disliked") {
-        setIsLiked(false);
         removeCommentLike(likeResponse.data.user.userId, id)
+        setLiked(false)
         console.log("UserId nakon dislajka => " + likeResponse.data.user.userId)
       }
       else 
         {
-          setIsLiked(true)
+          setLiked(true)
           addCommentLike(likeResponse.data.user.userId, id)
                   console.log("UserId nakon lajka => " + likeResponse.data.user.userId)
 
@@ -56,7 +55,7 @@ const Comment = ({ comment, addCommentLike, removeCommentLike }) => {
         </span>
         <div
           onClick={() => likeComment(comment.commentId)}
-          className={`text-sm flex gap-2 items-center justify-between ${isLiked == true ? isLikedButton : isNotLikedButton} w-fit px-2 py-1 rounded-md cursor-pointer`}
+          className={`text-sm flex gap-2 items-center justify-between ${liked == true ? isLikedButton : isNotLikedButton} w-fit px-2 py-1 rounded-md cursor-pointer`}
         >
           <BiLike />
           <span>Like</span>

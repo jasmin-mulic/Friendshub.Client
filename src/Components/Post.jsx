@@ -9,32 +9,17 @@ import { dateToText } from "../Helpers";
 import { FaCommentDots } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import "../index.css";
-import PostDetailsModal from "./Modals/PostDetailsModal";
 import DeletePostModal from "./Modals/DeletePostModal";
-
-export default function Post({ post: initialPost, deletePost }) {
+import { useFeedStore } from "../Services/Stores/useFeedStore";
+export default function Post({ post: initialPost, onClick}) {
 
   const [showFull, setShowFull] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [userId] = useState(getUserIdFromStorage());
-  const [postLikeCount, setPostLikeCount] = useState();
+  const [postLikeCount, setPostLikeCount] = useState(0);
   const [post, setPost] = useState(initialPost);
-  const [showPostDetails, setShowPostDetails] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-
-  const addCommentToPost = (newComment) => {
-    setPost((prev) => ({
-      ...prev,
-      comments: [newComment, ...prev.comments],
-    }));
-  };
-
-  useEffect(() => {
-    setPostLikeCount(post.likes?.count);
-    if (userId && post.likes?.users) {
-      setIsLiked(post.likes.users.some((x) => x.userId === userId));
-    }
-  }, [userId, post.likes?.count, post.comments.count]);
+  const deletePost = useFeedStore((state) => state.deletePost)
 
   const likePost = async (postId) => {
     try {
@@ -58,51 +43,19 @@ export default function Post({ post: initialPost, deletePost }) {
     try {
       const response = await PostsApi.deletePost(postId);
       if (response.status == 200)
+      {
+        console.log("post deleted from db")
         deletePost(postId);
+      }
     } catch (error) {
       console.log(error)
     }
   }
-  useEffect(() => {
-    console.log(post)
-  }, [initialPost])
-
-  const addCommentLike = (user, commentId) => {
-    console.log("Pozivam dodavanje lajka")
-    setPost((prev) => ({
-      ...prev,
-      comments: prev.comments.map((comment) =>
-        comment.commentId == commentId ? {
-          ...comment,
-          commentLikes: [...comment.commentLikes, user]
-        } : comment)
-    }))
-  }
-
-  const removeCommentLike = (user, commentId) => {
-    console.log("userId iz funkcije brisanje ->" + user.userId)
-        console.log("Pozivam brisanje lajka")
-
-    setPost((prev) => ({
-      ...prev,
-      comments: prev.comments.map((comment) =>
-        comment.commentId === commentId
-          ? {
-            ...comment,
-            commentLikes: comment.commentLikes.filter(
-              (like) => like.userId !== user.userId
-            ),
-          }
-          : comment
-      ),
-    }));
-    console.log(post.comments[0].commentLikes)
-  }
   return (
-    <div className="w-full shadow-md rounded-2xl  bg-gray-500/20 mb-6 p-5 relative">
+    <div className="w-full shadow-md rounded-2xl  bg-gray-800/20 mb-6 p-5 relative">
 
       {userId == post.userId && (
-        <div className="absolute p-2 right-3 top-3 rounded-xl bg-red-500 hover:bg-red-700" onClick={() => setShowDelete(true)}>
+        <div className="absolute p-2 right-5 top-5 rounded-xl bg-red-500 hover:bg-red-700" onClick={() => setShowDelete(true)}>
           <FaTrashAlt size={20} />
         </div>
       )}
@@ -121,9 +74,9 @@ export default function Post({ post: initialPost, deletePost }) {
 
       {post.content && (
         <p className="text-gray-100 mb-3 text-sm">
-          {showFull || post.content.length < 200
-            ? post.content
-            : post.content.substring(0, 200) + "..."}
+          {post.content.length > 200 && !showFull
+            ? post.content.substring(0, 200) + "..."
+            : post.content}
           {post.content.length > 200 && (
             <button
               onClick={() => setShowFull(!showFull)}
@@ -169,20 +122,11 @@ export default function Post({ post: initialPost, deletePost }) {
         </div>
         <div
           className="flex gap-2 px-2 rounded-md items-center cursor-pointer hover:bg-gray-600/50 transition"
-          onClick={() => setShowPostDetails(!showPostDetails)}
+          onClick={onClick}
         >
-          <FaCommentDots /> <span>{post.comments.length}</span>
+          <FaCommentDots /> <span>{ post.comments?.length}</span>
         </div>
       </div>
-      {showPostDetails == true && (
-        <PostDetailsModal
-          post={post}
-          setShowCommentArea={setShowPostDetails}
-          addCommentToPost={addCommentToPost}
-          addCommentLike={addCommentLike}
-          removeCommentLike = {removeCommentLike}
-        />
-      )}
       <DeletePostModal
         show={showDelete}
         onConfirm={() => handleDelete(post.postId)}
