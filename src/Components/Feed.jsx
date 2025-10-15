@@ -15,14 +15,13 @@ const { posts, setPosts, deletePost, selectPost, selectedPost, clearSelectedPost
     }
   }, [feedPosts]);
 
-
   return (
     <div className="flex flex-col gap-5 overflow-y-auto max-h-[70vh] scrollbar-hide px-4">
       {posts.length > 0 ? (
         posts.map((post) => (
           (<Post 
           key={post.postId} 
-          post={post} 
+          postId={post.postId} 
           deletePost={deletePost} 
           onClick= {() => selectPost(post)}
           />)
@@ -39,7 +38,7 @@ const { posts, setPosts, deletePost, selectPost, selectedPost, clearSelectedPost
           Load More posts
         </button>
       )}
-    {selectedPost && (<PostDetailsModal post={selectedPost} onClose={clearSelectedPost} />)}
+    {selectedPost && (<PostDetailsModal postId={selectedPost.postId} onClose={clearSelectedPost} />)}
     </div>
   );
 };

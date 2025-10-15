@@ -104,7 +104,7 @@ export default function Profile() {
   const toggleFollowings = () => setShowFollowingsModal((prev) => !prev);
 
   return (
-    <div className="flex flex-col z-10 min-h-screen text-white border-2">
+    <div className="flex flex-col z-10 min-h-screen text-white">
       <Navbar />
 
       <div className="flex gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">

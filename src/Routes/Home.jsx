@@ -11,6 +11,7 @@ import AddPost from "../Components/AddPost";
 import "../../src/index.css";
 import Navbar from "../Components/Navbar";
 import { useFeedStore } from "../Services/Stores/useFeedStore";
+
 export default function Home() {
   const {
     username,
@@ -41,7 +42,8 @@ export default function Home() {
     if (data.totalCount === feedPosts.length) return;
     const newData = [...feedPosts, ...data.items];
     setFeedPosts(newData);
-    if (newData.length <= data.totalCount) setFeedPage((prev) => prev + 1);
+    if (newData.length <= data.totalCount)
+      setFeedPage((prev) => prev + 1);
   };
 
   const getPosts = async (page) => {
@@ -70,7 +72,7 @@ export default function Home() {
     }
   };
 
-  const getData = async () => {
+  const getUserInfo = async () => {
     setLoading(true);
     try {
       const profileDataInfo = await UsersApi.myData();
@@ -95,20 +97,18 @@ export default function Home() {
     };
     fetchPosts();
     fetchRecommendations();
-    getData();
-    console.log(privateAccount)
+    getUserInfo();
   }, [privateAccount]);
 
-   return (
-    <div className="flex flex-col min-h-screen text-white w-full">  
-    <Navbar />
+  return (
+    <div className="flex flex-col min-h-screen text-white w-full">
 
-      {/* Glavni layout */}
+      <Navbar />
       <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0">
-        
+
         {/* Lijevi sidebar (profil) */}
         <div className="hidden lg:flex flex-col w-full xl:w-1/4 text-gray-300">
-          <div className="bg-gray-800/30 rounded-xl p-5 shadow backdrop-blur-md border border-gray-700/40">
+          <div className="bg-gray-800/30 rounded-xl p-5  shadow-lg backdrop-blur-sm border border-gray-700/40">
             <div className="flex flex-col items-center text-center">
               <img
                 src={profileImgUrl || defaultProfileImg}

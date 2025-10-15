@@ -11,20 +11,24 @@ import { FaTrashAlt } from "react-icons/fa";
 import "../index.css";
 import DeletePostModal from "./Modals/DeletePostModal";
 import { useFeedStore } from "../Services/Stores/useFeedStore";
-export default function Post({ post: initialPost, onClick}) {
+export default function Post({ postId, onClick}) {
 
-  const [showFull, setShowFull] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+  const post = useFeedStore((state) => state.posts.find((post) => post.postId == postId))
   const [userId] = useState(getUserIdFromStorage());
-  const [postLikeCount, setPostLikeCount] = useState(0);
-  const [post, setPost] = useState(initialPost);
   const [showDelete, setShowDelete] = useState(false);
   const deletePost = useFeedStore((state) => state.deletePost)
+  const [postLikeCount, setPostLikeCount] = useState(post.likes.count);
+  const [postCommentCount, setPostCommentCount] = useState(post.comments.length)
+  const [isLiked, setIsLiked] = useState(post.likes.users.some((like) => like.userId == userId));
 
+  useEffect(() =>{
+    setPostCommentCount(post.comments.length)
+  },[post.comments])
   const likePost = async (postId) => {
     try {
       const response = await PostsApi.likePost(postId);
       if (response.status === 200) {
+        console.log(response.data)
         if (response.data === "Post liked.") {
           setPostLikeCount((prev) => prev + 1);
           setIsLiked(true);
@@ -71,7 +75,6 @@ export default function Post({ post: initialPost, onClick}) {
           <p className="text-gray-400 text-sm">{dateToText(post.postedAt)}</p>
         </div>
       </div>
-
       {post.content && (
         <p className="text-gray-100 mb-3 text-sm">
           {post.content.length > 200 && !showFull
@@ -124,7 +127,7 @@ export default function Post({ post: initialPost, onClick}) {
           className="flex gap-2 px-2 rounded-md items-center cursor-pointer hover:bg-gray-600/50 transition"
           onClick={onClick}
         >
-          <FaCommentDots /> <span>{ post.comments?.length}</span>
+          <FaCommentDots /> <span>{postCommentCount}</span>
         </div>
       </div>
       <DeletePostModal

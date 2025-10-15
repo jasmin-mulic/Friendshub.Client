@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import defaultProfilePic from "../../assets/noProfilePic.jpg";
-import { dateToText, getUserIdFromStorage } from "../../Helpers";
+import { dateToText } from "../../Helpers";
 import { ImCross } from "react-icons/im";
 import { useUserDataStore } from "../../Services/Stores/useUserDataStore";
 import Comment from "../Comment";
@@ -9,17 +9,19 @@ import "../../index.css";
 import { FaLocationArrow } from "react-icons/fa";
 import PostsApi from "../../Services/Api/PostsApi";
 import { useFeedStore } from "../../Services/Stores/useFeedStore";
-const PostDetailsModal = ({ post : initialPost, onClose}) => {
+import { AnimatePresence, motion } from "motion/react";
+const PostDetailsModal = ({ postId, onClose}) => {
+  const post = useFeedStore((state) => state.posts.find((post) => post.postId == postId))
 
   const username = useUserDataStore((state) => state.username);
   const profileImgUrl = useUserDataStore((state) => state.profileImgUrl);
   const [newComment, setNewComment] = useState({ Content: null, Image: null, });
-  const [post, setPost] = useState(initialPost);
   const addCommentToPost = useFeedStore((state) => state.addCommentToPost)
+  const [showFull, setShowFull] = useState(false)
 
   useEffect(() => {
-    setPost(initialPost)
-  },[initialPost])
+    console.log(post)
+  },[post])
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -48,9 +50,10 @@ const PostDetailsModal = ({ post : initialPost, onClose}) => {
         formData.append("Image", newComment.Image)
       const response = await PostsApi.addComment(post.postId, formData)
       if (response.status == 200) {
+        console.log(response.data)
         const newComment = response.data
-        addCommentToPost(newComment.commentId, newComment)
-        onClose
+        addCommentToPost(post.postId, newComment)
+        onClose()
       }
     } catch (error) {
       console.log(error.response)
@@ -58,8 +61,17 @@ const PostDetailsModal = ({ post : initialPost, onClose}) => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center pt-10 bg-black/40 backdrop-blur-lg transition-opacity duration-2000">
-      {/* Modal container */}
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-md z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={(e) => e.defaultPrevented}
+        
+      >
+
+	 <div className="fixed inset-0 z-50 flex justify-center items-center pt-10 bg-black/40 backdrop-blur-lg transition-opacity duration-2000">
       <div className="scrollbar-hide w-full sm:w-[600px] max-h-[80vh] overflow-y-auto bg-gray-800/90 rounded-2xl text-white p-6 relative flex flex-col gap-5 border border-gray-700/40">
 
         {/* Close button */}
@@ -84,18 +96,30 @@ const PostDetailsModal = ({ post : initialPost, onClose}) => {
         </div>
 
         {/* Post content */}
-        {post.content && (
-          <p className="text-gray-100 mb-3 text-sm">{post.content}</p>
-        )}
+      {post.content && (
+        <p className="text-gray-100 mb-3 text-sm">
+          {post.content.length > 200 && !showFull
+            ? post.content.substring(0, 200) + "..."
+            : post.content}
+          {post.content.length > 200 && (
+            <button
+              onClick={() => setShowFull(!showFull)}
+              className="text-cyan-400 ml-2 text-sm hover:underline"
+            >
+              {showFull ? "Show less" : "Read more"}
+            </button>
+          )}
+        </p>
+      )}
         {/* Post images */}
         {post.postImagesUrl?.length > 0 && (
-          <div className="flex flex-col md:flex-row gap-3 px-3 mb-3 overflow-x-auto scrollbar-hide">
+          <div className="flex md:flex-row min-h-50 gap-3 mb-3 overflow-x-auto scrollbar-hide">
             {post.postImagesUrl.map((img, i) => (
               <img
                 key={i}
                 src={img}
                 alt={`post-img-${i}`}
-                className="w-full md:w-1/2 rounded-xl object-cover"
+                className="w-full xl:w-1/3 rounded-xl object-cover"
               />
             ))}
           </div>
@@ -148,6 +172,8 @@ const PostDetailsModal = ({ post : initialPost, onClose}) => {
         </div>
       </div>
     </div>
+        </motion.div>
+    </AnimatePresence>
   );
 };
 export default PostDetailsModal

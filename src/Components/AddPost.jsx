@@ -7,17 +7,15 @@ import { FaTrash } from "react-icons/fa";
 import PostsApi from "../Services/Api/PostsApi";
 
 const AddPost = ({ setClose, pushNewPost }) => {
-  const { displayUsername, profileImgUrl } = useUserDataStore();
+  const { username, profileImgUrl } = useUserDataStore();
   const [previews, setPreviews] = useState([]);
   const [postData, setPostData] = useState({ Content: "", ImagePaths: [] });
   const [errorMessage, setErrorMessage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setPostData((prev) => ({ ...prev, ImagePaths: files }));
-
     const urls = files.map((file) => ({
       name: file.name,
       url: URL.createObjectURL(file),
@@ -92,7 +90,7 @@ const AddPost = ({ setClose, pushNewPost }) => {
             alt="profile"
             className="w-12 h-12 rounded-full object-cover border border-cyan-600"
           />
-          <span className="font-medium text-gray-100">{displayUsername}</span>
+          <span className="font-medium text-gray-100">{username}</span>
         </div>
 
         <textarea
