@@ -11,7 +11,6 @@ import AddPost from "../Components/AddPost";
 import "../../src/index.css";
 import Navbar from "../Components/Navbar";
 import { useFeedStore } from "../Services/Stores/useFeedStore";
-
 export default function Home() {
   const {
     username,
@@ -19,7 +18,6 @@ export default function Home() {
     followersCount,
     setUserData,
     resetUserData,
-    privateAccount,
   } = useUserDataStore();
 
   const authLogOut = useAuthStore((state) => state.logout);
@@ -27,11 +25,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [recommendationList, setRecommendationList] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [feedPosts, setFeedPosts] = useState([]);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const addPost = useFeedStore((state) => state.addPost)
   const navigate = useNavigate();
+  const setPosts = useFeedStore((state) => state.setPosts)
+  const feedPosts = useFeedStore((state) => state.posts)
+  const loadMorePosts = useFeedStore((state) => state.loadMorePosts)
 
   const pushNewPost = (newPost) => {
     addPost(newPost)
@@ -39,9 +39,12 @@ export default function Home() {
 
   const nextPage = async () => {
     const data = await getPosts(feedPage + 1);
+
     if (data.totalCount === feedPosts.length) return;
+
     const newData = [...feedPosts, ...data.items];
-    setFeedPosts(newData);
+
+    loadMorePosts(newData);
     if (newData.length <= data.totalCount)
       setFeedPage((prev) => prev + 1);
   };
@@ -52,6 +55,7 @@ export default function Home() {
       const postFeedResponse = await PostsApi.getFeedPosts(page);
       if (postFeedResponse.status === 200) {
         setTotalCount(postFeedResponse.data.totalCount);
+        console.log(postFeedResponse.data)
         return postFeedResponse.data;
       }
     } catch (error) {
@@ -93,12 +97,16 @@ export default function Home() {
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await getPosts(feedPage);
-      if (data) setFeedPosts(data.items);
+      if (data)
+        {
+          setPosts(data.items)
+        }
+          
     };
     fetchPosts();
     fetchRecommendations();
     getUserInfo();
-  }, [privateAccount]);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen text-white w-full">
@@ -139,7 +147,7 @@ export default function Home() {
             <p className="font-medium">Share something...</p>
           </div>
 
-          <Feed loadMorePosts={nextPage} feedPosts={feedPosts} totalCount={totalCount} />
+          <Feed loadMorePosts={nextPage} totalCount={totalCount} />
         </div>
 
         {/* Desni sidebar (preporuke prijatelja) */}

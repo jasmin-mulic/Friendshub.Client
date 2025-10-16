@@ -42,7 +42,7 @@ const FollowingsModal = ({ onCancel }) => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50"
+        className="fixed inset-0 flex items-center justify-center  bg-black/10 backdrop-blur-md z-50"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

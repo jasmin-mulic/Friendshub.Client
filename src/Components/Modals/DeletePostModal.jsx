@@ -16,7 +16,7 @@ export default function DeletePostModal({ show, onConfirm, onCancel }) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => e.defaultPrevented} 
           >
             <p className="text-lg font-semibold mb-5">
               Do you want to delete this post?
