@@ -14,7 +14,7 @@ const FriendRecommendations = ({ recommendationList, handleFollow }) => {
 
   const followUser = async (id) => {
     try {
-      const response = await UsersApi.followUser(id);
+      const response = await UsersApi.toggleFollow(id);
       if (response.status === 200) {
         console.log(response.data)
       }

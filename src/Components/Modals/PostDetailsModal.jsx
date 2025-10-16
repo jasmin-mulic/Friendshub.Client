@@ -10,7 +10,7 @@ import { FaLocationArrow } from "react-icons/fa";
 import PostsApi from "../../Services/Api/PostsApi";
 import { useFeedStore } from "../../Services/Stores/useFeedStore";
 import { AnimatePresence, motion } from "motion/react";
-const PostDetailsModal = ({ postId, onClose}) => {
+const PostDetailsModal = ({ postId, onClose }) => {
 
   const post = useFeedStore((state) => state.posts.find((post) => post.postId == postId))
 
@@ -18,10 +18,11 @@ const PostDetailsModal = ({ postId, onClose}) => {
   const profileImgUrl = useUserDataStore((state) => state.profileImgUrl);
   const [newComment, setNewComment] = useState({ Content: null, Image: null, });
   const addCommentToPost = useFeedStore((state) => state.addCommentToPost)
+  const deleteComment = useFeedStore((state) => state.deleteComment)
   const [showFull, setShowFull] = useState(false)
 
   useEffect(() => {
-  },[])
+  }, [])
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -60,7 +61,17 @@ const PostDetailsModal = ({ postId, onClose}) => {
     }
   }
 
- return (
+  const handleDeleteComment = async (id) => {
+    try {
+      const res = await PostsApi.deleteComment(id);
+      if(res.status == 200) deleteComment(id);
+    } catch (error) {
+      console.log(error)
+      
+    }
+    deleteComment(postId, id)
+  }
+  return (
     <AnimatePresence>
       {post && (
         <motion.div
@@ -131,11 +142,17 @@ const PostDetailsModal = ({ postId, onClose}) => {
               </div>
             )}
 
-            {/* Comments section */}
+
             <div className="mt-4 flex flex-col gap-3">
-              {post.comments?.map((comment) => (
-                <Comment commentId={comment.commentId} key={comment.commentId} postId={postId} />
-              ))}
+                {post.comments?.map((comment) => (
+                  <Comment
+                    commentId={comment.commentId}
+                    key={comment.commentId}
+                    postId={postId}
+                    handleDelete={() => handleDeleteComment(comment.commentId)}
+                  />
+                ))}
+
 
               {/* Add comment input */}
               <div className="flex gap-3 items-center bg-gray-700/50 p-2 rounded-xl border border-gray-600/30">

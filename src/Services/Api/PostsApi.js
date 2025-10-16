@@ -8,6 +8,8 @@ const PostsApi = {
   getMyPosts : (page) => Api.get(`/Posts/my-posts/page/${page}`),
   addComment : (postId, comment) => Api.post(`/Posts/add-comment/${postId}`, comment),
   deletePost : (postId) => Api.delete(`/Posts/delete-post?postId=${postId}`),
-  likeComment : (commentId) => Api.post(`/Posts/like-comment/${commentId}`)
+  likeComment : (commentId) => Api.post(`/Posts/like-comment/${commentId}`),
+  deleteComment : (commentId) => Api.delete(`/Posts/comment/${commentId}`)
+
 }
 export default PostsApi

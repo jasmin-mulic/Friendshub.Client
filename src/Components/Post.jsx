@@ -17,12 +17,12 @@ export default function Post({ postId, onClick}) {
   const [userId] = useState(getUserIdFromStorage());
   const [showDelete, setShowDelete] = useState(false);
   const deletePost = useFeedStore((state) => state.deletePost)
-  const [postLikeCount, setPostLikeCount] = useState(post.likes.count);
-  const [postCommentCount, setPostCommentCount] = useState(post.comments.length)
-  const [isLiked, setIsLiked] = useState(post.likes.users.some((like) => like.userId == userId));
+  const [postLikeCount, setPostLikeCount] = useState(post.likes?.count);
+  const [postCommentCount, setPostCommentCount] = useState(post.comments?.length)
+  const [isLiked, setIsLiked] = useState(post.likes?.users.some((like) => like.userId == userId));
 
   useEffect(() =>{
-    setPostCommentCount(post.comments.length)
+    setPostCommentCount(post.comments ? post.comments.length : 0)
   },[post.comments])
   const likePost = async (postId) => {
     try {

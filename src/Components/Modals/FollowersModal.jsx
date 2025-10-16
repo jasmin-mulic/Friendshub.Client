@@ -19,7 +19,6 @@ const FollowerModal = ({ onCancel }) => {
       }
     };
     getFollowers();
-    console.log("rendering");
   }, []);
 
   const removeFollower = async (followeeId) => {
@@ -30,7 +29,7 @@ const FollowerModal = ({ onCancel }) => {
         setFollowers(filteredList);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error.response)
     }
   }
   return (

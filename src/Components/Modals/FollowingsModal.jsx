@@ -9,7 +9,6 @@ const FollowingsModal = ({ onCancel }) => {
   const [followings, setFollowers] = useState([]);
   const setFollowingCount = useUserDataStore((state) => state.setFollowingCount)
 
-
   useEffect(() => {
     const getFollowings = async () => {
       try {
@@ -27,7 +26,7 @@ const FollowingsModal = ({ onCancel }) => {
 
   const removeFromFollowing = async (followeeId) => {
     try {
-      const response = await UsersApi.followUser(followeeId)
+      const response = await UsersApi.toggleFollow(followeeId)
       if(response.status == 200)
       {
         const filteredList = followings.filter((followee) => followee.userId != followeeId);

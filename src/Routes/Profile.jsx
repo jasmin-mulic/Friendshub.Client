@@ -133,15 +133,14 @@ export default function Profile() {
             <span>Posts: {postCount}</span>
           </div>
 
-          <button
-            onClick={() => setShowEditProfile(true)}
+          <Link
+          to={"/details"}
             className="flex items-center gap-2 mt-3 bg-cyan-600 hover:bg-cyan-700 px-4 py-2 rounded-lg shadow transition-all"
           >
             <Edit3 size={16} /> Edit Profile
-          </button>
+          </Link>
         </div>
 
-        {/* Sredina (feed postova korisnika) */}
         <div className="flex-1 flex flex-col gap-6">
           <h2 className="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2">
             My Posts
@@ -162,11 +161,7 @@ export default function Profile() {
       {showFollowingsModal && (
         <FollowingsModal onCancel={toggleFollowings} />
       )}
-      {showEditProfile && (
-        <EditProfileModal onClose={() => setShowEditProfile(false)} />
-      )}
 
-      {/* Loader */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>

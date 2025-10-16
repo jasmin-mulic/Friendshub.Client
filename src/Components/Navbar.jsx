@@ -31,25 +31,25 @@ const Navbar = () => {
         }
     };
     return (
-        <div>
+        <div className='relative  w-full'>
 
-        <nav className="flex justify-center items-center px-10 py-3 bg-gray-800/50 backdrop-blur-md sticky top-0 z-50 shadow-md mx-auto ">
-            <div className="flex items-center gap-6 text-xl w-full xl:w-2/5 relative ps-5 ">
+        <nav className="flex justify-start items-center px-10 py-3 bg-gray-800/50 backdrop-blur-md top-0 z-50 shadow-md w-full xl:w-1/2 mx-auto">
+            <div className="flex items-center gap-6 text-xl w-full xl:w-2/5  ps-5 ">
                 <Link to="/" className="flex items-center gap-2 hover:text-cyan-400 transition">
                     <HomeIcon size={20} /> Home
                 </Link>
                 <Link to="/me" className="flex items-center gap-2 hover:text-cyan-400 transition">
                     <User size={20} /> Profile
                 </Link>
-            <button
-                onClick={logout}
-                className="absolute  right-2 flex items-center gap-2 bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg shadow transition-all"
-            >
-                <LogOut size={18} /> Logout
-            </button>
             </div>
         </nav>
 
+            <button
+                onClick={logout}
+                className="absolute right-2 top-2 flex items-center gap-2 bg-red-500/70 hover:bg-red-600 transition- px-3 py-1 rounded-lg shadow transition-all"
+            >
+                <LogOut size={18} /> Logout
+            </button>
         </div>
     )
 }

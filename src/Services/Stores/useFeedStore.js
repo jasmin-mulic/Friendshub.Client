@@ -1,3 +1,4 @@
+import { p } from "motion/react-client";
 import { create } from "zustand";
 
 export const useFeedStore = create((set) => ({
@@ -33,35 +34,34 @@ export const useFeedStore = create((set) => ({
     })),
 
 toggleLikeComment: (postId, commentId, userId, likeObj) =>
-  set((state) => {
-    const postIndex = state.posts.findIndex((p) => p.postId === postId);
-    if (postIndex === -1) return state;
-
-    const post = state.posts[postIndex];
-    const commentIndex = post.comments.findIndex((c) => c.commentId === commentId);
-    if (commentIndex === -1) return state;
-
-    const comment = post.comments[commentIndex];
-    const likes = comment.commentLikes || [];
-    const liked = likes.some((l) => l.userId === userId);
-
-    // kreiramo novi niz lajkova samo ako ima promjene
-    const newLikes = liked
-      ? likes.filter((l) => l.userId !== userId)
-      : [...likes, likeObj];
-
-    // ako se ništa nije promijenilo, ne diramo state
-    if (liked && likes.length === newLikes.length) return state;
-
-    const newComment = { ...comment, commentLikes: newLikes };
-    const newComments = [...post.comments];
-    newComments[commentIndex] = newComment;
-
-    const newPost = { ...post, comments: newComments };
-    const newPosts = [...state.posts];
-    newPosts[postIndex] = newPost;
-
-    return { posts: newPosts };
-  }),
-
+  set((state) => ({
+    posts: state.posts.map((p) =>
+      p.postId === postId
+        ? {
+            ...p,
+            comments: p.comments.map((c) =>
+              c.commentId === commentId
+                ? {
+                    ...c,
+                    commentLikes: (c.commentLikes || []).some((l) => l.userId === userId)
+                      ? c.commentLikes.filter((l) => l.userId !== userId)
+                      : [...(c.commentLikes || []), likeObj],
+                  }
+                : c
+            ),
+          }
+        : p
+    ),
+  })),
+deleteComment: (postId, commentId) =>
+  set((state) => ({
+    posts: state.posts.map((p) =>
+      p.postId === postId
+        ? {
+            ...p,
+            comments: p.comments.filter((c) => c.commentId !== commentId),
+          }
+        : p
+    ),
+  })),
 }));

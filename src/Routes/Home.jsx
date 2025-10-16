@@ -42,7 +42,7 @@ export default function Home() {
 
     if (data.totalCount === feedPosts.length) return;
 
-    const newData = [...feedPosts, ...data.items];
+    const newData = data.items;
 
     loadMorePosts(newData);
     if (newData.length <= data.totalCount)
@@ -54,8 +54,8 @@ export default function Home() {
     try {
       const postFeedResponse = await PostsApi.getFeedPosts(page);
       if (postFeedResponse.status === 200) {
-        setTotalCount(postFeedResponse.data.totalCount);
         console.log(postFeedResponse.data)
+        setTotalCount(postFeedResponse.data.totalCount);
         return postFeedResponse.data;
       }
     } catch (error) {
@@ -125,16 +125,6 @@ export default function Home() {
               />
               <h3 className="mt-3 text-lg font-semibold text-gray-100">{username}</h3>
               <p className="text-sm text-gray-400">{followersCount} followers</p>
-            </div>
-
-            <div className="mt-5 text-sm space-y-2 text-center">
-              <ul className="space-y-1">
-                <Link to="/me" className="hover:text-cyan-400 cursor-pointer block">
-                  My Profile
-                </Link>
-                <li className="hover:text-cyan-400 cursor-pointer">Saved</li>
-                <li className="hover:text-cyan-400 cursor-pointer">Settings</li>
-              </ul>
             </div>
           </div>
         </div>

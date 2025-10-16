@@ -4,18 +4,19 @@ import { BiLike } from "react-icons/bi";
 import PostsApi from "../Services/Api/PostsApi";
 import { useEffect, useState } from "react";
 import { useFeedStore } from "../Services/Stores/useFeedStore";
+import { FaTrashAlt } from "react-icons/fa";
 
-const Comment = ({ commentId, postId }) => {
+const Comment = ({ commentId, postId, handleDelete }) => {
+
   const post = useFeedStore((state) => state.posts.find((p) => p.postId == postId));
   const userId = getUserIdFromStorage()
   const comment = post.comments.find((c) => c.commentId == commentId);
   const toggleLikeComment = useFeedStore((state) => state.toggleLikeComment)
   const [liked, setLiked] = useState(null);
-
+  const isMyComment= comment.userId == userId
+  const deleteComment = useFeedStore((state) => state.deleteComment)
 useEffect(() => {
-  const isLiked = comment.commentLikes?.some((like) => like.userId === userId);
-  setLiked(isLiked);
-  console.log(comment)
+  setLiked(comment.commentLikes?.some((like) => like.userId === userId))
 }, [comment.commentLikes, userId, postId]);
 
   const handleLikeComment = async (id) => {
@@ -35,7 +36,8 @@ useEffect(() => {
   const isNotLikedButton = "bg-gray-500/50 hover:bg-blue-500/50";
 
   return (
-    <div className="flex items-start gap-3 w-full p-3 bg-gray-700/50 rounded-xl border border-gray-600/40 mb-2">
+    <div className="flex items-start gap-3 w-full p-3 bg-gray-700/50 rounded-xl border border-gray-600/40 mb-2 relative">
+      { isMyComment == true && <FaTrashAlt onClick={handleDelete} size={20} color="red" className="absolute right-2 top-2" />}
       <img
         className="w-10 h-10 rounded-full object-cover border border-cyan-600"
         src={comment.userProfileImageUrl ?? noProfileImage}
@@ -54,7 +56,7 @@ useEffect(() => {
           } w-fit px-2 py-1 rounded-md cursor-pointer`}
         >
           <BiLike />
-          <span>Like</span>
+          <span>Like {comment.commentLikes.length}</span>
         </div>
       </div>
     </div>
