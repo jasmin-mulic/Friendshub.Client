@@ -18,6 +18,7 @@ export default function Home() {
     followersCount,
     setUserData,
     resetUserData,
+    emailAddress,
   } = useUserDataStore();
 
   const authLogOut = useAuthStore((state) => state.logout);
@@ -80,6 +81,7 @@ export default function Home() {
     setLoading(true);
     try {
       const profileDataInfo = await UsersApi.myData();
+      console.log(profileDataInfo.data)
       if (profileDataInfo.status === 200) setUserData(profileDataInfo.data);
       else {
         authLogOut();

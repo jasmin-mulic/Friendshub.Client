@@ -2,22 +2,25 @@ import { create } from "zustand";
 
 export const useUserDataStore = create((set) => ({
   username: null,
-  profileImgUrl: null,
+  profileImageUrl: null,
+  emailAddress : null,
   followersCount: 0,
   followingCount: 0,
   postCount: 0,
   userId: null,
   privateAccount: null,
 
+
   setUserData: (userData) =>
     set(() => ({
-      username: userData.displayUsername,
-      profileImgUrl: userData.profileImgUrl,
+      username: userData.username,
+      profileImgUrl: userData.profileImageUrl,
       followersCount: userData.followersCount,
       followingCount: userData.followingCount,
       postCount: userData.postCount,
       userId: userData.userId,
-      privateAccount : userData.privateAccount
+      privateAccount : userData.privateAccount,
+      emailAddress : userData.emailAddress,
     })),
 
   setFollowingCount: (num) =>

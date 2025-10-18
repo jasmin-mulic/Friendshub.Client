@@ -7,10 +7,10 @@ const Register = () => {
   const form = useForm();
   const navigate = useNavigate()
   const { register, handleSubmit, formState } = form;
-  const { errors } = formState;
+  const { errors, setError, clearErrors } = formState;
   const [apiValidationErrors, setApiValidationErrors] = useState([])
   const onSubmit = async (data) => {
-    console.log(data)
+
     try {
         const response = await AuthApi.register(data)
         if(response.status === 200)
@@ -20,6 +20,12 @@ const Register = () => {
             setApiValidationErrors(Object.fromEntries(
               validationErrors.map(e =>[e.propertyName, e.errorMessage])
             ))   
+            validationErrors.forEach(err => {
+              if(err.propertyName == "username")
+        setError("username", { type: "server", message: err.errorMessage });
+      else
+        clearErrors("username")
+            });
     }
   };
   return (
@@ -33,7 +39,7 @@ const Register = () => {
           className="space-y-5"
           noValidate
         >
-          <div className="h-22">
+          <div className="h-27">
             <label
               htmlFor="Username"
               className="block mb-2 text-sm font-medium text-red-700 dark:text-gray-300"
@@ -46,13 +52,17 @@ const Register = () => {
               placeholder="your-cool-username"
               {...register("Username", {
                 required: "We need your username",
+                                 pattern: {
+                    value: /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._]{1,30}$/,
+                    message: "Username can contain letters, numbers, _ and .; cannot start/end with . or have consecutive dots."
+                  }
               })}
               className="w-full px-4 py-2 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
             />
             {errors.Username?.message && (
-              <p className="text-red-400 p-1">{errors.Username.message}</p>
+              <p className="text-red-400 p-1 text-xs">{errors.Username.message}</p>
             )}
-            {apiValidationErrors.Username &&  <p className="text-red-400 p-1">{apiValidationErrors.Username}</p>}
+            {apiValidationErrors.username &&  <p className="text-red-400 p-1">{apiValidationErrors.Username}</p>}
           </div>
 
           <div className="h-22">
@@ -68,7 +78,12 @@ const Register = () => {
               name="EmailAddress"
               placeholder="your-fav@mail.com"
               className="w-full px-4 py-2 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
-              {...register("EmailAddress", { required: "Your email is missing." })}
+              {...register("EmailAddress", { required: "Your email is missing.",
+                 pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Enter a valid email address."
+                  }
+               })}
             />
             {errors.EmailAddress?.message && (
               <p className="text-red-400 p-1">{errors.EmailAddress.message}</p>
