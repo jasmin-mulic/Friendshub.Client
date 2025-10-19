@@ -54,14 +54,14 @@ export default function EditProfile() {
   const { errors } = formState;
 
   const onSubmit = async (data) => {
-    
+
     const formData = new FormData();
     formData.append("username", data.username);
     formData.append("emailAddress", data.emailAddress);
     formData.append("privateAccount", data.privateAccount);
-    if (data.profileImg) 
+    if (data.profileImg)
       formData.append("profileImageUrl", data.profileImageUrl);
-    
+
     try {
       const updateResponse = await UsersApi.updateUserInfo(userId, formData)
       console.log(updateResponse.status)
@@ -114,7 +114,17 @@ export default function EditProfile() {
               <label className="text-gray-400 mb-1">Username</label>
               <input
                 type="text"
-                {...register("username", { required: "Enter your username" })}
+                {...register("username", {
+                  required: "We need your username",
+                  pattern: {
+                    value: /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._]{1,30}$/,
+                    message: "Username can contain letters, numbers, underscore and dot."
+                  },
+                  minLength:{
+                    value : 3,
+                    message : "Username must be at least 3 characters long"
+                  }
+                })}
                 className="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white placeholder-gray-400"
                 placeholder="Enter your username"
               />

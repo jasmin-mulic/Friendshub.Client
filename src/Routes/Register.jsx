@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import {isAdult} from "../Helpers"
+import { isAdult } from "../Helpers"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthApi from "../Services/Api/AuthApi";
@@ -12,20 +12,20 @@ const Register = () => {
   const onSubmit = async (data) => {
 
     try {
-        const response = await AuthApi.register(data)
-        if(response.status === 200)
-          navigate("/")
+      const response = await AuthApi.register(data)
+      if (response.status === 200)
+        navigate("/")
     } catch (exc) {
-            var validationErrors = exc.response.data
-            setApiValidationErrors(Object.fromEntries(
-              validationErrors.map(e =>[e.propertyName, e.errorMessage])
-            ))   
-            validationErrors.forEach(err => {
-              if(err.propertyName == "username")
-        setError("username", { type: "server", message: err.errorMessage });
-      else
-        clearErrors("username")
-            });
+      var validationErrors = exc.response.data
+      setApiValidationErrors(Object.fromEntries(
+        validationErrors.map(e => [e.propertyName, e.errorMessage])
+      ))
+      validationErrors.forEach(err => {
+        if (err.propertyName == "username")
+          setError("username", { type: "server", message: err.errorMessage });
+        else
+          clearErrors("username")
+      });
     }
   };
   return (
@@ -41,7 +41,7 @@ const Register = () => {
         >
           <div className="h-27">
             <label
-              htmlFor="Username"
+              htmlFor="username"
               className="block mb-2 text-sm font-medium text-red-700 dark:text-gray-300"
             >
               Username
@@ -52,17 +52,21 @@ const Register = () => {
               placeholder="your-cool-username"
               {...register("Username", {
                 required: "We need your username",
-                                 pattern: {
-                    value: /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._]{1,30}$/,
-                    message: "Username can contain letters, numbers, _ and .; cannot start/end with . or have consecutive dots."
-                  }
+                pattern: {
+                  value: /^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._]{1,30}$/,
+                  message: "Username can contain letters, numbers, underscore and dot."
+                },
+                minLength: {
+                  value: 3,
+                  message: "Username must be at least 3 characters long"
+                }
               })}
               className="w-full px-4 py-2 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
             />
             {errors.Username?.message && (
               <p className="text-red-400 p-1 text-xs">{errors.Username.message}</p>
             )}
-            {apiValidationErrors.username &&  <p className="text-red-400 p-1">{apiValidationErrors.Username}</p>}
+            {apiValidationErrors.username && <p className="text-red-400 p-1">{apiValidationErrors.Username}</p>}
           </div>
 
           <div className="h-22">
@@ -78,12 +82,13 @@ const Register = () => {
               name="EmailAddress"
               placeholder="your-fav@mail.com"
               className="w-full px-4 py-2 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
-              {...register("EmailAddress", { required: "Your email is missing.",
-                 pattern: {
-                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                    message: "Enter a valid email address."
-                  }
-               })}
+              {...register("EmailAddress", {
+                required: "Your email is missing.",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Enter a valid email address."
+                }
+              })}
             />
             {errors.EmailAddress?.message && (
               <p className="text-red-400 p-1">{errors.EmailAddress.message}</p>
@@ -105,13 +110,13 @@ const Register = () => {
               className="w-full px-4 py-2 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
               {...register("dateOfBirth", {
                 required: "Are you even born yet?.",
-                validate : (value) => isAdult(value) || "You must be at least 18 buddy."
+                validate: (value) => isAdult(value) || "You must be at least 18 buddy."
               })}
             />
             {errors.dateOfBirth?.message && (
               <p className="text-red-400 p-1">{errors.dateOfBirth.message}</p>
             )}
-             {apiValidationErrors.DateOfBirth &&  <p className="text-red-400 p-1">{apiValidationErrors.DateOfBirth}</p>}
+            {apiValidationErrors.DateOfBirth && <p className="text-red-400 p-1">{apiValidationErrors.DateOfBirth}</p>}
           </div>
 
           <div className="h-20">
@@ -129,18 +134,18 @@ const Register = () => {
               className="w-full px-4 py-2 border-b-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
               {...register("password", {
                 required: "You are not safe.",
-                minLength :
+                minLength:
                 {
-                  value : 6,
-                  message : "Password must be a minimum of 6 characters."
+                  value: 6,
+                  message: "Password must be a minimum of 6 characters."
                 }
               })}
-              
+
             />
             {errors.password?.message && (
               <p className="text-red-400 p-1">{errors.password.message}</p>
             )}
-             {apiValidationErrors.Password &&  <p className="text-red-400 p-1">{apiValidationErrors.DateOfBirth}</p>}
+            {apiValidationErrors.Password && <p className="text-red-400 p-1">{apiValidationErrors.DateOfBirth}</p>}
 
           </div>
 
