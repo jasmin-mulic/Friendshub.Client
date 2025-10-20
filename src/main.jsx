@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./Routes/Register.jsx";
 import Profile from "./Routes/Profile.jsx";
 import Details from "./Routes/Details.jsx";
+import User from "./Routes/User.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,12 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <Details />
       </ProtectedRoute>
+    ),
+  },
+      {
+    path : "/User/:username",
+    element : (
+        <User />
     ),
   }
 ]);

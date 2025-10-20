@@ -105,7 +105,6 @@ export default function Profile() {
 
   return (
     <div className="flex flex-col z-10 min-h-screen text-white">
-      <Navbar />
 
       <div className="flex gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">
         {/* Lijevi sidebar (profil info) */}
@@ -142,6 +141,7 @@ export default function Profile() {
         </div>
 
         <div className="flex-1 flex flex-col gap-6">
+          <Navbar />
           <h2 className="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2">
             My Posts
           </h2>

@@ -45,8 +45,8 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-950/80 px-4">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-white text-center">
-          Welcome to Friends<span className="text-orange-400">Hub</span>
+        <h2 className="text-2xl font-bold mb-6 text-center text-cyan-400">
+          Welcome to friendshub
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>

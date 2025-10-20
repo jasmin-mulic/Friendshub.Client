@@ -9,6 +9,7 @@ import FriendRecommendations from "../Components/FriendRecommendations";
 import Feed from "../Components/Feed";
 import AddPost from "../Components/AddPost";
 import "../../src/index.css";
+import { FaUserFriends } from "react-icons/fa";
 import Navbar from "../Components/Navbar";
 import { useFeedStore } from "../Services/Stores/useFeedStore";
 export default function Home() {
@@ -113,10 +114,8 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen text-white w-full">
 
-      <Navbar />
       <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0">
 
-        {/* Lijevi sidebar (profil) */}
         <div className="hidden lg:flex flex-col w-full xl:w-1/4 text-gray-300">
           <div className="bg-gray-800/30 rounded-xl p-5  shadow-lg backdrop-blur-sm border border-gray-700/40">
             <div className="flex flex-col items-center text-center">
@@ -131,7 +130,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col gap-6">
+        <div className="flex-1 flex flex-col gap-6 w-full ">
+          <Navbar />
           <div
             className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"
             onClick={() => setShowAddForm(true)}

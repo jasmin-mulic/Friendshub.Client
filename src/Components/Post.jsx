@@ -71,7 +71,7 @@ export default function Post({ postId, onClick}) {
           className="w-12 h-12 rounded-full object-cover"
         />
         <div>
-          <Link to={post.username} className="font-semibold text-sm">{post.username}</Link>
+          <Link to={`/User/${post.username}`} className="font-semibold text-sm">{post.username}</Link>
           <p className="text-gray-400 text-sm">{dateToText(post.postedAt)}</p>
         </div>
       </div>

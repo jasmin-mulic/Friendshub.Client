@@ -18,7 +18,6 @@ export default function EditProfile() {
     privateAccount: null
   })
   const [preview, setPreview] = useState(userData.profileImageUrl || defaultProfileImg);
-  const navigate = useNavigate();
   const userId = getUserIdFromStorage()
   const loadUserData = async () => {
     try {
