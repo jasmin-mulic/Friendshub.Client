@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Register from "./Routes/Register.jsx";
 import Profile from "./Routes/Profile.jsx";
 import Details from "./Routes/Details.jsx";
-import User from "./Routes/User.jsx";
+import UserProfile from "./Routes/UserProfile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,9 +43,9 @@ const router = createBrowserRouter([
     ),
   },
       {
-    path : "/User/:username",
+    path : ":id",
     element : (
-        <User />
+        <UserProfile />
     ),
   }
 ]);

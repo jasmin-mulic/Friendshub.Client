@@ -10,7 +10,7 @@ const UsersApi = {
   getFollowings: () => Api.get("/Users/following-list"),
   removeFollower: (followeeId) => Api.post(`Users/remove-follower/${followeeId}`),
   updateUserInfo : (id, data) => Api.put(`Users/${id}`, data),
-  userProfile : (id) => Api.put(`Users/${id}`)
+  userProfile : (id) => Api.get(`Users/${id}`)
 
 };
 export default UsersApi;
