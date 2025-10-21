@@ -8,10 +8,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { useUserDataStore } from "../Services/Stores/useUserDataStore";
 import Feed from "../Components/Feed";
 import "../../src/index.css";
-import { LogOut, Home as HomeIcon, Edit3 } from "lucide-react";
+import { Edit3 } from "lucide-react";
 import FollowersModal from "../Components/Modals/FollowersModal";
 import FollowingsModal from "../Components/Modals/FollowingsModal";
+import { MdDelete } from "react-icons/md";
 import Navbar from "../Components/Navbar";
+import DeleteAccountModal from "../Components/Modals/DeleteAccountModal";
 export default function Profile() {
   const {
     username,
@@ -30,8 +32,9 @@ export default function Profile() {
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
-  const [showFollowingsModal, setShowFollowingsModal] = useState(false)
-  const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showFollowingsModal, setShowFollowingsModal] = useState(false);
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false)
+
   const navigate = useNavigate();
 
   const getData = async () => {
@@ -50,6 +53,9 @@ export default function Profile() {
     }
   };
 
+  const deleteAccount = async (password) =>{
+      console.log(password)
+  }
   const getMyPosts = async (page) => {
     try {
       const postFeedResponse = await PostsApi.getMyPosts(page);
@@ -76,7 +82,7 @@ export default function Profile() {
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await getMyPosts(feedPage);
-      setFeedPosts(data.items);
+      if (data) setFeedPosts(data.items);
     };
     fetchPosts();
     getData();
@@ -100,52 +106,63 @@ export default function Profile() {
       setLoading(false);
     }
   };
- const toggleFollowers = () => setShowFollowersModal((prev) => !prev);
+
+  const toggleFollowers = () => setShowFollowersModal((prev) => !prev);
   const toggleFollowings = () => setShowFollowingsModal((prev) => !prev);
 
   return (
-    <div className="flex flex-col z-10 min-h-screen text-white">
+    <div className="flex flex-col min-h-screen text-white w-full bg-gray-800/20">
+      <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0 bg-gray-900/20">
 
-      <div className="flex gap-8 w-full xl:w-4/5 2xl:w-3/5 mx-auto py-8">
-        {/* Lijevi sidebar (profil info) */}
-        <div className="w-1/4 hidden lg:flex flex-col items-center p-4 bg-gray-800/20 rounded-2xl shadow-lg backdrop-blur-sm gap-4">
-          <img
-            className="rounded-full w-24 h-24 border-2 border-cyan-600 shadow-lg"
-            src={profileImgUrl || defaultProfileImg}
-            alt="Profile"
-          />
-          <p className="font-bold text-lg">{username}</p>
+        <div className="hidden lg:flex flex-col w-full xl:w-1/5 text-gray-300">
+          <div className="bg-gray-800/30 rounded-xl p-5 shadow-lg backdrop-blur-sm border border-gray-700/40">
+            <div className="flex flex-col items-center text-center">
+              <img
+                src={profileImgUrl || defaultProfileImg}
+                alt="Profile"
+                className="w-20 h-20 rounded-full border border-gray-700"
+              />
+              <h3 className="mt-3 text-lg font-semibold text-gray-100">{username}</h3>
 
-          <div className="flex flex-col text-md text-gray-300 gap-1 text-center">
-            <span
-              onClick={toggleFollowers}
-              className="hover:text-blue-400 cursor-pointer"
-            >
-              Followers: {followersCount}
-            </span>
-            <span
-              onClick={toggleFollowings}
-              className="hover:text-blue-400 cursor-pointer"
-            >
-              Following: {followingCount}
-            </span>
-            <span>Posts: {postCount}</span>
+              <div className="flex flex-col gap-1 text-gray-400 mt-2">
+                <span
+                  onClick={toggleFollowers}
+                  className="hover:text-cyan-400 cursor-pointer"
+                >
+                  Followers: {followersCount}
+                </span>
+                <span
+                  onClick={toggleFollowings}
+                  className="hover:text-cyan-400 cursor-pointer"
+                >
+                  Following: {followingCount}
+                </span>
+                <span>Posts: {postCount}</span>
+              </div>
+
+              <Link
+                to={"/details"}
+                className="flex items-center justify-center gap-2 mt-4 bg-cyan-600 hover:bg-cyan-700 px-4 py-2 rounded-lg shadow transition-all"
+              >
+                <Edit3 size={16} /> Edit Profile
+              </Link>
+
+              <button
+                onClick={() => setShowDeleteAccount(true)}
+                className="flex items-center justify-center gap-2 mt-3 text-red-400 hover:text-red-500 transition"
+              >
+                <MdDelete size={18} /> Delete account
+              </button>
+            </div>
           </div>
-
-          <Link
-          to={"/details"}
-            className="flex items-center gap-2 mt-3 bg-cyan-600 hover:bg-cyan-700 px-4 py-2 rounded-lg shadow transition-all"
-          >
-            <Edit3 size={16} /> Edit Profile
-          </Link>
         </div>
 
-        <div className="flex-1 flex flex-col gap-6">
+        {/* MAIN FEED SECTION */}
+        <div className="flex-1 flex flex-col gap-6 w-full">
           <Navbar />
           <h2 className="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2">
             My Posts
           </h2>
-
           <Feed
             loadMorePosts={nextPage}
             feedPosts={feedPosts}
@@ -154,19 +171,17 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* Modali */}
-      {showFollowersModal && (
-        <FollowersModal onCancel={toggleFollowers} />
-      )}
-      {showFollowingsModal && (
-        <FollowingsModal onCancel={toggleFollowings} />
-      )}
+      {/* Modals */}
+      {showFollowersModal && <FollowersModal onCancel={toggleFollowers} />}
+      {showFollowingsModal && <FollowingsModal onCancel={toggleFollowings} />}
 
+      {/* Loader */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
+      {showDeleteAccount == true  && <DeleteAccountModal show={showDeleteAccount} onConfirm={deleteAccount} onCancel={() => setShowDeleteAccount(false)}  />}
     </div>
   );
 }

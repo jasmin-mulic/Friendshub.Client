@@ -17,8 +17,10 @@ export default function EditProfile() {
     profileImageUrl: null,
     privateAccount: null
   })
-  const [preview, setPreview] = useState(userData.profileImageUrl || defaultProfileImg);
+
+  const [preview, setPreview] = useState();
   const userId = getUserIdFromStorage()
+  const navigate = useNavigate()
   const loadUserData = async () => {
     try {
       const res = await UsersApi.myData()
@@ -32,7 +34,7 @@ export default function EditProfile() {
           privateAccount: userDetails.privateAccount,
           profileImageUrl: userDetails.profileImageUrl
         })
-        setPreview(userDetails.profileImageUrl)
+        setPreview(userDetails.profileImageUrl == null ? defaultProfileImg : userDetails.profileImageUrl)
       }
     } catch (error) {
     }
@@ -58,22 +60,23 @@ export default function EditProfile() {
     formData.append("username", data.username);
     formData.append("emailAddress", data.emailAddress);
     formData.append("privateAccount", data.privateAccount);
-    if (data.profileImg)
+    if (data.profileImageUrl)
       formData.append("profileImageUrl", data.profileImageUrl);
 
     try {
       const updateResponse = await UsersApi.updateUserInfo(userId, formData)
-      console.log(updateResponse.status)
+      if(updateResponse.status == 200)
+        navigate("/")
     } catch (error) {
       console.log(error)
     }
   };
 
   return (
-    <div className="text-white overflow-y-hidden bg-gray-800/20 h-full ">
+    <div className="text-white overflow-y-hidden bg-gray-800/20 h-screen">
       <Navbar className="absolute" />
-      <div className="min-h-screen flex bg-gray-900/20 p-4 flex-col justify-center items-center ">
-        <div className="bg-gray-800/30 border-gray-700/50 backdrop-blur-md rounded-2xl p-6 w-full max-w-md text-gray-200 ">
+      <div className="min-h-screen flex bg-gray-900/20 flex-col justify-center items-center ">
+        <div className=" bg-transparent border-gray-700/50 backdrop-blur-md rounded-2xl p-6 w-full max-w-md text-gray-200 ">
           <h2 className="text-2xl font-semibold mb-6 text-white text-center">
             Edit Profile
           </h2>

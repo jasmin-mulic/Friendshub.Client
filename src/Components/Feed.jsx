@@ -19,7 +19,7 @@ useEffect(() =>{
   }, [feedPosts]);
 
   return (
-    <div className="flex flex-col gap-5 overflow-y-auto max-h-[70vh] scrollbar-hide px-4">
+    <div className="flex flex-col gap-5 overflow-y-auto max-h-[70vh] scrollbar-hide px-4 w-full">
       {feedPosts.length > 0 ? (
         feedPosts.map((post) => (
           (<Post 
