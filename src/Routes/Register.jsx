@@ -39,7 +39,6 @@ const Register = () => {
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-          {/* USERNAME */}
           <div>
             <label
               htmlFor="username"
@@ -48,8 +47,9 @@ const Register = () => {
               Username
             </label>
             <input
+            placeholder="Your cool username..."
+            autoComplete="off"
               id="username"
-              placeholder="your-cool-username"
               {...register("username", {
                 required: "We need your username",
                 pattern: {
@@ -72,7 +72,6 @@ const Register = () => {
             )}
           </div>
 
-          {/* EMAIL */}
           <div>
             <label
               htmlFor="EmailAddress"
@@ -83,7 +82,7 @@ const Register = () => {
             <input
               type="email"
               id="EmailAddress"
-              placeholder="your-fav@mail.com"
+              placeholder="Email address..."
               {...register("EmailAddress", {
                 required: "Your email is missing.",
                 pattern: {

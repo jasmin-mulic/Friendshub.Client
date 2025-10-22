@@ -52,10 +52,26 @@ export default function Profile() {
       setLoading(false);
     }
   };
-
-  const deleteAccount = async (password) =>{
-      console.log(password)
+const deleteAccount = async (password) => {
+  try {
+    const res = await AuthApi.deleteAccount(password);
+    
+    if (res.status === 200) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setShowDeleteAccount(false); // zatvori modal
+        storeLogout(); // izbriši iz store-a
+        resetUserData();
+        navigate("login"); // preusmjeri korisnika
+      }, 5000);
+    }
+  } catch (error) {
+    
+    return;a
   }
+};
+
   const getMyPosts = async (page) => {
     try {
       const postFeedResponse = await PostsApi.getMyPosts(page);
@@ -157,8 +173,7 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* MAIN FEED SECTION */}
-        <div className="flex-1 flex flex-col gap-6 w-full">
+        <div className="flex-1 flex flex-col gap-5 w-full">
           <Navbar />
           <h2 className="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2">
             My Posts
@@ -181,7 +196,7 @@ export default function Profile() {
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-      {showDeleteAccount == true  && <DeleteAccountModal show={showDeleteAccount} onConfirm={deleteAccount} onCancel={() => setShowDeleteAccount(false)}  />}
+      {showDeleteAccount == true  && <DeleteAccountModal loading={loading} show={showDeleteAccount} onConfirm={deleteAccount} onCancel={() => setShowDeleteAccount(false)}  />}
     </div>
   );
 }

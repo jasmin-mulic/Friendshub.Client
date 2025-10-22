@@ -5,5 +5,6 @@ const AuthApi = {
     register : (data) => Api.post("/Auth/register", data),
     logout : () => Api.post("/Auth/logout"),
     refreshToken : () => Api.post("/Auth/refresh-token"),
+    deleteAccount : (password) => Api.delete(`/Auth/${password}`)
 }
 export default AuthApi;

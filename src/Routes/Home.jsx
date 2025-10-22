@@ -127,7 +127,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col gap-6 w-full ">
+        <div className="flex-1 flex flex-col gap-5 w-full ">
           <Navbar />
           <div
             className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"
@@ -148,7 +148,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Loader */}
       {loading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
