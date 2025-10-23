@@ -10,6 +10,7 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(false);
   const { id } = useParams("id");
   const navigate = useNavigate();
+
   if(id === getUserIdFromStorage())
     navigate("/")
   useEffect(() => {

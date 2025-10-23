@@ -65,7 +65,7 @@ const Navbar = () => {
           </Link>
 
           {/* 🔔 Ikonica notifikacija */}
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative bg-red-700" ref={dropdownRef}>
             <button
               onClick={() => setShowNotifications((prev) => !prev)}
               className="relative flex items-center gap-2 hover:text-cyan-400 transition"
@@ -82,7 +82,7 @@ const Navbar = () => {
                   Notifications
                 </p>
 
-                <div className="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scrollbar scrollbar-hide">
+                <div className="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scrollbar scrollbar-hide bg-blue-500" >
                   {/* Dummy notifications */}
                   <div className="bg-gray-700/40 hover:bg-gray-700/60 p-2 rounded-lg transition text-sm">
                     💬 Someone commented on your post

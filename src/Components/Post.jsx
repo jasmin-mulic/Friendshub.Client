@@ -16,6 +16,7 @@ export default function Post({ postId, onClick}) {
   const post = useFeedStore((state) => state.posts.find((post) => post.postId == postId))
   const [userId] = useState(getUserIdFromStorage());
   const [showDelete, setShowDelete] = useState(false);
+  const [showFull, setShowFull] = useState(false)
   const deletePost = useFeedStore((state) => state.deletePost)
   const [postLikeCount, setPostLikeCount] = useState(post.likes?.count);
   const [postCommentCount, setPostCommentCount] = useState(post.comments?.length)
