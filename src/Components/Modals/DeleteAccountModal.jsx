@@ -1,19 +1,39 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import AuthApi from "../../Services/Api/AuthApi";
 
-export default function DeleteAccountModal({ loading, show, onConfirm, onCancel }) {
+export default function DeleteAccountModal({ loading, show, onCancel }) {
   const [message, setMessage] = useState("Deleting your account...");
 
-  // React Hook Form setup
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     reset
   } = useForm();
 
-  // Efekat koji mijenja loading poruke tokom brisanja
+const deleteAccount = async (password) => {
+  try {
+    const res = await AuthApi.deleteAccount(password);
+    
+    if (res.status === 200) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setShowDeleteAccount(false); // zatvori modal
+        storeLogout(); // izbriši iz store-a
+        resetUserData();
+        navigate("login"); // preusmjeri korisnika
+      }, 5000);
+    }
+  } catch (error) {
+    if(error.response.status == 400)
+      console.log(error.response.data)
+      setError("password", {type : "manual", message : error.response.data})
+  }
+};
   useEffect(() => {
     if (!loading) return;
 
@@ -37,9 +57,8 @@ export default function DeleteAccountModal({ loading, show, onConfirm, onCancel 
     return () => clearInterval(interval);
   }, [loading]);
 
-  // Obrada submit-a (poziva onConfirm samo ako ima lozinku)
   const confirmDeletion = (data) => {
-    onConfirm(data.password);
+    deleteAccount(data.password);
     reset();
   };
 

@@ -57,25 +57,6 @@ export default function Profile() {
       setLoading(false);
     }
   };
-const deleteAccount = async (password) => {
-  try {
-    const res = await AuthApi.deleteAccount(password);
-    
-    if (res.status === 200) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setShowDeleteAccount(false); // zatvori modal
-        storeLogout(); // izbriši iz store-a
-        resetUserData();
-        navigate("login"); // preusmjeri korisnika
-      }, 5000);
-    }
-  } catch (error) {
-    
-    return;a
-  }
-};
 
   const getMyPosts = async (page) => {
     try {
@@ -116,14 +97,13 @@ const deleteAccount = async (password) => {
   return (
     <div className="flex flex-col min-h-screen text-white w-full bg-gray-800/20">
       <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0 bg-gray-900/20">
-
-        <div className="hidden lg:flex flex-col w-full xl:w-1/5 text-gray-300">
-          <div className="bg-gray-800/30 rounded-xl p-5 shadow-lg backdrop-blur-sm border border-gray-700/40">
+        <div className="hidden lg:flex flex-col w-full xl:w-1/5 text-gray-300 ">
+          <div className="bg-gray-800/30 rounded-xl p-5 shadow-lg backdrop-blur-sm  border-cyan-500/10">
             <div className="flex flex-col items-center text-center">
               <img
                 src={profileImgUrl || defaultProfileImg}
                 alt="Profile"
-                className="w-20 h-20 rounded-full border border-gray-700"
+                className="w-30 h-30 rounded-full border border-gray-700"
               />
               <h3 className="mt-3 text-lg font-semibold text-gray-100">{username}</h3>
 
@@ -160,9 +140,9 @@ const deleteAccount = async (password) => {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col gap-5 w-full">
+        <div className="flex-1 flex flex-col gap-5 w-full ">
           <Navbar />
-          <h2 className="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2">
+          <h2 className="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2 mt-5">
             My Posts
           </h2>
           <Feed
@@ -183,7 +163,7 @@ const deleteAccount = async (password) => {
           <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
       )}
-      {showDeleteAccount == true  && <DeleteAccountModal loading={loading} show={showDeleteAccount} onConfirm={deleteAccount} onCancel={() => setShowDeleteAccount(false)}  />}
+      {showDeleteAccount == true  && <DeleteAccountModal loading={loading} show={showDeleteAccount} onCancel={() => setShowDeleteAccount(false)}  />}
     </div>
   );
 }

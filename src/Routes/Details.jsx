@@ -44,7 +44,7 @@ export default function EditProfile() {
     loadUserData();
   }, [])
 
-  const { control, register, handleSubmit, formState, reset } = useForm({
+  const { control, register, handleSubmit, formState, reset, setError } = useForm({
     defaultValues: {
       username: userData.username,
       emailAddress: userData.emailAddress,
@@ -66,9 +66,15 @@ export default function EditProfile() {
     try {
       const updateResponse = await UsersApi.updateUserInfo(userId, formData)
       if(updateResponse.status == 200)
+
         navigate("/")
     } catch (error) {
-      console.log(error)
+      console.log(error.response.data.errors)
+            if(error.response.data.errors?.username != null)
+      {
+        setError("username", { type: "manual", message: error.response.data.errors?.username });
+
+      }
     }
   };
 

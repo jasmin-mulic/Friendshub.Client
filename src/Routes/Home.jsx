@@ -114,12 +114,12 @@ export default function Home() {
       <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0 bg-gray-900/20">
 
         <div className="hidden lg:flex flex-col w-full xl:w-1/5 text-gray-300">
-          <div className="bg-gray-800/30 rounded-xl p-5  shadow-lg backdrop-blur-sm border border-gray-700/40">
+          <div className="bg-gray-800/30 rounded-xl p-5 shadow-lg backdrop-blur-sm">
             <div className="flex flex-col items-center text-center">
               <img
                 src={profileImgUrl || defaultProfileImg}
                 alt="Profile"
-                className="w-20 h-20 rounded-full border border-gray-700"
+                className="w-30 h-30 rounded-full border border-gray-700"
               />
               <h3 className="mt-3 text-lg font-semibold text-gray-100">{username}</h3>
               <p className="text-sm text-gray-400">{followersCount} followers</p>
