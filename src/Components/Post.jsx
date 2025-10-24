@@ -10,7 +10,7 @@ import { FaCommentDots } from "react-icons/fa6";
 import { FaTrashAlt } from "react-icons/fa";
 import "../index.css";
 import DeletePostModal from "./Modals/DeletePostModal";
-import { useFeedStore } from "../Services/Stores/useFeedStore";
+import { useFeedStore } from "../Services/Stores/FeedStore";
 export default function Post({ postId, onClick}) {
 
   const post = useFeedStore((state) => state.posts.find((post) => post.postId == postId))
@@ -18,9 +18,9 @@ export default function Post({ postId, onClick}) {
   const [showDelete, setShowDelete] = useState(false);
   const [showFull, setShowFull] = useState(false)
   const deletePost = useFeedStore((state) => state.deletePost)
-  const [postLikeCount, setPostLikeCount] = useState(post.likes?.count);
+  const [postLikeCount, setPostLikeCount] = useState(post.likeCount);
   const [postCommentCount, setPostCommentCount] = useState(post.comments?.length)
-  const [isLiked, setIsLiked] = useState(post.likes?.users.some((like) => like.userId == userId));
+  const [isLiked, setIsLiked] = useState(post.likes?.some((like) => like.userId == userId));
 
   useEffect(() =>{
     setPostCommentCount(post.comments ? post.comments.length : 0)
@@ -49,7 +49,6 @@ export default function Post({ postId, onClick}) {
       const response = await PostsApi.deletePost(postId);
       if (response.status == 200)
       {
-        console.log("post deleted from db")
         deletePost(postId);
       }
     } catch (error) {
@@ -72,7 +71,7 @@ export default function Post({ postId, onClick}) {
           className="w-12 h-12 rounded-full object-cover"
         />
         <div>
-          <Link to={`/${post.userId}`} className="font-semibold text-sm">{post.username}</Link>
+          <Link to={`/${post.username}`} className="font-semibold text-sm">{post.username}</Link>
           <p className="text-gray-400 text-sm">{dateToText(post.postedAt)}</p>
         </div>
       </div>

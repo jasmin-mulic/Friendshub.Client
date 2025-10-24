@@ -4,21 +4,41 @@ import UsersApi from "../Services/Api/UsersApi";
 import Feed from "../Components/Feed";
 import Navbar from "../Components/Navbar";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
-import { getUserIdFromStorage } from "../Helpers";
+import { useAuthStore } from "../Services/Stores/AuthStore";
+import { useUserDataStore } from "../Services/Stores/UserDataStore";
+import { useFeedStore } from "../Services/Stores/FeedStore";
 const UserProfile = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(false);
-  const { id } = useParams("id");
+  const { username } = useParams();
+  const storeUsername = useUserDataStore((state) => state.username)
   const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  
+  const resetFeed = useFeedStore((state) => state.resetFeedStore)
+  const setPosts = useFeedStore((state) =>state.setPosts)
+    const posts = useFeedStore((state) =>state.posts)
 
-  if(id === getUserIdFromStorage())
-    navigate("/")
+
+  useEffect(() =>{
+    if(storeUsername == username)
+      navigate("/me")
+  }, [])
+
   useEffect(() => {
     const getProfile = async () => {
       setLoading(true);
       try {
-        const response = await UsersApi.userProfile(id);
-        if (response.status === 200) setUserData(response.data);
+        const response = await UsersApi.userProfile(username);
+        if (response.status === 200)
+          {
+            resetFeed();
+            setUserData(response.data)
+            setPosts(response.data.posts);
+            console.log(response.data.posts)
+          }
+            
+            
       } catch (error) {
         console.log(error);
       } finally {
@@ -26,7 +46,7 @@ const UserProfile = () => {
       }
     };
     getProfile();
-  }, [id]);
+  }, [username]);
 
   if (loading)
     return (
@@ -34,9 +54,6 @@ const UserProfile = () => {
         <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
-
-  if (!userData) return null;
-
   return (
     <div className="flex flex-col min-h-screen text-white w-full">
       <div className="flex flex-col xl:flex-row gap-8 w-full xl:w-4/5 mx-auto py-8 px-4 xl:px-0">

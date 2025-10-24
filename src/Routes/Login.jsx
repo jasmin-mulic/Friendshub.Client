@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import AuthApi from "../Services//Api/AuthApi";
 import { jwtDecode } from "jwt-decode";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../Services/Stores/UserDataStore";
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -50,7 +50,6 @@ export default function Login() {
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-          {/* Username/Email */}
           <div>
             <label
               htmlFor="usernameOrEmail"

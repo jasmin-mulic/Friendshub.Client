@@ -64,4 +64,10 @@ deleteComment: (postId, commentId) =>
         : p
     ),
   })),
+    resetFeedStore: () =>
+    set(() => ({
+
+      posts: [],
+      selectedPost : null,
+    })),
 }));

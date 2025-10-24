@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import defaultProfilePic from "../../assets/noProfilePic.jpg";
 import { dateToText } from "../../Helpers";
 import { ImCross } from "react-icons/im";
-import { useUserDataStore } from "../../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../../Services/Stores/UserDataStore";
 import Comment from "../Comment";
 import { MdAddAPhoto } from "react-icons/md";
 import "../../index.css";
 import { FaLocationArrow } from "react-icons/fa";
 import PostsApi from "../../Services/Api/PostsApi";
-import { useFeedStore } from "../../Services/Stores/useFeedStore";
+import { useFeedStore } from "../../Services/Stores/FeedStore";
 import { AnimatePresence, motion } from "motion/react";
 const PostDetailsModal = ({ postId, onClose }) => {
 

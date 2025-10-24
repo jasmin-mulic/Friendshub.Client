@@ -5,7 +5,7 @@ import PostsApi from "../Services/Api/PostsApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
 import AuthApi from "../Services/Api/AuthApi";
 import { useNavigate, Link } from "react-router-dom";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import Feed from "../Components/Feed";
 import "../../src/index.css";
 import { Edit3 } from "lucide-react";
@@ -14,6 +14,7 @@ import FollowingsModal from "../Components/Modals/FollowingsModal";
 import { MdDelete } from "react-icons/md";
 import Navbar from "../Components/Navbar";
 import DeleteAccountModal from "../Components/Modals/DeleteAccountModal";
+import { useFeedStore } from "../Services/Stores/FeedStore";
 export default function Profile() {
   const {
     username,
@@ -28,13 +29,17 @@ export default function Profile() {
   const authLogOut = useAuthStore((state) => state.logout);
   const storeLogout = useAuthStore.getState().logout;
   const [loading, setLoading] = useState(false);
-  const [feedPosts, setFeedPosts] = useState([]);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
   const [showFollowingsModal, setShowFollowingsModal] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false)
-
+  const
+  {
+    posts,
+    setPosts,
+    resetFeedStore,
+  } = useFeedStore();
   const navigate = useNavigate();
 
   const getData = async () => {
@@ -76,6 +81,7 @@ const deleteAccount = async (password) => {
     try {
       const postFeedResponse = await PostsApi.getMyPosts(page);
       if (postFeedResponse.status === 200) {
+        resetFeedStore()
         setTotalCount(postFeedResponse.data.totalCount);
         return postFeedResponse.data;
       }
@@ -98,30 +104,11 @@ const deleteAccount = async (password) => {
   useEffect(() => {
     const fetchPosts = async () => {
       const data = await getMyPosts(feedPage);
-      if (data) setFeedPosts(data.items);
+      if (data) setPosts(data.items);
     };
     fetchPosts();
     getData();
   }, []);
-
-  const logout = async () => {
-    setLoading(true);
-    try {
-      const response = await AuthApi.logout();
-      if (response.status === 200) {
-        storeLogout();
-        resetUserData();
-        navigate("login");
-      }
-    } catch (error) {
-      localStorage.removeItem("token");
-      storeLogout();
-      resetUserData();
-      navigate("login");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const toggleFollowers = () => setShowFollowersModal((prev) => !prev);
   const toggleFollowings = () => setShowFollowingsModal((prev) => !prev);
@@ -180,7 +167,7 @@ const deleteAccount = async (password) => {
           </h2>
           <Feed
             loadMorePosts={nextPage}
-            feedPosts={feedPosts}
+            feedPosts={posts}
             totalCount={totalCount}
           />
         </div>

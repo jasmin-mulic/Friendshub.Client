@@ -3,7 +3,7 @@ import { dateToText, getUserIdFromStorage } from "../Helpers";
 import { BiLike } from "react-icons/bi";
 import PostsApi from "../Services/Api/PostsApi";
 import { useEffect, useState } from "react";
-import { useFeedStore } from "../Services/Stores/useFeedStore";
+import { useFeedStore } from "../Services/Stores/FeedStore";
 import { FaTrashAlt } from "react-icons/fa";
 
 const Comment = ({ commentId, postId, handleDelete }) => {

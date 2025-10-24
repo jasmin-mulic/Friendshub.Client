@@ -4,13 +4,13 @@ import UsersApi from "../Services/Api/UsersApi";
 import PostsApi from "../Services/Api/PostsApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
 import { useNavigate, Link } from "react-router-dom";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import FriendRecommendations from "../Components/FriendRecommendations";
 import Feed from "../Components/Feed";
 import AddPost from "../Components/AddPost";
 import "../../src/index.css";
 import Navbar from "../Components/Navbar";
-import { useFeedStore } from "../Services/Stores/useFeedStore";
+import { useFeedStore } from "../Services/Stores/FeedStore";
 export default function Home() {
   const {
     username,
@@ -128,7 +128,7 @@ export default function Home() {
         </div>
 
         <div className="flex-1 flex flex-col gap-5 w-full ">
-          <Navbar />
+              <Navbar />
           <div
             className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"
             onClick={() => setShowAddForm(true)}

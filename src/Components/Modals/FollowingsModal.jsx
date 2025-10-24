@@ -3,7 +3,7 @@ import noProfilePic from "../../assets/noProfilePic.jpg";
 import { AnimatePresence, motion } from "motion/react";
 import UsersApi from "../../Services/Api/UsersApi";
 import { ImCross } from "react-icons/im";
-import { useUserDataStore } from "../../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../../Services/Stores/UserDataStore";
 const FollowingsModal = ({ onCancel }) => {
 
   const [followings, setFollowers] = useState([]);

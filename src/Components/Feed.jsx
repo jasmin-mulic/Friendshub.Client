@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import Post from "./Post";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import PostDetailsModal from "./Modals/PostDetailsModal";
-import { useFeedStore } from "../Services/Stores/useFeedStore";
+import { useFeedStore } from "../Services/Stores/FeedStore";
 
 const Feed = ({ loadMorePosts, totalCount }) => {
 
 const { setPosts, deletePost, selectPost, selectedPost, clearSelectedPost } = useFeedStore();
 const feedPosts = useFeedStore((state) => state.posts)
-useEffect(() =>{
-  console.log(feedPosts)
-}, [])
 
   useEffect(() => {
     if (feedPosts && feedPosts.length > 0) {

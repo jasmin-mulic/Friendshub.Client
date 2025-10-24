@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import noProfileImg from "../assets/noProfilePic.jpg";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import { FcAddImage } from "react-icons/fc";
 import { ImCross } from "react-icons/im";
 import { FaTrash } from "react-icons/fa";

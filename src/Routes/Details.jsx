@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
-import { useUserDataStore } from "../Services/Stores/useUserDataStore";
+import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import UsersApi from "../Services/Api/UsersApi";
 import Navbar from "../Components/Navbar";
 import { useForm, Controller } from "react-hook-form";
