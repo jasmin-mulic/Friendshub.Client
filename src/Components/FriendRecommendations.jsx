@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import noProfileImage from "../assets/noProfilePic.jpg";
 import UsersApi from "../Services/Api/UsersApi";
-import { useUserDataStore } from "../Services/Stores/UserDataStore";
 
 const FriendRecommendations = ({ recommendationList, handleFollow }) => {
   const [removingId, setRemovingId] = useState(null);
-  const { setFollowingCount } = useUserDataStore();
   const [recommendationsList, setRecommendationsList] = useState([]);
 
   useEffect(() => {

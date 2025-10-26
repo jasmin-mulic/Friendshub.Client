@@ -25,6 +25,7 @@ export default function Post({ postId, onClick}) {
   useEffect(() =>{
     setPostCommentCount(post.comments ? post.comments.length : 0)
   },[post.comments])
+
   const likePost = async (postId) => {
     try {
       const response = await PostsApi.likePost(postId);
@@ -44,6 +45,7 @@ export default function Post({ postId, onClick}) {
   };
 
   const handleDelete = async (postId) => {
+    
     setShowDelete(false)
     try {
       const response = await PostsApi.deletePost(postId);

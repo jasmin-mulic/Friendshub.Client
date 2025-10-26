@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UsersApi from "../Services/Api/UsersApi";
 import Feed from "../Components/Feed";
@@ -13,11 +13,10 @@ const UserProfile = () => {
   const { username } = useParams();
   const storeUsername = useUserDataStore((state) => state.username)
   const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   
   const resetFeed = useFeedStore((state) => state.resetFeedStore)
   const setPosts = useFeedStore((state) =>state.setPosts)
-    const posts = useFeedStore((state) =>state.posts)
+  const posts = useFeedStore((state) =>state.posts)
 
 
   useEffect(() =>{

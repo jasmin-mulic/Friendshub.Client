@@ -3,7 +3,7 @@ import { useAuthStore } from "../Services/Stores/AuthStore";
 import UsersApi from "../Services/Api/UsersApi";
 import PostsApi from "../Services/Api/PostsApi";
 import defaultProfileImg from "../assets/noProfilePic.jpg";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import FriendRecommendations from "../Components/FriendRecommendations";
 import Feed from "../Components/Feed";

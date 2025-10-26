@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import Post from "./Post";
-import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import PostDetailsModal from "./Modals/PostDetailsModal";
 import { useFeedStore } from "../Services/Stores/FeedStore";
 
 const Feed = ({ loadMorePosts, totalCount }) => {
-
-const { setPosts, deletePost, selectPost, selectedPost, clearSelectedPost } = useFeedStore();
-const feedPosts = useFeedStore((state) => state.posts)
+  const { setPosts, deletePost, selectPost, selectedPost, clearSelectedPost, posts : feedPosts } = useFeedStore();
 
   useEffect(() => {
     if (feedPosts && feedPosts.length > 0) {
@@ -19,12 +16,12 @@ const feedPosts = useFeedStore((state) => state.posts)
     <div className="flex flex-col gap-5 overflow-y-auto max-h-[70vh] scrollbar-hide px-4 w-full">
       {feedPosts.length > 0 ? (
         feedPosts.map((post) => (
-          (<Post 
-          key={post.postId} 
-          postId={post.postId} 
-          deletePost={deletePost} 
-          onClick= {() => selectPost(post)}
-          />)
+          <Post
+            key={post.postId}
+            postId={post.postId}
+            deletePost={deletePost}
+            onClick={() => selectPost(post)}
+          />
         ))
       ) : (
         <p className="text-center text-gray-400">No posts to show.</p>
@@ -38,7 +35,12 @@ const feedPosts = useFeedStore((state) => state.posts)
           Load More posts
         </button>
       )}
-    {selectedPost && (<PostDetailsModal postId={selectedPost.postId} onClose={clearSelectedPost} />)}
+      {selectedPost && (
+        <PostDetailsModal
+          postId={selectedPost.postId}
+          onClose={clearSelectedPost}
+        />
+      )}
     </div>
   );
 };

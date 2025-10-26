@@ -11,8 +11,7 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
 
-  const authLogOut = useAuthStore((state) => state.logout);
-  const storeLogout = useAuthStore.getState().logout;
+  const storeLogout = useAuthStore((state) => state.logout);
   const resetUserData = useUserDataStore((state) => state.resetUserData);
   const navigate = useNavigate();
 
