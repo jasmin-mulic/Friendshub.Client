@@ -9,7 +9,9 @@ const FriendRecommendations = ({ recommendationList, handleFollow }) => {
   useEffect(() => {
     setRecommendationsList(recommendationList || []);
   }, [recommendationList]);
-
+useEffect(() =>{
+  console.log("users", recommendationList)
+}, [recommendationList])
   const followUser = async (id) => {
     try {
       const response = await UsersApi.toggleFollow(id);
@@ -45,9 +47,9 @@ const FriendRecommendations = ({ recommendationList, handleFollow }) => {
       ) : (
         recommendationsList.map((r) => (
           <div
-            key={r.id}
+            key={r.userId}
             className={`flex items-center justify-between border border-gray-600/30 rounded-xl p-3 bg-gray-700/40 hover:bg-gray-700/60 transition-all duration-500 ${
-              removingId === r.id
+              removingId === r.userId
                 ? "opacity-0 translate-x-10"
                 : "opacity-100 translate-x-0"
             }`}
@@ -64,10 +66,11 @@ const FriendRecommendations = ({ recommendationList, handleFollow }) => {
 
             {/* dugme */}
             <button
-              onClick={() => handleFollowClick(r.id)}
+              onClick={() => handleFollowClick(r.userId)}
               className="bg-cyan-700 hover:bg-cyan-600 px-4 py-1 rounded-lg text-sm font-medium shadow transition-all duration-200"
             >
               Follow
+              {r.id}
             </button>
           </div>
         ))

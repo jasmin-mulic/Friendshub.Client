@@ -5,7 +5,7 @@ let isRefreshing = false;
 let refreshPromise = null;
 
 const Api = axios.create({
-  baseURL: "https://localhost:44326/api",
+  baseURL: "https://localhost:7291/api",
   withCredentials: true,
 });
 
@@ -33,7 +33,7 @@ Api.interceptors.response.use(
         isRefreshing = true;
         refreshPromise = axios
           .post(
-            "https://localhost:44326/api/Auth/refresh-token",
+            "https://localhost:7291/api/Auth/refresh-token",
             {},
             { withCredentials: true }
           )

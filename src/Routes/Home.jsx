@@ -24,6 +24,7 @@ export default function Home() {
   const storeLogout = useAuthStore.getState().logout;
   const [loading, setLoading] = useState(false);
   const [recommendationList, setRecommendationList] = useState([]);
+  const [recommendationPage, setRecommendationpage] = useState(1);
   const [showAddForm, setShowAddForm] = useState(false);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -68,8 +69,9 @@ export default function Home() {
 
   const fetchRecommendations = async () => {
     try {
-      const response = await UsersApi.followRecommendations();
-      if (response.status === 200) setRecommendationList(response.data || []);
+      const response = await UsersApi.followRecommendations(recommendationPage);
+      console.log(response)
+      if (response.status === 200) setRecommendationList(response.data.items || []);
     } catch (error) {
       console.log(error);
     }
