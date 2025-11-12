@@ -23,8 +23,7 @@ export default function Home() {
   const authLogOut = useAuthStore((state) => state.logout);
   const storeLogout = useAuthStore.getState().logout;
   const [loading, setLoading] = useState(false);
-  const [recommendationList, setRecommendationList] = useState([]);
-  const [recommendationPage, setRecommendationpage] = useState(1);
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -67,21 +66,11 @@ export default function Home() {
     }
   };
 
-  const fetchRecommendations = async () => {
-    try {
-      const response = await UsersApi.followRecommendations(recommendationPage);
-      console.log(response)
-      if (response.status === 200) setRecommendationList(response.data.items || []);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const getUserInfo = async () => {
     setLoading(true);
     try {
       const profileDataInfo = await UsersApi.myData();
-      console.log(profileDataInfo.data)
+      console.log(profileDataInfo)
       if (profileDataInfo.status === 200) setUserData(profileDataInfo.data);
       else {
         authLogOut();
@@ -90,10 +79,6 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleFollowRemove = (id) => {
-    setRecommendationList((prev) => prev.filter((x) => x.id !== id));
   };
 
   useEffect(() => {
@@ -106,7 +91,6 @@ export default function Home() {
           
     };
     fetchPosts();
-    fetchRecommendations();
     getUserInfo();
   }, []);
 
@@ -144,8 +128,6 @@ export default function Home() {
 
         <div className="hidden 2xl:block w-full xl:w-1/5">
           <FriendRecommendations
-            recommendationList={recommendationList}
-            handleFollow={handleFollowRemove}
           />
         </div>
       </div>
