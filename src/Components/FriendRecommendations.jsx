@@ -11,28 +11,49 @@ const FriendRecommendations = () => {
     try {
       const response = await UsersApi.toggleFollow(id);
       if (response.status === 200) {
-        console.log(response.data)
-        setRecommendationList((prev) => prev.filter((r) => r.userId !== id));
+        const message = response.data.message;
+        console.log(message)
+
+        // Ažuriraj status korisnika u listi
+        setRecommendationList((prev) =>
+          prev.map((user) =>
+            user.userId === id
+              ? {
+                  ...user,
+                  followStatus: message, // dodaj novi property u state
+                }
+              : user
+          )
+        );
       }
     } catch (error) {
       console.error(error);
       alert("Check the console, there was an error");
     }
-  }
+  };
 
-      const fetchRecommendations = async () => {
+  const fetchRecommendations = async () => {
     try {
       const response = await UsersApi.followRecommendations(recommendationPage);
-      console.log(response)
-      if (response.status === 200) setRecommendationList(response.data.items);
+      if (response.status === 200)
+      {
+        console.log("Recommendations", response.data)
+        // Dodaj default followStatus na "Follow"
+        setRecommendationList(
+          response.data.items.map((item) => ({
+            ...item,
+            followStatus: "Follow",
+          }))
+        );
+      }
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() =>{
-    fetchRecommendations()
-  },[])
-  
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, []);
 
   return (
     <div className="text-white bg-gray-800/40 rounded-2xl shadow-lg p-4 flex flex-col gap-3">
@@ -52,7 +73,6 @@ const FriendRecommendations = () => {
                 : "opacity-100 translate-x-0"
             }`}
           >
-            {/* lijeva strana */}
             <div className="flex items-center gap-3">
               <img
                 src={r.profileImageUrl || noProfileImage}
@@ -62,18 +82,19 @@ const FriendRecommendations = () => {
               <span className="font-medium text-gray-100">{r.username}</span>
             </div>
 
-            {/* dugme */}
             <button
               onClick={() => followUser(r.userId)}
-              className="bg-cyan-700 hover:bg-cyan-600 px-4 py-1 rounded-lg text-sm font-medium shadow transition-all duration-200"
-            >
-              Follow
-              {r.id}
+              className={`px-4 py-1 rounded-lg text-sm font-medium shadow transition-all duration-200 bg-blue-600`}>
+                {r.pendingRequest == true ? "Request sent" : "Follow"}
             </button>
           </div>
         ))
       )}
-     { recommendationList?.length > 10 &&  <button className="border-1 w-fit px-4 rounded-md py-2 mx-auto">Load more</button>}
+      {recommendationList?.length > 10 && (
+        <button className="border-1 w-fit px-4 rounded-md py-2 mx-auto">
+          Load more
+        </button>
+      )}
     </div>
   );
 };

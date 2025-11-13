@@ -45,6 +45,7 @@ export default function Profile() {
     setLoading(true);
     try {
       const profileDataInfo = await UsersApi.myData();
+      console.log(profileDataInfo)
       if (profileDataInfo.status === 200) setUserData(profileDataInfo.data);
       else {
         authLogOut();

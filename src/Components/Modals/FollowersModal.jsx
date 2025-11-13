@@ -24,7 +24,7 @@ const FollowerModal = ({ onCancel }) => {
   const removeFollower = async (followeeId) => {
     try {
       const response = await UsersApi.removeFollower(followeeId)
-      if (response.data == 200) {
+      if (response.status == 200) {
         const filteredList = followers.filter((followee) => followee.userId != followeeId);
         setFollowers(filteredList);
       }
