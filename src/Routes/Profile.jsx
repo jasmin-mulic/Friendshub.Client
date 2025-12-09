@@ -60,7 +60,7 @@ export default function Profile() {
 
   const getMyPosts = async (page) => {
     try {
-      const postFeedResponse = await PostsApi.getMyPosts(page);
+      const postFeedResponse = await PostsApi.myPosts(page);
       if (postFeedResponse.status === 200) {
         resetFeedStore()
         setTotalCount(postFeedResponse.data.totalCount);

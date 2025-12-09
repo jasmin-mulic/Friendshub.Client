@@ -5,7 +5,6 @@ import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import { useAuthStore } from "../Services/Stores/AuthStore";
 import AuthApi from "../Services/Api/AuthApi";
 import '../index.css'
-import { startSignalRConnection } from '../Services/SignalR';
 
 const Navbar = () => {
   const [loading, setLoading] = useState(false);
@@ -40,15 +39,6 @@ const Navbar = () => {
     }
   };
 
-  useEffect(() => {
-    if (!token) return;
-
-    startSignalRConnection(token, (data) => {
-      console.log("New notification:", data);
-
-      setNotifications(prev => [data, ...prev]);
-    });
-  }, [token]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -88,15 +78,6 @@ const Navbar = () => {
                 </p>
 
                 <div className="flex flex-col gap-2 max-h-60 overflow-y-auto">
-                  {notifications.length === 0 ? (
-                    <p className="text-gray-400 text-sm">No notifications yet.</p>
-                  ) : (
-                    notifications.map((n, index) => (
-                      <div key={index} className="bg-gray-700/40 hover:bg-gray-700/60 p-2 rounded-lg text-sm">
-                        {n.message ?? "New notification"}
-                      </div>
-                    ))
-                  )}
                 </div>
 
               </div>

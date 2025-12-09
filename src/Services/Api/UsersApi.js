@@ -1,16 +1,20 @@
 import Api from "./Api";
 
 const UsersApi = {
-  myData: () => Api.get("/Users/me"),
-  changeProfilePicture: () => Api.post("Users/change-profile-picture"),
-  followRecommendations: (page) => Api.get(`/Users/follow-recommendations/${page}`),
-  toggleFollow: (id) => Api.post(`/Users/follow-user?foloweeId=${id}`),
-  deleteUser: () => Api.get("delete-user"),
-  getFollowers: () => Api.get("/Users/followers-list"),
-  getFollowings: () => Api.get("/Users/following-list"),
-  removeFollower: (followeeId) => Api.post(`Users/remove-follower/${followeeId}`),
-  updateUserInfo : (id, data) => Api.put(`Users/${id}`, data),
-  userProfile : (username) => Api.get(`Users/${username}`)
 
+  myData: () => Api.get("/me"),
+  updateMyInfo: (data) => Api.put("/me", data),
+
+  followRecommendations: (page = 1) => 
+    Api.get(`/me/follow-recommendations?page=${page}`),
+
+  followUser: (id) => Api.post(`/users/${id}/follow`),
+  unfollowUser: (id) => Api.delete(`/users/${id}/follow`),
+
+  getFollowers: () => Api.get("/me/followers"),
+  getFollowings: () => Api.get("/me/following"),
+
+  userProfile: (username) => Api.get(`/profiles/${username}`)
 };
+
 export default UsersApi;

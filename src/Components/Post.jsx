@@ -24,6 +24,7 @@ export default function Post({ postId, onClick}) {
 
   useEffect(() =>{
     setPostCommentCount(post.comments ? post.comments.length : 0)
+    console.log(post)
   },[post.comments])
 
   const likePost = async (postId) => {

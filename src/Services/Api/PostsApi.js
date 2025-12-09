@@ -1,15 +1,14 @@
 import Api from "./Api";
 
 const PostsApi = {
-  myPosts : (page) => Api.get(`Posts/my-posts/page/${page}`),
-  addPost : (postData) =>Api.post("Posts/add-post", postData),
-  getFeedPosts : (page) => Api.get(`/Posts/get-feed-posts/page/${page}`),
-  likePost : (postId) => Api.post(`/Posts/like?postId=${postId}`),
-  getMyPosts : (page) => Api.get(`/Posts/my-posts/page/${page}`),
-  addComment : (postId, comment) => Api.post(`/Posts/add-comment/${postId}`, comment),
-  deletePost : (postId) => Api.delete(`/Posts/delete-post?postId=${postId}`),
+  myPosts : (page) => Api.get(`posts?page=${page}`),
+  addPost : (postData) =>Api.post(`/posts`, postData),
+  getFeedPosts : (page) => Api.get(`posts/feed?page=${page}`),
+  likePost : (postId) => Api.post(`/posts/${postId}/likes`),
+  addComment : (postId, comment) => Api.post(`/posts/${postId}/comments`, comment),
+  deletePost : (postId) => Api.delete(`/posts/${postId}`),
   likeComment : (commentId) => Api.post(`/Posts/like-comment/${commentId}`),
-  deleteComment : (commentId) => Api.delete(`/Posts/comment/${commentId}`)
+  deleteComment : (commentId) => Api.delete(`/posts/comment/${commentId}`)
 
 }
 export default PostsApi

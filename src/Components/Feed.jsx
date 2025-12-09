@@ -7,6 +7,7 @@ const Feed = ({ loadMorePosts, totalCount }) => {
   const { setPosts, deletePost, selectPost, selectedPost, clearSelectedPost, posts : feedPosts } = useFeedStore();
 
   useEffect(() => {
+    console.log(feedPosts)
     if (feedPosts && feedPosts.length > 0) {
       setPosts(feedPosts);
     }

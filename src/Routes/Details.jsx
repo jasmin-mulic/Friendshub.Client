@@ -63,12 +63,12 @@ export default function EditProfile() {
       formData.append("profileImageUrl", data.profileImageUrl);
 
     try {
-      const updateResponse = await UsersApi.updateUserInfo(userId, formData)
+      const updateResponse = await UsersApi.updateMyInfo(formData)
       if(updateResponse.status == 200)
 
         navigate("/")
     } catch (error) {
-      console.log(error.response.data.errors)
+      console.log(error.response)
             if(error.response.data.errors?.username != null)
       {
         setError("username", { type: "manual", message: error.response.data.errors?.username });
