@@ -32,10 +32,11 @@ export default function Post({ postId, onClick}) {
       const response = await PostsApi.likePost(postId);
       if (response.status === 200) {
         console.log(response.data)
-        if (response.data === "Liked") {
+        if (response.data.IsLiked === true) {
           setPostLikeCount((prev) => prev + 1);
           setIsLiked(true);
-        } else {
+        } else
+        {
           setIsLiked(false);
           setPostLikeCount((prev) => prev - 1);
         }

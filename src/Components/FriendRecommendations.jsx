@@ -9,22 +9,11 @@ const FriendRecommendations = () => {
 
   const followUser = async (id) => {
     try {
-      const response = await UsersApi.toggleFollow(id);
+      const response = await UsersApi.followUser(id);
       if (response.status === 200) {
         const message = response.data.message;
         console.log(message)
-
-        // Ažuriraj status korisnika u listi
-        setRecommendationList((prev) =>
-          prev.map((user) =>
-            user.userId === id
-              ? {
-                  ...user,
-                  followStatus: message, // dodaj novi property u state
-                }
-              : user
-          )
-        );
+        setRecommendationList(recommendationList.filter((u) => u.userId != id));
       }
     } catch (error) {
       console.error(error);
@@ -53,6 +42,7 @@ const FriendRecommendations = () => {
 
   useEffect(() => {
     fetchRecommendations();
+    console.log(recommendationList)
   }, []);
 
   return (

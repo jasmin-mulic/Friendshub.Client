@@ -13,7 +13,6 @@ const Comment = ({ commentId, postId, handleDelete }) => {
   const comment = post.comments.find((c) => c.commentId == commentId);
   const toggleLikeComment = useFeedStore((state) => state.toggleLikeComment)
   const [liked, setLiked] = useState(null);
-  const isMyComment= comment.userId == userId
   const deleteComment = useFeedStore((state) => state.deleteComment)
 useEffect(() => {
   setLiked(comment.commentLikes?.some((like) => like.userId === userId))
@@ -24,7 +23,7 @@ useEffect(() => {
       const res = await PostsApi.likeComment(id);
 
       if (res.status === 200) {
-        toggleLikeComment(postId, commentId, userId, res.data.user);
+        toggleLikeComment(postId, commentId, userId, res.data.likeResponse.user);
         console.log(res.data)
       }
     } catch (err) {
@@ -37,7 +36,7 @@ useEffect(() => {
 
   return (
     <div className="flex items-start gap-3 w-full p-3 bg-gray-700/50 rounded-xl border border-gray-600/40 mb-2 relative">
-      { isMyComment == true && <FaTrashAlt onClick={handleDelete} size={20} color="red" className="absolute right-2 top-2" />}
+      {  comment.userId == userId == true && <FaTrashAlt onClick={handleDelete} size={20} color="red" className="absolute right-2 top-2" />}
       <img
         className="w-10 h-10 rounded-full object-cover border border-cyan-600"
         src={comment.userProfileImageUrl ?? noProfileImage}

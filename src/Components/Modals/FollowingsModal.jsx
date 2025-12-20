@@ -26,7 +26,7 @@ const FollowingsModal = ({ onCancel }) => {
 
   const removeFromFollowing = async (followeeId) => {
     try {
-      const response = await UsersApi.toggleFollow(followeeId)
+      const response = await UsersApi.unfollowUser(followeeId)
       if(response.status == 200)
       {
         const filteredList = followings.filter((followee) => followee.userId != followeeId);

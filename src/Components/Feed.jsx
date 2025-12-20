@@ -5,12 +5,20 @@ import { useFeedStore } from "../Services/Stores/FeedStore";
 
 const Feed = ({ loadMorePosts, totalCount }) => {
   const { setPosts, deletePost, selectPost, selectedPost, clearSelectedPost, posts : feedPosts } = useFeedStore();
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    console.log(feedPosts)
-    if (feedPosts && feedPosts.length > 0) {
-      setPosts(feedPosts);
+    try {
+      setLoading(true)
+      console.log(feedPosts)
+      if (feedPosts && feedPosts.length > 0) {
+        setPosts(feedPosts);
     }
+   } catch (error) {
+   }
+   finally{
+    setLoading(false)
+   }
   }, [feedPosts]);
 
   return (
@@ -42,6 +50,7 @@ const Feed = ({ loadMorePosts, totalCount }) => {
           onClose={clearSelectedPost}
         />
       )}
+      {loading && <div className="loading"> </div>}
     </div>
   );
 };
