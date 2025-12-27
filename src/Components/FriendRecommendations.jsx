@@ -12,7 +12,6 @@ const FriendRecommendations = () => {
       const response = await UsersApi.followUser(id);
       if (response.status === 200) {
         const message = response.data.message;
-        console.log(message)
         setRecommendationList(recommendationList.filter((u) => u.userId != id));
       }
     } catch (error) {
@@ -26,8 +25,6 @@ const FriendRecommendations = () => {
       const response = await UsersApi.followRecommendations(recommendationPage);
       if (response.status === 200)
       {
-        console.log("Recommendations", response.data)
-        // Dodaj default followStatus na "Follow"
         setRecommendationList(
           response.data.items.map((item) => ({
             ...item,
@@ -39,12 +36,9 @@ const FriendRecommendations = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    fetchRecommendations();
-    console.log(recommendationList)
-  }, []);
-
+  useEffect(() =>{
+    fetchRecommendations()
+  },[])
   return (
     <div className="text-white bg-gray-800/40 rounded-2xl shadow-lg p-4 flex flex-col gap-3">
       <h2 className="text-lg font-semibold mb-2 text-gray-200">

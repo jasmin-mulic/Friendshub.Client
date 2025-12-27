@@ -24,7 +24,7 @@ export default function Home() {
   const storeLogout = useAuthStore.getState().logout;
   const [loading, setLoading] = useState(false);
 
-  const [showAddForm, setShowAddForm] = useState(false);
+  const [showAddPostForm, setShowAddPostForm] = useState(false);
   const [feedPage, setFeedPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const addPost = useFeedStore((state) => state.addPost)
@@ -53,7 +53,6 @@ export default function Home() {
     try {
       const postFeedResponse = await PostsApi.getFeedPosts(page);
       if (postFeedResponse.status === 200) {
-        console.log(postFeedResponse.data)
         setTotalCount(postFeedResponse.data.totalCount);
         return postFeedResponse.data;
       }
@@ -70,7 +69,6 @@ export default function Home() {
     setLoading(true);
     try {
       const profileDataInfo = await UsersApi.myData();
-      console.log(profileDataInfo)
       if (profileDataInfo.status === 200) setUserData(profileDataInfo.data);
       else {
         authLogOut();
@@ -117,7 +115,7 @@ export default function Home() {
               <Navbar />
           <div
             className="bg-gray-700/40 rounded-lg p-4 text-gray-300 hover:bg-gray-700/60 cursor-pointer transition"
-            onClick={() => setShowAddForm(true)}
+            onClick={() => setShowAddPostForm(true)}
           >
             <p className="font-medium">Share something...</p>
           </div>
@@ -139,8 +137,8 @@ export default function Home() {
       )}
 
       {/* Add Post modal */}
-      {showAddForm && (
-        <AddPost setClose={() => setShowAddForm(false)} pushNewPost={pushNewPost} />
+      {showAddPostForm && (
+        <AddPost setClose={() => setShowAddPostForm(false)} pushNewPost={pushNewPost} />
       )}
     </div>
   );

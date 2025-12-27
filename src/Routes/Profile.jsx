@@ -47,10 +47,6 @@ export default function Profile() {
       const profileDataInfo = await UsersApi.myData();
       console.log(profileDataInfo)
       if (profileDataInfo.status === 200) setUserData(profileDataInfo.data);
-      else {
-        authLogOut();
-        resetUserData();
-      }
     } catch (err) {
       console.log(err);
     } finally {

@@ -4,6 +4,7 @@ const UsersApi = {
 
   myData: () => Api.get("/Users/me"),
   updateMyInfo: (data) => Api.put("Users/me", data),
+  myPosts:(page) => Api.get(`Users/me/posts?page=${page}`),
 
   followRecommendations: (page = 1) => 
     Api.get(`Users/me/follow-recommendations?page=${page}`),

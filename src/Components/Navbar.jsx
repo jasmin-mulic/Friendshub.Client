@@ -4,20 +4,19 @@ import { LogOut, Home as HomeIcon, User, Bell } from "lucide-react";
 import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import { useAuthStore } from "../Services/Stores/AuthStore";
 import AuthApi from "../Services/Api/AuthApi";
-import '../index.css'
+import "../index.css";
+import { startSignalR } from "../Services/signalR";
 
 const Navbar = () => {
   const [loading, setLoading] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const storeLogout = useAuthStore((state) => state.logout);
   const resetUserData = useUserDataStore((state) => state.resetUserData);
 
-  const [notifications, setNotifications] = useState([]);
-  const token = useAuthStore((state) => state.token);
-
-  const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
-
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -39,21 +38,46 @@ const Navbar = () => {
     }
   };
 
+  // SignalR
+  useEffect(() => {
+    let conn;
 
+    startSignalR().then((connection) => {
+      conn = connection;
+
+      console.log("ConnectionId:", connection.connectionId);
+
+      conn.on("ReceiveNotification", (notification) => {
+        setNotifications((prev) => [...prev, notification]);
+        setUnreadCount((prev) => prev + 1);
+        console.log(notification)
+      });
+    });
+
+    return () => {
+      if (conn) {
+        conn.off("ReceiveNotification");
+        conn.stop();
+      }
+    };
+  }, []);
+
+  // Click outside dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowNotifications(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <div className="relative w-full z-10">
       <nav className="flex justify-between items-center rounded-xl py-3 px-5 bg-gray-800/50 backdrop-blur-md shadow-md w-full">
-
         <div className="flex items-center gap-6 text-xl">
           <Link to="/" className="hover:text-cyan-400 transition">
             <HomeIcon size={20} />
@@ -65,10 +89,29 @@ const Navbar = () => {
 
           <div ref={dropdownRef} className="relative">
             <button
-              onClick={() => setShowNotifications(prev => !prev)}
-              className="flex items-center gap-2 hover:text-cyan-400 transition"
+              onClick={() => {
+                setShowNotifications((prev) => {
+                  if (!prev) setUnreadCount(0);
+                  return !prev;
+                });
+              }}
+              className="relative flex items-center hover:text-cyan-400 transition"
             >
               <Bell size={20} />
+
+              {unreadCount > 0 && (
+                <span
+                  className="
+                    absolute -top-1 -right-1
+                    bg-red-500 text-white text-xs
+                    w-5 h-5 rounded-full
+                    flex items-center justify-center
+                    font-semibold
+                  "
+                >
+                  {unreadCount}
+                </span>
+              )}
             </button>
 
             {showNotifications && (
@@ -78,8 +121,21 @@ const Navbar = () => {
                 </p>
 
                 <div className="flex flex-col gap-2 max-h-60 overflow-y-auto">
-                </div>
+                  {notifications.length === 0 && (
+                    <p className="text-sm text-gray-500">
+                      No notifications
+                    </p>
+                  )}
 
+                  {notifications.map((notification, index) => (
+                    <div
+                      key={index}
+                      className="text-sm bg-gray-700/50 rounded-lg p-2"
+                    >
+                      {notification.message}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -91,7 +147,6 @@ const Navbar = () => {
         >
           <LogOut size={20} /> Logout
         </button>
-
       </nav>
 
       {loading && (

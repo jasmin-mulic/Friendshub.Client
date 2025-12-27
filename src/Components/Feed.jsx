@@ -10,7 +10,6 @@ const Feed = ({ loadMorePosts, totalCount }) => {
   useEffect(() => {
     try {
       setLoading(true)
-      console.log(feedPosts)
       if (feedPosts && feedPosts.length > 0) {
         setPosts(feedPosts);
     }

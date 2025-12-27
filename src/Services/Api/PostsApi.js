@@ -2,7 +2,7 @@ import Api from "./Api";
 
 const PostsApi = 
 {
-  myPosts : (page) => Api.get(`posts?page=${page}`),
+  myPosts : (page) => Api.get(`/posts/me?page=${page}`),
   addPost : (postData) =>Api.post(`/posts`, postData),
   getFeedPosts : (page) => Api.get(`posts/feed?page=${page}`),
   likePost : (postId) => Api.post(`/posts/${postId}/likes`),

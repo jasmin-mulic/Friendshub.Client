@@ -24,7 +24,6 @@ export default function Post({ postId, onClick}) {
 
   useEffect(() =>{
     setPostCommentCount(post.comments ? post.comments.length : 0)
-    console.log(post)
   },[post.comments])
 
   const likePost = async (postId) => {
@@ -32,7 +31,7 @@ export default function Post({ postId, onClick}) {
       const response = await PostsApi.likePost(postId);
       if (response.status === 200) {
         console.log(response.data)
-        if (response.data.IsLiked === true) {
+        if (response.data.isLiked === true) {
           setPostLikeCount((prev) => prev + 1);
           setIsLiked(true);
         } else
