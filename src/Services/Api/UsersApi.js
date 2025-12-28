@@ -17,7 +17,8 @@ const UsersApi = {
 
   userProfile: (username) => Api.get(`/profiles/${username}`),
 
-  removeFollower: (followerId) => Api.delete(`Users/${followerId}/follows`)
+  removeFollower: (followerId) => Api.delete(`Users/${followerId}/follows`),
+  getNotifications : (page) => Api.get(`/Users/me/notifications?page=${page}`)
 };
 
 export default UsersApi;

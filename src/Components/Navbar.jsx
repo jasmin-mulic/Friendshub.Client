@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { LogOut, Home as HomeIcon, User, Bell } from "lucide-react";
 import { useUserDataStore } from "../Services/Stores/UserDataStore";
 import { useAuthStore } from "../Services/Stores/AuthStore";
+import  UsersApi from "../Services/Api/UsersApi"
 import AuthApi from "../Services/Api/AuthApi";
 import "../index.css";
 import { startSignalR } from "../Services/signalR";
@@ -12,7 +13,7 @@ const Navbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-
+  const [page, setPage] = useState(1)
   const storeLogout = useAuthStore((state) => state.logout);
   const resetUserData = useUserDataStore((state) => state.resetUserData);
 
@@ -37,7 +38,17 @@ const Navbar = () => {
       setLoading(false);
     }
   };
-
+  useEffect(() =>{
+    const getNotifications = async () =>{
+      try {
+        const response = await  UsersApi.getNotifications(page);
+        console.log(response);
+      } catch (error) {
+        console.log(error.response)
+      }
+    }
+    getNotifications()
+  },[])
   // SignalR
   useEffect(() => {
     let conn;
