@@ -14,7 +14,5 @@ export const startSignalR = async () => {
 
   await connection.start();
 
-  //test
-
   return connection;
 };
